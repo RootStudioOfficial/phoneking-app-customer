@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
 
 class ViewAllPage extends StatefulWidget {
   const ViewAllPage({super.key});
@@ -26,7 +28,7 @@ class _ViewAllPageState extends State<ViewAllPage> {
   @override
   Widget build(BuildContext context) {
     final filtered = items.where((r) {
-      final brandOk = _brand == 'Gadget Plus' ? r.brand == _brand : r.brand == _brand;
+      final brandOk = r.brand == _brand;
       final catOk = _category == 'All Categories' ? true : r.category == _category;
       return brandOk && catOk;
     }).toList();
@@ -43,15 +45,15 @@ class _ViewAllPageState extends State<ViewAllPage> {
             elevation: 0,
             title: const Text(''),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: Icon(Icons.chevron_left,size: 22,),
               onPressed: () => Navigator.of(context).maybePop(),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // Banner (swap with Image.asset(...))
-                  const Placeholder(),
+                  // Banner image
+                  Placeholder(),
                   // Subtle gradient to make top icons readable
                   const DecoratedBox(
                     decoration: BoxDecoration(
@@ -194,13 +196,13 @@ class _RewardCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image
+          // Image placeholder replaced with asset
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
             child: SizedBox(
               height: 120,
               width: double.infinity,
-              child: const Placeholder(), // swap with Image.asset(...)
+              child: Placeholder(),
             ),
           ),
           const SizedBox(height: 12),

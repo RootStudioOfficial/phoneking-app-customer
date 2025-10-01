@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key});
@@ -139,7 +140,7 @@ class _UsedCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today_outlined, size: 16, color: Color(0xFF98A2B3)),
+                    Image.asset(AssetImageUtils.confirmRedeemIcon, width: 16, height: 16, color: const Color(0xFF98A2B3)),
                     const SizedBox(width: 6),
                     Text(
                       item.dateText,
@@ -147,10 +148,9 @@ class _UsedCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.star, size: 20, color: Color(0xFFFFC107)),
+                    Image.asset(AssetImageUtils.confirmRedeemIcon, width: 18, height: 18, color: const Color(0xFFFFC107)),
                     const SizedBox(width: 6),
                     Text(
                       item.pointsText,
@@ -158,6 +158,7 @@ class _UsedCard extends StatelessWidget {
                     ),
                   ],
                 ),
+
               ],
             ),
           ),
@@ -167,9 +168,7 @@ class _UsedCard extends StatelessWidget {
   }
 }
 
-// -------------------------------------------------------------
-// Redeemed tab (matches your mock)
-// -------------------------------------------------------------
+
 class _RedeemedTab extends StatelessWidget {
   const _RedeemedTab();
 

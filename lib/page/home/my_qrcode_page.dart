@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-// If you didn't add qr_flutter yet, this import can be removed.
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
 
 class MyQrCodePage extends StatelessWidget {
   const MyQrCodePage({super.key, this.qrData = "PHONEKING_USER_123456"});
@@ -110,7 +111,7 @@ class MyQrCodePage extends StatelessWidget {
   }
 }
 
-/// Extracted so we can gracefully fall back to a placeholder if qr_flutter
+/// Extracted so we can gracefully fall back to an asset if qr_flutter
 /// is not included yet.
 class _QrBox extends StatelessWidget {
   final String data;
@@ -141,17 +142,18 @@ class _QrBox extends StatelessWidget {
         ),
       );
     } catch (_) {
-      // Fallback without the package
-      return Container(
-        decoration: BoxDecoration(
+      // Fallback without the package → use your asset icon
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: ColoredBox(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Center(
-          child: Placeholder(
-            strokeWidth: 1.5,
-            fallbackHeight: 200,
-            fallbackWidth: 200,
+          child: Center(
+            child: Image.asset(
+              AssetImageUtils.qrIcon,
+              width: 160,
+              height: 160,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       );

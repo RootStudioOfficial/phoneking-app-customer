@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phone_king_customer/page/home/home_page.dart';
 import 'package:phone_king_customer/page/profile/profile_page.dart';
 import 'package:phone_king_customer/page/reward/reward_page.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -25,10 +27,19 @@ class _IndexPageState extends State<IndexPage> {
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF0C34FF),
         unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard_outlined), label: 'Gifts'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(AssetImageUtils.homeIcon, width: 24, height: 24),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(AssetImageUtils.rewardIcon, width: 24, height: 24),
+            label: 'Gifts',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(AssetImageUtils.profileIcon, width: 24, height: 24),
+            label: 'Profile',
+          ),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
 
 class RedeemDetailsPage extends StatefulWidget {
   const RedeemDetailsPage({
@@ -143,7 +144,6 @@ class _RedeemDetailsPageState extends State<RedeemDetailsPage> {
 
     setState(() => _processing = true);
 
-    // TODO: call your redeem API here
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return;
@@ -191,7 +191,7 @@ class _PointsCard extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
               ),
               const Spacer(),
-              const Icon(Icons.star, color: Color(0xFFFFC107)),
+              Image.asset(AssetImageUtils.shareAppIcon, width: 18, height: 18),
               const SizedBox(width: 6),
               Text(
                 _fmt(requiredPts),

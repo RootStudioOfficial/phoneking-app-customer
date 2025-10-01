@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -37,7 +39,14 @@ class ProfilePage extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: Color(0xFF0C34FF),
                       ),
-                      child: const Icon(Icons.person, color: Colors.white, size: 30),
+                      child: Center(
+                        child: Image.asset(
+                          AssetImageUtils.profileIcon,
+                          width: 28,
+                          height: 28,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 14),
                     const Expanded(
@@ -56,6 +65,7 @@ class ProfilePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              // edit icon
                               Icon(Icons.edit_outlined, size: 18, color: Color(0xFF9AA3B2)),
                             ],
                           ),
@@ -87,12 +97,12 @@ class ProfilePage extends StatelessWidget {
           _sectionTitle('General'),
           _cardList(children: const [
             _SettingTile(
-              icon: Icons.password_outlined,
+              asset: AssetImageUtils.changePinIcon,
               label: 'Change Pin',
             ),
             _DividerTile(),
             _SettingTile(
-              icon: Icons.share_outlined,
+              asset: AssetImageUtils.shareAppIcon,
               label: 'Share App',
             ),
           ]),
@@ -101,17 +111,17 @@ class ProfilePage extends StatelessWidget {
           _sectionTitle('Support'),
           _cardList(children: const [
             _SettingTile(
-              icon: Icons.help_outline,
+              asset: AssetImageUtils.helpAndSupportIcon,
               label: 'Help & Support',
             ),
             _DividerTile(),
             _SettingTile(
-              icon: Icons.call_outlined,
+              asset: AssetImageUtils.contactBranchesIcon,
               label: 'Contact Branches',
             ),
             _DividerTile(),
             _SettingTile(
-              icon: Icons.description_outlined,
+              asset: AssetImageUtils.termsAndConditionIcon,
               label: 'Terms & Conditions',
             ),
           ]),
@@ -125,7 +135,7 @@ class ProfilePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: const _SettingTile(
-              icon: Icons.logout_outlined,
+              asset: AssetImageUtils.signOutIcon,
               label: 'Sign Out',
               labelColor: Color(0xFFEF4444),
             ),
@@ -189,11 +199,11 @@ Widget _cardList({required List<Widget> children}) => Container(
 );
 
 class _SettingTile extends StatelessWidget {
-  final IconData icon;
+  final String asset;
   final String label;
   final Color? labelColor;
   const _SettingTile({
-    required this.icon,
+    required this.asset,
     required this.label,
     this.labelColor,
   });
@@ -208,7 +218,14 @@ class _SettingTile extends StatelessWidget {
           color: const Color(0xFFF2F4F8),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: const Color(0xFF6B7280)),
+        child: Center(
+          child: Image.asset(
+            asset,
+            width: 20,
+            height: 20,
+            color: const Color(0xFF6B7280),
+          ),
+        ),
       ),
       title: Text(
         label,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -42,11 +44,17 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        actions: const [
-          Icon(Icons.language, color: Colors.black87),
-          SizedBox(width: 16),
-          Icon(Icons.notifications_outlined, color: Colors.black87),
-          SizedBox(width: 16),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(AssetImageUtils.translateIcon, width: 24, height: 24),
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(AssetImageUtils.notificationIcon, width: 24, height: 24),
+          ),
+          const SizedBox(width: 16),
         ],
       ),
       body: SingleChildScrollView(
@@ -98,8 +106,9 @@ class HomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _actionButton(Icons.qr_code, "QR Code"),
-                      _actionButton(Icons.history, "History"),
+                      _actionButton(AssetImageUtils.qrIcon, "QR Code"),
+                      const SizedBox(width: 12),
+                      _actionButton(AssetImageUtils.historyIcon, "History"),
                     ],
                   )
                 ],
@@ -131,14 +140,14 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Product Grid (PhoneKing section)
-            _sectionHeader("PhoneKing"),
+            _sectionHeader("PhoneKing", AssetImageUtils.appLogo),
             const SizedBox(height: 12),
             _productGrid(),
 
             const SizedBox(height: 24),
 
             // Another section example
-            _sectionHeader("KingPlus"),
+            _sectionHeader("KingPlus", AssetImageUtils.appLogo),
             const SizedBox(height: 12),
             _productGrid(),
           ],
@@ -147,7 +156,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _sectionHeader(String title) {
+  Widget _sectionHeader(String title, String iconPath) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -155,7 +164,7 @@ class HomePage extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.phone_android, color: Color(0xFF0C34FF)),
+              Image.asset(iconPath, width: 22, height: 22),
               const SizedBox(width: 6),
               Text(
                 title,
@@ -237,7 +246,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  static Widget _actionButton(IconData icon, String label) {
+  static Widget _actionButton(String iconPath, String label) {
     return Expanded(
       child: ElevatedButton.icon(
         onPressed: () {},
@@ -249,7 +258,7 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           elevation: 0,
         ),
-        icon: Icon(icon),
+        icon: Image.asset(iconPath, width: 20, height: 20),
         label: Text(label),
       ),
     );

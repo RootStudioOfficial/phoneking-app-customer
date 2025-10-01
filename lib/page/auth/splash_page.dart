@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
+
 
 class SplashPage extends StatefulWidget {
   /// Where to go when splash finishes or "Skip" is tapped.
@@ -81,13 +84,14 @@ class _SplashPageState extends State<SplashPage>
             child: FadeTransition(
               opacity: CurvedAnimation(parent: _ac, curve: Curves.easeOut),
               child: ScaleTransition(
-                scale: CurvedAnimation(
-                    parent: _ac, curve: Curves.easeOutBack),
+                scale: CurvedAnimation(parent: _ac, curve: Curves.easeOutBack),
                 child: SizedBox(
                   width: 170,
                   height: 170,
-                  // Replace with Image.asset('assets/logo_plus.png', fit: BoxFit.contain)
-                  child: const Placeholder(),
+                  child: Image.asset(
+                    AssetImageUtils.splashLogo,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),

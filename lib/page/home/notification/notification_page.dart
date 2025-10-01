@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/utils/asset_image_utils.dart';
+
 
 class NotificationItem {
   final String title;
@@ -7,7 +9,13 @@ class NotificationItem {
   final String timeAgo; // e.g. "3d ago"
   bool isRead;
 
-  NotificationItem({required this.title, required this.body, required this.tag, required this.timeAgo, this.isRead = false});
+  NotificationItem({
+    required this.title,
+    required this.body,
+    required this.tag,
+    required this.timeAgo,
+    this.isRead = false,
+  });
 }
 
 class NotificationPage extends StatefulWidget {
@@ -64,13 +72,19 @@ class _NotificationPageState extends State<NotificationPage> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: Row(
               children: [
-                Text('$_unreadCount unread notification${_unreadCount == 1 ? '' : 's'}', style: TextStyle(color: Colors.grey.shade700)),
+                Text(
+                  '$_unreadCount unread notification${_unreadCount == 1 ? '' : 's'}',
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
                 const Spacer(),
                 GestureDetector(
                   onTap: _unreadCount == 0 ? null : _markAllAsRead,
                   child: Text(
                     'Mark all as read',
-                    style: TextStyle(color: _unreadCount == 0 ? Colors.grey : const Color(0xFF0C34FF), fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: _unreadCount == 0 ? Colors.grey : const Color(0xFF0C34FF),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -125,7 +139,7 @@ class _NotificationCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // leading icon/avatar (placeholder gear)
+            // leading icon/avatar (AssetUtils)
             Container(
               width: 36,
               height: 36,
@@ -134,7 +148,11 @@ class _NotificationCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: const Color(0xFFE5E7F1)),
               ),
-              child: const Icon(Icons.settings, color: Color(0xFF7C8AA6)),
+              padding: const EdgeInsets.all(6),
+              child: Image.asset(
+                AssetImageUtils.notificationIcon,
+                fit: BoxFit.contain,
+              ),
             ),
             const SizedBox(width: 12),
 
@@ -150,12 +168,20 @@ class _NotificationCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           item.title,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF101828)),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF101828),
+                          ),
                         ),
                       ),
                       Text(
                         item.timeAgo,
-                        style: TextStyle(fontSize: 12, color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       if (!item.isRead) const _Dot(color: Color(0xFF2F56FF)),
@@ -167,10 +193,17 @@ class _NotificationCard extends StatelessWidget {
                   // tag chip
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(color: const Color(0xFFEDEFF3), borderRadius: BorderRadius.circular(10)),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEDEFF3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Text(
                       item.tag,
-                      style: const TextStyle(fontSize: 12, color: Color(0xFF5B667A), fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF5B667A),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -185,7 +218,6 @@ class _NotificationCard extends StatelessWidget {
 
 class _Dot extends StatelessWidget {
   final Color color;
-
   const _Dot({required this.color});
 
   @override
