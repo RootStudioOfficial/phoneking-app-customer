@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Phone King',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: IndexPage(),
+      home: OnBoardingPage(),
     );
   }
 }
