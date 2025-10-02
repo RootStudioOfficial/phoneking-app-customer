@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-
 class MyQrCodePage extends StatelessWidget {
-  const MyQrCodePage({super.key, this.qrData = "PHONEKING_USER_123456"});
-
-  /// Whatever text/URL your QR should encode
-  final String qrData;
+  const MyQrCodePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +14,7 @@ class MyQrCodePage extends StatelessWidget {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: const Text(
-          'My QR  Code',
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
+        title: const Text('My QR  Code', style: TextStyle(fontWeight: FontWeight.w700)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -37,21 +30,13 @@ class MyQrCodePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: const Color(0xFFE6E8F0)),
               ),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: _QrBox(data: qrData),
-              ),
+              child: AspectRatio(aspectRatio: 1, child: _QrBox(data: "PHONEKING_USER_123456")),
             ),
             const SizedBox(height: 16),
             const Text(
               "Show this QR code to earn points from\npurchases and services",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF737B8C),
-                height: 1.4,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(color: Color(0xFF737B8C), height: 1.4, fontSize: 14, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 20),
 
@@ -69,11 +54,7 @@ class MyQrCodePage extends StatelessWidget {
                 children: [
                   const Text(
                     "Scanning Tips",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF101828),
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF101828)),
                   ),
                   const SizedBox(height: 8),
                   _bullet("Hold your phone steady and ensure good lighting"),
@@ -100,11 +81,8 @@ class MyQrCodePage extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(color: Color(0xFF6B7280), height: 1.4),
-            ),
-          )
+            child: Text(text, style: const TextStyle(color: Color(0xFF6B7280), height: 1.4)),
+          ),
         ],
       ),
     );
@@ -115,6 +93,7 @@ class MyQrCodePage extends StatelessWidget {
 /// is not included yet.
 class _QrBox extends StatelessWidget {
   final String data;
+
   const _QrBox({required this.data});
 
   @override
@@ -126,18 +105,18 @@ class _QrBox extends StatelessWidget {
         child: ColoredBox(
           color: Colors.white,
           child: Center(
-            child: QrImageView(
-              data: data,
-              version: QrVersions.auto,
-              eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square),
-              dataModuleStyle: const QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.square,
-              ),
-              // Quiet zone keeps spacing from the border
-              gapless: false,
-              padding: const EdgeInsets.all(16),
-              backgroundColor: Colors.white,
-            ),
+            child: Image.asset("assets/demo_qr.png"),
+
+            // QrImageView(
+            //   data: data,
+            //   version: QrVersions.auto,
+            //   eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square),
+            //   dataModuleStyle: const QrDataModuleStyle(dataModuleShape: QrDataModuleShape.square),
+            //   // Quiet zone keeps spacing from the border
+            //   gapless: false,
+            //   padding: const EdgeInsets.all(16),
+            //   backgroundColor: Colors.white,
+            // ),
           ),
         ),
       );
@@ -147,14 +126,7 @@ class _QrBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: ColoredBox(
           color: Colors.white,
-          child: Center(
-            child: Image.asset(
-              AssetImageUtils.qrIcon,
-              width: 160,
-              height: 160,
-              fit: BoxFit.contain,
-            ),
-          ),
+          child: Center(child: Image.asset(AssetImageUtils.qrIcon, width: 160, height: 160, fit: BoxFit.contain)),
         ),
       );
     }

@@ -82,7 +82,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   child: Text(
                     'Mark all as read',
                     style: TextStyle(
-                      color: _unreadCount == 0 ? Colors.grey : const Color(0xFF0C34FF),
+                      color: _unreadCount == 0 ? Colors.grey : const Color(0xFFEF4444),
                       fontWeight: FontWeight.w600,
                     ),
                   ),

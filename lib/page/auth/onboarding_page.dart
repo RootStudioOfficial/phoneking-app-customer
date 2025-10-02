@@ -1,8 +1,8 @@
-// lib/onboarding_flow.dart
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/page/auth/splash_page.dart';
+import 'package:phone_king_customer/page/index_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
-
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
 enum _Sheet { none, phone, pin, personal }
 
@@ -13,12 +13,9 @@ class OnBoardingPage extends StatefulWidget {
   State<OnBoardingPage> createState() => _OnBoardingPageState();
 }
 
-class _OnBoardingPageState extends State<OnBoardingPage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac =
-  AnimationController(vsync: this, duration: const Duration(milliseconds: 480));
-  late final Animation<double> _scale =
-  CurvedAnimation(parent: _ac, curve: Curves.easeOutBack);
+class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProviderStateMixin {
+  late final AnimationController _ac = AnimationController(vsync: this, duration: const Duration(milliseconds: 480));
+  late final Animation<double> _scale = CurvedAnimation(parent: _ac, curve: Curves.easeOutBack);
   late final Animation<Offset> _slide = Tween<Offset>(
     begin: const Offset(0, .25),
     end: Offset.zero,
@@ -57,8 +54,13 @@ class _OnBoardingPageState extends State<OnBoardingPage>
     if (!mounted) return;
     setState(() => _sheet = _Sheet.none);
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("All set! Welcome to PhoneKing.")));
+    context.navigateToNextPage(
+      SplashPage(
+        onFinish: () {
+          context.navigateToNextPageWithRemoveUntil(IndexPage());
+        },
+      ),
+    );
   }
 
   Future<void> _closeAny() async {
@@ -82,7 +84,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xFF0C1B4D), Color(0xFF0C34FF)],
+                    colors: [Color(0xFF0C1B4D), Color(0xFFED5B23), Color(0xFFED5B23)],
                   ),
                 ),
               ),
@@ -93,13 +95,12 @@ class _OnBoardingPageState extends State<OnBoardingPage>
               child: Column(
                 children: [
                   const SizedBox(height: 24),
-                  const Expanded(child: _PlanetCanvas()),
+                  Expanded(child: Image.asset(AssetImageUtils.onboardingBgImage)),
 
                   // Marketing card + CTA
                   _BottomCard(
                     title: "PhoneKing",
-                    subtitle:
-                    "Your gateway to exclusive rewards,\namazing deals and premium services",
+                    subtitle: "Your gateway to exclusive rewards,\namazing deals and premium services",
                     buttonText: "Get Started",
                     onPressed: _openPhone,
                   ),
@@ -114,8 +115,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                   onTap: _closeAny,
                   child: AnimatedBuilder(
                     animation: _ac,
-                    builder: (_, __) =>
-                        ColoredBox(color: Colors.black.withValues(alpha: .35 * _ac.value)),
+                    builder: (_, __) => ColoredBox(color: Colors.black.withValues(alpha: .35 * _ac.value)),
                   ),
                 ),
               ),
@@ -141,84 +141,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
             ],
           ],
         ),
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------
-// Decorative background canvas (now using AssetUtils images)
-// ---------------------------------------------------------------------
-class _PlanetCanvas extends StatelessWidget {
-  const _PlanetCanvas();
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, c) {
-      final w = c.maxWidth;
-      final r1 = w * 0.62, r2 = w * 0.46, rc = w * 0.28;
-
-      final badgeAssets = <String>[
-        AssetImageUtils.rewardIcon,
-        AssetImageUtils.notificationIcon,
-        AssetImageUtils.profileIcon,
-        AssetImageUtils.qrIcon,
-        AssetImageUtils.homeIcon,
-        AssetImageUtils.goldSetIcon,
-        AssetImageUtils.translateIcon,
-      ];
-
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          _orbit(r1, .35),
-          _orbit(r2, .45),
-          _orbit(rc, .25),
-
-          // Center logo tile
-          Container(
-            width: rc * .45,
-            height: rc * .45,
-            decoration:
-            BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-              padding: const EdgeInsets.all(6),
-              child: Image.asset(AssetImageUtils.appLogo, fit: BoxFit.contain),
-            ),
-          ),
-
-          // Floating icon badges
-          _badge(r1 / 2, -20, badgeAssets[0]),
-          _badge(r1 / 2, 25, badgeAssets[1]),
-          _badge(r1 / 2, 155, badgeAssets[2]),
-          _badge(r2 / 2, -60, badgeAssets[3]),
-          _badge(r2 / 2, 10, badgeAssets[4]),
-          _badge(r2 / 2, 85, badgeAssets[5]),
-          _badge(r2 / 2, 210, badgeAssets[6]),
-        ],
-      );
-    });
-  }
-
-  Widget _orbit(double d, double o) => Container(
-    width: d,
-    height: d,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(color: Colors.white.withValues(alpha: o), width: 2),
-    ),
-  );
-
-  Widget _badge(double radius, double deg, String assetPath) {
-    final rad = deg * math.pi / 180;
-    return Transform.translate(
-      offset: Offset(radius * math.cos(rad), radius * math.sin(rad)),
-      child: Container(
-        width: 58,
-        height: 58,
-        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-        padding: const EdgeInsets.all(8),
-        child: Image.asset(assetPath, fit: BoxFit.contain),
       ),
     );
   }
@@ -257,8 +179,7 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _grabber(),
-            const Text("Unlock Amazing Benefits",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+            const Text("Unlock Amazing Benefits", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 18),
 
             _label("Phone Number"),
@@ -276,8 +197,7 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
                     borderRadius: const BorderRadius.horizontal(left: Radius.circular(12)),
                     border: Border.all(color: const Color(0xFFE6E8F0)),
                   ),
-                  child:
-                  const Text("+95", style: TextStyle(fontWeight: FontWeight.w600)),
+                  child: const Text("+95", style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
                 Expanded(
                   child: SizedBox(
@@ -291,22 +211,17 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
                         fillColor: Color(0xFFF7F8FB),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFE6E8F0)),
-                          borderRadius:
-                          BorderRadius.horizontal(right: Radius.circular(12)),
+                          borderRadius: BorderRadius.horizontal(right: Radius.circular(12)),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFE6E8F0)),
-                          borderRadius:
-                          BorderRadius.horizontal(right: Radius.circular(12)),
+                          borderRadius: BorderRadius.horizontal(right: Radius.circular(12)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Color(0xFF1133FF), width: 1.4),
-                          borderRadius:
-                          BorderRadius.horizontal(right: Radius.circular(12)),
+                          borderSide: BorderSide(color: Color(0xFFED5B23), width: 1.4),
+                          borderRadius: BorderRadius.horizontal(right: Radius.circular(12)),
                         ),
-                        contentPadding:
-                        EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                       ),
                     ),
                   ),
@@ -323,14 +238,12 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
                   widget.onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1133FF),
+                  backgroundColor: const Color(0xFFED5B23),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text("Confirm",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+                child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
               ),
             ),
           ],
@@ -382,26 +295,17 @@ class _PinFormCardState extends State<_PinFormCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _grabber(),
-            const Text("Create Your Safety Pin",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+            const Text("Create Your Safety Pin", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 18),
 
             _label("PIN Number"),
             const SizedBox(height: 8),
-            _pinField(
-              controller: _pin1,
-              obscure: _ob1,
-              onToggle: () => setState(() => _ob1 = !_ob1),
-            ),
+            _pinField(controller: _pin1, obscure: _ob1, onToggle: () => setState(() => _ob1 = !_ob1)),
 
             const SizedBox(height: 18),
             _label("Confirm PIN Number"),
             const SizedBox(height: 8),
-            _pinField(
-              controller: _pin2,
-              obscure: _ob2,
-              onToggle: () => setState(() => _ob2 = !_ob2),
-            ),
+            _pinField(controller: _pin2, obscure: _ob2, onToggle: () => setState(() => _ob2 = !_ob2)),
 
             const SizedBox(height: 18),
             SizedBox(
@@ -411,26 +315,22 @@ class _PinFormCardState extends State<_PinFormCard> {
                   final err1 = _validatePin(_pin1.text);
                   final err2 = _validatePin(_pin2.text);
                   if (err1 != null || err2 != null) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(err1 ?? err2!)));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err1 ?? err2!)));
                     return;
                   }
                   if (_pin1.text != _pin2.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("PINs do not match")));
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("PINs do not match")));
                     return;
                   }
                   widget.onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1133FF),
+                  backgroundColor: const Color(0xFFED5B23),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text("Create",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+                child: const Text("Create", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
               ),
             ),
           ],
@@ -439,11 +339,7 @@ class _PinFormCardState extends State<_PinFormCard> {
     );
   }
 
-  Widget _pinField({
-    required TextEditingController controller,
-    required bool obscure,
-    required VoidCallback onToggle,
-  }) {
+  Widget _pinField({required TextEditingController controller, required bool obscure, required VoidCallback onToggle}) {
     return SizedBox(
       height: 52,
       child: TextFormField(
@@ -451,15 +347,12 @@ class _PinFormCardState extends State<_PinFormCard> {
         obscureText: obscure,
         keyboardType: TextInputType.number,
         maxLength: 6,
-        buildCounter: (_, {int? currentLength, bool? isFocused, int? maxLength}) =>
-        const SizedBox(),
+        buildCounter: (_, {int? currentLength, bool? isFocused, int? maxLength}) => const SizedBox(),
         decoration: InputDecoration(
           hintText: "must be 6 digits",
           filled: true,
           fillColor: const Color(0xFFF7F8FB),
-          suffixIcon: IconButton(
-              onPressed: onToggle,
-              icon: Icon(obscure ? Icons.visibility : Icons.visibility_off)),
+          suffixIcon: IconButton(onPressed: onToggle, icon: Icon(obscure ? Icons.visibility : Icons.visibility_off)),
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Color(0xFFE6E8F0)),
             borderRadius: BorderRadius.circular(12),
@@ -469,11 +362,10 @@ class _PinFormCardState extends State<_PinFormCard> {
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xFF1133FF), width: 1.4),
+            borderSide: const BorderSide(color: Color(0xFFED5B23), width: 1.4),
             borderRadius: BorderRadius.circular(12),
           ),
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         ),
       ),
     );
@@ -514,8 +406,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _grabber(),
-            const Text("Fill Your Personal Info",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+            const Text("Fill Your Personal Info", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 18),
 
             _label("Your Name"),
@@ -535,7 +426,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFF1133FF), width: 1.4),
+                  borderSide: BorderSide(color: Color(0xFFED5B23), width: 1.4),
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
                 contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
@@ -547,17 +438,11 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
             const SizedBox(height: 8),
             Row(
               children: [
-                Expanded(
-                    child: _birthdayDropdown(
-                        1, 31, _day, (v) => setState(() => _day = v))),
+                Expanded(child: _birthdayDropdown(1, 31, _day, (v) => setState(() => _day = v))),
                 const SizedBox(width: 8),
-                Expanded(
-                    child: _birthdayDropdown(
-                        1, 12, _month, (v) => setState(() => _month = v))),
+                Expanded(child: _birthdayDropdown(1, 12, _month, (v) => setState(() => _month = v))),
                 const SizedBox(width: 8),
-                Expanded(
-                    child: _birthdayDropdown(1960, DateTime.now().year, _year,
-                            (v) => setState(() => _year = v))),
+                Expanded(child: _birthdayDropdown(1960, DateTime.now().year, _year, (v) => setState(() => _year = v))),
               ],
             ),
 
@@ -566,25 +451,19 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_nameCtrl.text.trim().isEmpty ||
-                      _day == null ||
-                      _month == null ||
-                      _year == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Please fill all fields")));
+                  if (_nameCtrl.text.trim().isEmpty || _day == null || _month == null || _year == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
                     return;
                   }
                   widget.onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1133FF),
+                  backgroundColor: const Color(0xFFED5B23),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text("Confirm",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+                child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
               ),
             ),
           ],
@@ -593,8 +472,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
     );
   }
 
-  Widget _birthdayDropdown(
-      int start, int end, String? value, ValueChanged<String?> onChanged) {
+  Widget _birthdayDropdown(int start, int end, String? value, ValueChanged<String?> onChanged) {
     final items = List.generate(end - start + 1, (i) => (start + i).toString());
     return DropdownButtonFormField<String>(
       initialValue: value,
@@ -610,7 +488,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF1133FF), width: 1.4),
+          borderSide: BorderSide(color: Color(0xFFED5B23), width: 1.4),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -634,8 +512,7 @@ Widget _grabber() => Container(
   width: 56,
   height: 5,
   margin: const EdgeInsets.only(bottom: 12),
-  decoration:
-  BoxDecoration(color: const Color(0xFFE6E8F0), borderRadius: BorderRadius.circular(12)),
+  decoration: BoxDecoration(color: const Color(0xFFE6E8F0), borderRadius: BorderRadius.circular(12)),
 );
 
 // Marketing bottom card
@@ -643,11 +520,7 @@ class _BottomCard extends StatelessWidget {
   final String title, subtitle, buttonText;
   final VoidCallback onPressed;
 
-  const _BottomCard(
-      {required this.title,
-        required this.subtitle,
-        required this.buttonText,
-        required this.onPressed});
+  const _BottomCard({required this.title, required this.subtitle, required this.buttonText, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -662,44 +535,26 @@ class _BottomCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(mainAxisSize: MainAxisSize.min, children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0C34FF),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              padding: const EdgeInsets.all(2),
-              child: Image.asset(AssetImageUtils.appLogo, fit: BoxFit.contain),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF0D1B2A)),
-            ),
-          ]),
-          const SizedBox(height: 12),
+          Image.asset(AssetImageUtils.appLogo, width: 200),
+          const SizedBox(height: 32),
           Text(
             subtitle,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16, height: 1.5, color: Color(0xFF384053)),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0C34FF),
+                backgroundColor: const Color(0xFFED5B23),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 0,
               ),
-              child: Text(buttonText,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              child: Text(buttonText, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             ),
           ),
         ],

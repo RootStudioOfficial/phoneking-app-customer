@@ -30,7 +30,7 @@ class MyHistoryPage extends StatelessWidget {
                 child: _SummaryCard(
                   label: 'Total Spent',
                   value: '500,000 Ks',
-                  bg: Color(0xFF0D2BFF),
+                  bg: Color(0xFFED5B23),
                   bg2: Color(0xFF2450FF),
                   textColor: Colors.white,
                 ),

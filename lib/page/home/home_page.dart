@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/page/home/my_history_page.dart';
+import 'package:phone_king_customer/page/home/my_qrcode_page.dart';
+import 'package:phone_king_customer/page/home/notification/notification_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
-
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,41 +22,16 @@ class HomePage extends StatelessWidget {
           children: [
             const SizedBox(width: 16),
             // Brand mark
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0C34FF),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Center(
-                child: Text(
-                  "K",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w900),
-                ),
-              ),
-            ),
+            Image.asset(AssetImageUtils.appLogo, width: 150),
             const SizedBox(width: 10),
-            const Text(
-              "PhoneKing",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-            ),
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(AssetImageUtils.translateIcon, width: 24, height: 24),
-          ),
+          IconButton(onPressed: () {}, icon: Image.asset(AssetImageUtils.translateIcon, width: 24, height: 24)),
           const SizedBox(width: 8),
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(AssetImageUtils.notificationIcon, width: 24, height: 24),
-          ),
+          IconButton(onPressed: () {
+            context.navigateToNextPage(NotificationPage());
+          }, icon: Image.asset(AssetImageUtils.notificationIcon, width: 24, height: 24)),
           const SizedBox(width: 16),
         ],
       ),
@@ -67,8 +45,8 @@ class HomePage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF0C34FF), Color(0xFF0064FF)],
+                gradient: LinearGradient(
+                  colors: [Color(0xFFED5B23), Color(0xFFED5B23), Color(0xFFED5B23)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -78,39 +56,40 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Points Balance",
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset(AssetImageUtils.goldSetIcon, width: 20, height: 20),
                       Text(
                         "Gold",
-                        style: TextStyle(
-                            color: Colors.amber,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14),
+                        style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    "11,968",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Point Balance", style: TextStyle(color: Colors.white)),
+                      const Text(
+                        "11,968",
+                        style: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 14),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _actionButton(AssetImageUtils.qrIcon, "QR Code"),
+                      _actionButton(AssetImageUtils.qrIcon, "QR Code", () {
+                        context.navigateToNextPage(MyQrCodePage());
+                      }),
                       const SizedBox(width: 12),
-                      _actionButton(AssetImageUtils.historyIcon, "History"),
+                      _actionButton(AssetImageUtils.historyIcon, "History", () {
+                        context.navigateToNextPage(MyHistoryPage());
+                      }),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -122,15 +101,13 @@ class HomePage extends StatelessWidget {
               child: PageView(
                 children: List.generate(
                   3,
-                      (i) => Padding(
+                  (i) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Container(
                         color: Colors.black12,
-                        child: const Center(
-                          child: Text("Banner Placeholder"),
-                        ),
+                        child: const Center(child: Text("Banner Placeholder")),
                       ),
                     ),
                   ),
@@ -140,14 +117,14 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Product Grid (PhoneKing section)
-            _sectionHeader("PhoneKing", AssetImageUtils.appLogo),
+            _sectionHeader(AssetImageUtils.appLogo),
             const SizedBox(height: 12),
             _productGrid(),
 
             const SizedBox(height: 24),
 
             // Another section example
-            _sectionHeader("KingPlus", AssetImageUtils.appLogo),
+            _sectionHeader(AssetImageUtils.appLogo),
             const SizedBox(height: 12),
             _productGrid(),
           ],
@@ -156,27 +133,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _sectionHeader(String title, String iconPath) {
+  Widget _sectionHeader(String iconPath) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Image.asset(iconPath, width: 22, height: 22),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ],
-          ),
+          Image.asset(iconPath, width: 150),
           const Text(
             "View All →",
-            style: TextStyle(
-                color: Color(0xFF0C34FF), fontWeight: FontWeight.w600),
+            style: TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -211,8 +178,7 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   child: Container(
                     height: 130,
                     color: Colors.black12,
@@ -220,22 +186,14 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  child: Text(
-                    p['name']!,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 16),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  child: Text(p['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
                     p['pts']!,
-                    style: const TextStyle(
-                        color: Color(0xFF0C34FF),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14),
+                    style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                 ),
               ],
@@ -246,20 +204,19 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  static Widget _actionButton(String iconPath, String label) {
+  static Widget _actionButton(String iconPath, String label, Function onPressed) {
     return Expanded(
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: () => onPressed(),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           foregroundColor: const Color(0xFF0C34FF),
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(vertical: 12),
           elevation: 0,
         ),
         icon: Image.asset(iconPath, width: 20, height: 20),
-        label: Text(label),
+        label: Text(label, style: TextStyle(color: Colors.black)),
       ),
     );
   }

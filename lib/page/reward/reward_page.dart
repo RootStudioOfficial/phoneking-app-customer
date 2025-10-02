@@ -117,7 +117,7 @@ class _UsedCard extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         'Used',
-                        style: TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w800),
+                        style: TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
                       ),
                     ),
                 ],
@@ -154,11 +154,10 @@ class _UsedCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       item.pointsText,
-                      style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w800),
+                      style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),
-
               ],
             ),
           ),
@@ -167,7 +166,6 @@ class _UsedCard extends StatelessWidget {
     );
   }
 }
-
 
 class _RedeemedTab extends StatelessWidget {
   const _RedeemedTab();
@@ -259,7 +257,7 @@ class _RedeemedCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       item.pointsText,
-                      style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w800),
+                      style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),
@@ -318,20 +316,14 @@ class _SectionBlock extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(Icons.phone_android, color: Color(0xFF0C34FF), size: 20),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    brand,
-                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF0F172A)),
-                  ),
-                ),
+                Image.asset(AssetImageUtils.appLogo, width: 130),
                 TextButton.icon(
                   onPressed: () {},
                   style: TextButton.styleFrom(foregroundColor: const Color(0xFF0C34FF)),
-                  icon: const Text("View All"),
-                  label: const Icon(Icons.arrow_outward_rounded, size: 16),
+                  icon: const Text("View All", style: TextStyle(color: Colors.black)),
+                  label: const Icon(Icons.arrow_outward_rounded, size: 16, color: Colors.black),
                 ),
               ],
             ),
@@ -391,7 +383,7 @@ class _RewardCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               item.pts,
-              style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w800),
+              style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
             ),
           ),
         ],
@@ -415,7 +407,7 @@ class _SegmentedTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const selected = Color(0xFF0C34FF);
+    const selected = Color(0xFFEF4444);
     const bg = Color(0xFFF0F1F6);
 
     return Container(

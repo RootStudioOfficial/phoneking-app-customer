@@ -1,8 +1,10 @@
 class AssetImageUtils {
   static const String appLogo = 'assets/app_logo.png';
   static const String splashLogo = 'assets/splash_logo.png';
+  static const String onboardingBgImage = 'assets/onboarding_bg_image.png';
 
   // Icons
+
   static const String homeIcon = 'assets/home_icon.png';
   static const String profileIcon = 'assets/profile_icon.png';
   static const String rewardIcon = 'assets/reward_icon.png';
