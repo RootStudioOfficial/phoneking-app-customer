@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
 
 
 class ViewAllPage extends StatefulWidget {

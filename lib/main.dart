@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/page/auth/splash_page.dart';
-import 'package:phone_king_customer/page/index_page.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-
 void main() {
   runApp(const MyApp());
 }
