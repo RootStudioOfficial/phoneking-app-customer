@@ -99,7 +99,7 @@ class _QrBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-      // If qr_flutter is present, render a crisp QR.
+
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: ColoredBox(

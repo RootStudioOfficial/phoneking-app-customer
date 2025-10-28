@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/page/auth/onboarding_page.dart';
+import 'package:phone_king_customer/page/auth/splash_page.dart';
 import 'package:phone_king_customer/page/index_page.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Phone King',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: OnBoardingPage(),
+      home: SplashPage(),
     );
   }
 }

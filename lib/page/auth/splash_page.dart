@@ -1,21 +1,17 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/page/auth/banner_page.dart';
+import 'package:phone_king_customer/page/auth/onboarding_page.dart';
+import 'package:phone_king_customer/persistent/login_persistent.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
+import 'package:phone_king_customer/data/model/banner/phone_king_banner_model.dart';
+import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
 
+import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 
 class SplashPage extends StatefulWidget {
-  /// Where to go when splash finishes or "Skip" is tapped.
-  final VoidCallback onFinish;
-
-  /// Seconds to show before auto-finish.
-  final int seconds;
-
-  const SplashPage({
-    super.key,
-    required this.onFinish,
-    this.seconds = 3,
-  });
+  const SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -23,38 +19,70 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  late int _left = widget.seconds;
-  Timer? _timer;
-
   late final AnimationController _ac = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 800),
+    duration: const Duration(milliseconds: 500),
   )..forward();
+
+  final PhoneKingBannerModel _bannerModel = PhoneKingBannerModelImpl();
+
+  static const String _bannerType = 'SPLASH';
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _decideNext());
+  }
+
+  Future<void> _decideNext() async {
+    const splashHold = Duration(milliseconds: 650);
+
+    bool loggedIn = false;
+    try {
+      loggedIn = await LoginPersistent().isLoggedIn();
+    } catch (_) {
+      loggedIn = false;
+    }
+
+    if (!loggedIn) {
+      await Future<void>.delayed(splashHold);
       if (!mounted) return;
-      if (_left <= 1) {
-        t.cancel();
-        widget.onFinish();
+      _go(const OnBoardingPage());
+      return;
+    }
+
+    try {
+      final res = await _bannerModel.getBanners(bannerType: _bannerType);
+      final banners = res.data ?? const <BannerVO>[];
+
+      final String? firstImageUrl = banners.firstOrNull?.imageUrl;
+      await Future<void>.delayed(splashHold);
+      if (!mounted) return;
+
+      if (firstImageUrl != null && firstImageUrl.isNotEmpty) {
+        _go(BannerPage(bannerImageUrl: firstImageUrl));
       } else {
-        setState(() => _left--);
+        _go(const BannerPage(bannerImageUrl: ''));
       }
-    });
+    } catch (e) {
+      await Future<void>.delayed(splashHold);
+      if (!mounted) return;
+      _go(const OnBoardingPage());
+    }
+  }
+
+  void _go(Widget page) {
+    try {
+      context.navigateToNextPageWithRemoveUntil(page);
+    } catch (_) {
+      context.navigateToNextPageWithRemoveUntil(page);
+    }
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     _ac.dispose();
     super.dispose();
-  }
-
-  void _skip() {
-    _timer?.cancel();
-    widget.onFinish();
   }
 
   @override
@@ -62,24 +90,18 @@ class _SplashPageState extends State<SplashPage>
     return Scaffold(
       body: Stack(
         children: [
-          // Background gradient
-          Positioned.fill(
+          const Positioned.fill(
             child: DecoratedBox(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: RadialGradient(
                   center: Alignment.topLeft,
                   radius: 1.0,
-                  colors: [
-                    Color(0xFFDA6B1F), // orange glow
-                    Color(0xFF0F0F0F), // deep black
-                  ],
+                  colors: [Color(0xFFDA6B1F), Color(0xFF0F0F0F)],
                   stops: [0.0, 0.55],
                 ),
               ),
             ),
           ),
-
-          // Center logo with scale + fade
           Center(
             child: FadeTransition(
               opacity: CurvedAnimation(parent: _ac, curve: Curves.easeOut),
@@ -96,36 +118,6 @@ class _SplashPageState extends State<SplashPage>
               ),
             ),
           ),
-
-          // Skip pill (top-right)
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8, right: 8),
-                child: GestureDetector(
-                  onTap: _skip,
-                  child: Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.45),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      "Skip in $_left${_left == 1 ? 's' : 's'}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Bottom brand
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -133,11 +125,7 @@ class _SplashPageState extends State<SplashPage>
                 padding: const EdgeInsets.only(bottom: 20),
                 child: RichText(
                   text: const TextSpan(
-                    style: TextStyle(
-                      fontFamily: 'SF Pro', // optional
-                      fontSize: 18,
-                      letterSpacing: 0.3,
-                    ),
+                    style: TextStyle(fontSize: 18, letterSpacing: 0.3),
                     children: [
                       TextSpan(
                         text: "PhoneKing",
@@ -149,7 +137,7 @@ class _SplashPageState extends State<SplashPage>
                       TextSpan(
                         text: "Plus",
                         style: TextStyle(
-                          color: Color(0xFFFE6A00), // orange
+                          color: Color(0xFFFE6A00),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
