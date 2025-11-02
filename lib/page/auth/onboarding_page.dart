@@ -99,9 +99,9 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
   void _snack(String msg, {bool isError = false}) {
     if (isError) {
-      context.showSuccessSnackBar(msg);
-    } else {
       context.showErrorSnackBar(msg);
+    } else {
+      context.showSuccessSnackBar(msg);
     }
   }
 
@@ -185,12 +185,11 @@ class _OnBoardingPageState extends State<OnBoardingPage>
         username: fullPhone,
         password: password,
       );
-
       if (loginRes.data != null) {
         _snack('Login success');
         await _finishFlow();
       } else {
-        _snack(loginRes.message);
+        _snack(loginRes.message, isError: true);
       }
     } catch (e) {
       _snack(e.toString(), isError: true);
@@ -368,7 +367,7 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
     if (!widget.enabled) return;
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
-    final full = '+95${_phoneCtrl.text.trim()}';
+    final full = _phoneCtrl.text.trim();
     widget.onConfirm(full);
   }
 

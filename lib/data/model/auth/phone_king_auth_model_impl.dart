@@ -11,13 +11,16 @@ class PhoneKingAuthModelImpl implements PhoneKingAuthModel {
   Future<BaseResponse<LoginVO>> login({
     required String username,
     required String password,
-  }) {
-    return _api.login(username: username, password: password).then((res) {
+  }) async {
+    try {
+      final res = await _api.login(username: username, password: password);
       if (res.data != null) {
         LoginPersistent().saveLoginData(res.data!);
       }
       return res;
-    });
+    } catch (error) {
+      rethrow;
+    }
   }
 
   @override
@@ -33,19 +36,22 @@ class PhoneKingAuthModelImpl implements PhoneKingAuthModel {
     required String phoneNumber,
     required String birthday,
     String? referralCode,
-  }) => _api
-      .register(
+  }) async {
+    try {
+      final res = await _api.register(
         displayName: displayName,
         password: password,
         phoneNumber: phoneNumber,
         birthday: birthday,
-      )
-      .then((res) {
-        if (res.data != null) {
-          LoginPersistent().saveLoginData(res.data!);
-        }
-        return res;
-      });
+      );
+      if (res.data != null) {
+        LoginPersistent().saveLoginData(res.data!);
+      }
+      return res;
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   @override
   Future<BaseResponse<void>> sendRegisterVerification({
