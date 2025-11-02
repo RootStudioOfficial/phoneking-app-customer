@@ -17,12 +17,15 @@ class AssetImageUtils {
   static const String shareAppIcon = 'assets/share_app_icon.png';
   static const String helpAndSupportIcon = 'assets/help_and_support_icon.png';
   static const String contactBranchesIcon = 'assets/contact_branchers_icon.png';
-  static const String termsAndConditionIcon = 'assets/terms_and_condition_icon.png';
+  static const String termsAndConditionIcon =
+      'assets/terms_and_condition_icon.png';
   static const String signOutIcon = 'assets/sign_out_icon.png';
   static const String translateIcon = 'assets/translate_icon.png';
+  static const String redeemConfirmIcon = 'assets/redeem_confirm_icon.png';
 
   // Reward / Top-up icons
   static const String confirmRedeemIcon = 'assets/confirm_redeem_icon.png';
-  static const String rewardSuccessfulIcon = 'assets/reward_successful_icon.png';
+  static const String rewardSuccessfulIcon =
+      'assets/reward_successful_icon.png';
   static const String topUpSuccessfulIcon = 'assets/top_up_successful_icon.png';
 }

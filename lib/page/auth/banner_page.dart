@@ -23,7 +23,7 @@ class _BannerPageState extends State<BannerPage> {
       if (!mounted) return;
       if (_left <= 1) {
         t.cancel();
-        context.navigateToNextPage(IndexPage());
+        context.navigateToNextPageWithRemoveUntil(IndexPage());
       } else {
         setState(() => _left--);
       }
@@ -48,7 +48,9 @@ class _BannerPageState extends State<BannerPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8, right: 8),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    context.navigateToNextPageWithRemoveUntil(IndexPage());
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,

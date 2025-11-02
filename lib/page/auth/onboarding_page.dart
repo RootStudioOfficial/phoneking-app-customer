@@ -190,7 +190,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
         _snack('Login success');
         await _finishFlow();
       } else {
-        _snack(loginRes.message, isError: true);
+        _snack(loginRes.message);
       }
     } catch (e) {
       _snack(e.toString(), isError: true);
@@ -885,7 +885,7 @@ class _LoginFormCardState extends State<_LoginFormCard> {
     if (!widget.enabled) return;
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
-    final full = '+95${_phoneCtrl.text.trim()}';
+    final full = _phoneCtrl.text.trim();
     widget.onConfirm(full, _pwdCtrl.text);
   }
 

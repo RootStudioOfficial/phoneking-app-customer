@@ -4,9 +4,28 @@ class PhoneKingCustomerApi {
   // Auth
   static const String login = '$baseUrl/user/auth/login';
   static const String register = '$baseUrl/user/auth/register';
-  static const String sendRegisterVerification = '$baseUrl/user/auth/register/verification/send';
-  static const String confirmRegisterVerification = '$baseUrl/user/auth/register/verification/confirm';
+  static const String sendRegisterVerification =
+      '$baseUrl/user/auth/register/verification/send';
+  static const String confirmRegisterVerification =
+      '$baseUrl/user/auth/register/verification/confirm';
 
   // Banner
   static const String banner = '$baseUrl/user/banner';
+
+  //Point
+  static const String getBalance = '$baseUrl/user/point/balance';
+
+  //Store
+  static const String store = '$baseUrl/user/store';
+
+  //Reward
+  static const String rewardAll='$baseUrl/user/reward';
+  static const String redeemReward = '$baseUrl/user/reward/redeem';
+  static const String usedReward = '$baseUrl/user/reward/used';
+
+  static String rewardDetails(String rewardID) =>
+      '$baseUrl/user/reward/$rewardID';
+
+  static String rewardRedeem(String rewardID) =>
+      '$baseUrl/api/v1/user/reward/$rewardID/redeem';
 }

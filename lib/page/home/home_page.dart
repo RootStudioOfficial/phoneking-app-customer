@@ -1,12 +1,88 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
+import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
+import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
+import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
+import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
 import 'package:phone_king_customer/page/home/my_history_page.dart';
 import 'package:phone_king_customer/page/home/my_qrcode_page.dart';
 import 'package:phone_king_customer/page/home/notification/notification_page.dart';
+import 'package:phone_king_customer/page/home/store_view_all_page.dart';
+import 'package:phone_king_customer/page/reward/reward_details_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _pointModel = PhoneKingPointModelImpl();
+  final _bannerModel = PhoneKingBannerModelImpl();
+  final _storeModel = PhoneKingStoreModelImpl();
+
+  bool _loading = true;
+  String? _error;
+
+  GetBalanceVO? _balance;
+  List<BannerVO> _banners = const [];
+  List<StoreVO> _stores = const [];
+
+  static const String _bannerTypeAnnouncement = 'ANNOUNCEMENT';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAll());
+  }
+
+  Future<void> _loadAll() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final resBalance = await _pointModel.getBalance();
+      final resBanners = await _bannerModel.getBanners(
+        bannerType: _bannerTypeAnnouncement,
+      );
+      final resStores = await _storeModel.getStores();
+
+      if (!mounted) return;
+      setState(() {
+        _balance = resBalance.data;
+        _banners = resBanners.data ?? const [];
+        _stores = resStores.data ?? const [];
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _onRefresh() => _loadAll();
+
+  static String _formatPoints(int pts) {
+    final s = pts.toString();
+    final buf = StringBuffer();
+    for (int i = 0; i < s.length; i++) {
+      final idxFromEnd = s.length - i;
+      buf.write(s[i]);
+      if (idxFromEnd > 1 && idxFromEnd % 3 == 1) buf.write(',');
+    }
+    return buf.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,151 +97,280 @@ class HomePage extends StatelessWidget {
         title: Row(
           children: [
             const SizedBox(width: 16),
-            // Brand mark
             Image.asset(AssetImageUtils.appLogo, width: 150),
             const SizedBox(width: 10),
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Image.asset(AssetImageUtils.translateIcon, width: 24, height: 24)),
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              AssetImageUtils.translateIcon,
+              width: 24,
+              height: 24,
+            ),
+          ),
           const SizedBox(width: 8),
-          IconButton(onPressed: () {
-            context.navigateToNextPage(NotificationPage());
-          }, icon: Image.asset(AssetImageUtils.notificationIcon, width: 24, height: 24)),
+          IconButton(
+            onPressed: () =>
+                context.navigateToNextPage(const NotificationPage()),
+            icon: Image.asset(
+              AssetImageUtils.notificationIcon,
+              width: 24,
+              height: 24,
+            ),
+          ),
           const SizedBox(width: 16),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Points Balance Card
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFED5B23), Color(0xFFED5B23), Color(0xFFED5B23)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image.asset(AssetImageUtils.goldSetIcon, width: 20, height: 20),
-                      Text(
-                        "Gold",
-                        style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 14),
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: _loading
+            ? const _HomeSkeleton()
+            : _error != null
+            ? _ErrorView(message: _error!, onRetry: _loadAll)
+            : SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ===== Points Balance =====
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFFED5B23),
+                            Color(0xFFED5B23),
+                            Color(0xFFED5B23),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Point Balance", style: TextStyle(color: Colors.white)),
-                      const Text(
-                        "11,968",
-                        style: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _actionButton(AssetImageUtils.qrIcon, "QR Code", () {
-                        context.navigateToNextPage(MyQrCodePage());
-                      }),
-                      const SizedBox(width: 12),
-                      _actionButton(AssetImageUtils.historyIcon, "History", () {
-                        context.navigateToNextPage(MyHistoryPage());
-                      }),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Banner / Carousel placeholder
-            SizedBox(
-              height: w * 0.5,
-              child: PageView(
-                children: List.generate(
-                  3,
-                  (i) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        color: Colors.black12,
-                        child: const Center(child: Text("Banner Placeholder")),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Image.asset(
+                                AssetImageUtils.goldSetIcon,
+                                width: 20,
+                                height: 20,
+                              ),
+                              const SizedBox(width: 4),
+                              const Text(
+                                "Gold",
+                                style: TextStyle(
+                                  color: Colors.amber,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          const Text(
+                            "Point Balance",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            _formatPoints(_balance?.totalBalance ?? 0),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _actionButton(
+                                AssetImageUtils.qrIcon,
+                                "QR Code",
+                                () {
+                                  context.navigateToNextPage(
+                                    const MyQrCodePage(),
+                                  );
+                                },
+                              ),
+                              const SizedBox(width: 12),
+                              _actionButton(
+                                AssetImageUtils.historyIcon,
+                                "History",
+                                () {
+                                  context.navigateToNextPage(
+                                    const MyHistoryPage(),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+
+                    const SizedBox(height: 16),
+
+                    // ===== Banners =====
+                    SizedBox(
+                      height: w * 0.5,
+                      child: _banners.isEmpty
+                          ? Container(
+                              color: Colors.black12,
+                              child: const Center(
+                                child: Text("Banner Placeholder"),
+                              ),
+                            )
+                          : PageView.builder(
+                              itemCount: _banners.length,
+                              itemBuilder: (context, i) {
+                                final b = _banners[i];
+                                final img = b.imageUrl;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: CacheNetworkImageWidget(
+                                      url: img,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // ===== Stores (each with its Reward list) =====
+                    if (_stores.isEmpty)
+                      const SizedBox(
+                        height: 120,
+                        child: Center(child: Text("No stores available")),
+                      )
+                    else
+                      ..._stores
+                          .map(
+                            (s) => _storeSection(s, () {
+                              context.navigateToNextPage(
+                                StoreViewAllPage(stores: _stores),
+                              );
+                            }),
+                          )
+                          .expand((w) => [w, const SizedBox(height: 16)]),
+
+                    const SizedBox(height: 150),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-
-            // Product Grid (PhoneKing section)
-            _sectionHeader(AssetImageUtils.appLogo),
-            const SizedBox(height: 12),
-            _productGrid(),
-
-            const SizedBox(height: 24),
-
-            // Another section example
-            _sectionHeader(AssetImageUtils.appLogo),
-            const SizedBox(height: 12),
-            _productGrid(),
-          ],
-        ),
       ),
     );
   }
 
-  Widget _sectionHeader(String iconPath) {
+  // ---------- Sections ----------
+
+  Widget _storeSection(StoreVO store, Function onTapViewAll) {
+    final rewards = store.rewards ?? const <RewardVO>[];
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE6E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _storeHeader(store, onTapViewAll),
+          const SizedBox(height: 12),
+          _rewardGrid(rewards),
+        ],
+      ),
+    );
+  }
+
+  // ---------- UI helpers ----------
+
+  Widget _storeHeader(StoreVO store, Function onTapViewAll) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(iconPath, width: 150),
-          const Text(
-            "View All →",
-            style: TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w600),
+          Row(
+            children: [
+              if ((store.logoUrl ?? '').isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CacheNetworkImageWidget(
+                        url: store.logoUrl!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 180),
+                child: Text(
+                  store.name ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          GestureDetector(
+            onTap: () {
+              onTapViewAll();
+            },
+            child: const Text(
+              "View All →",
+              style: TextStyle(
+                color: Color(0xFF0C34FF),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _productGrid() {
-    final products = [
-      {"name": "Screen Protector", "pts": "1,000 pts"},
-      {"name": "Phone Case", "pts": "1,000 pts"},
-      {"name": "Charger", "pts": "1,200 pts"},
-      {"name": "Earbuds", "pts": "2,000 pts"},
-    ];
+  Widget _rewardGrid(List<RewardVO> rewards) {
+    if (rewards.isEmpty) {
+      return const SizedBox(
+        height: 120,
+        child: Center(child: Text("No rewards available")),
+      );
+    }
 
     return SizedBox(
       height: 240,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: products.length,
+        itemCount: rewards.length,
         itemBuilder: (context, i) {
-          final p = products[i];
+          final r = rewards[i];
           return Container(
             width: 160,
             margin: const EdgeInsets.only(right: 16),
@@ -174,29 +379,65 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: const Color(0xFFE6E8F0)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: Container(
-                    height: 130,
-                    color: Colors.black12,
-                    child: const Placeholder(), // Replace with product image
+            child: InkWell(
+              onTap: () {
+                context.navigateToNextPage(
+                  RewardDetailsPage(rewardID: r.id ?? ''),
+                );
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // image
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
+                    child: SizedBox(
+                      height: 130,
+                      child: (r.imageUrl ?? '').isEmpty
+                          ? const Center(child: Text("Image"))
+                          : Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: CacheNetworkImageWidget(
+                                url: r.imageUrl!,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  child: Text(p['name']!, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    p['pts']!,
-                    style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 14),
+                  // name
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      r.name ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  // points
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      "${r.requiredPoints} pts",
+                      style: const TextStyle(
+                        color: Color(0xFF0C34FF),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
             ),
           );
         },
@@ -204,19 +445,64 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  static Widget _actionButton(String iconPath, String label, Function onPressed) {
+  static Widget _actionButton(
+    String iconPath,
+    String label,
+    VoidCallback onPressed,
+  ) {
     return Expanded(
       child: ElevatedButton.icon(
-        onPressed: () => onPressed(),
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           foregroundColor: const Color(0xFF0C34FF),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 12),
           elevation: 0,
         ),
         icon: Image.asset(iconPath, width: 20, height: 20),
-        label: Text(label, style: TextStyle(color: Colors.black)),
+        label: Text(label, style: const TextStyle(color: Colors.black)),
+      ),
+    );
+  }
+}
+
+// ===== Small helpers for UX parity =====
+class _HomeSkeleton extends StatelessWidget {
+  const _HomeSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.only(top: 60),
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(message, textAlign: TextAlign.center),
+            const SizedBox(height: 12),
+            ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
+          ],
+        ),
       ),
     );
   }

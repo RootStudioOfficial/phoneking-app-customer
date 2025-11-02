@@ -1,5 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
+import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
+
+import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
+import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+
+import 'package:phone_king_customer/page/home/store_view_all_page.dart';
+import 'package:phone_king_customer/page/reward/reward_details_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key});
@@ -8,7 +19,8 @@ class RewardsPage extends StatefulWidget {
   State<RewardsPage> createState() => _RewardsPageState();
 }
 
-class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStateMixin {
+class _RewardsPageState extends State<RewardsPage>
+    with SingleTickerProviderStateMixin {
   late final TabController _tab = TabController(length: 3, vsync: this);
 
   @override
@@ -25,7 +37,10 @@ class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStat
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: const Text('Rewards', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Rewards',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
         centerTitle: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
@@ -36,50 +51,565 @@ class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStat
           ),
         ),
       ),
-      body: TabBarView(controller: _tab, children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()]),
+      body: TabBarView(
+        controller: _tab,
+        children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()],
+      ),
     );
   }
 }
 
-// -------------------------------------------------------------
-// Used tab (dim image + "Used" overlay like the mock)
-// -------------------------------------------------------------
-class _UsedTab extends StatelessWidget {
-  const _UsedTab();
+/// ----- iOS-like segmented control look (no packages) -----
+class _SegmentedTabBar extends StatelessWidget {
+  final TabController controller;
+
+  const _SegmentedTabBar({required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final items = const [
-      _UsedItem(
-        title: '20% Screen Protector',
-        desc: 'iphone 14 screen repaired.',
-        dateText: 'Redeemed on Sep 12, 2025',
-        pointsText: '2,000 pts',
-        isUsed: true,
-      ),
-    ];
+    const selected = Color(0xFFEF4444);
+    const bg = Color(0xFFF0F1F6);
 
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-      itemBuilder: (_, i) => _UsedCard(item: items[i]),
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemCount: items.length,
+    return Container(
+      height: 44,
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: TabBar(
+        controller: controller,
+        indicator: BoxDecoration(
+          color: selected,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x260C34FF),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        labelColor: Colors.white,
+        unselectedLabelColor: const Color(0xFF5B667A),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+        dividerColor: Colors.transparent,
+        indicatorSize: TabBarIndicatorSize.tab,
+        tabs: const [
+          Tab(text: "Reward Store"),
+          Tab(text: "Redeemed"),
+          Tab(text: "Used"),
+        ],
+      ),
     );
   }
 }
 
-class _UsedItem {
-  final String title;
-  final String desc;
-  final String dateText;
-  final String pointsText;
-  final bool isUsed;
+// -------------------------------------------------------------
+// Reward Store tab  -> getStores()
+// -------------------------------------------------------------
+class _RewardStoreTab extends StatefulWidget {
+  const _RewardStoreTab();
 
-  const _UsedItem({required this.title, required this.desc, required this.dateText, required this.pointsText, this.isUsed = true});
+  @override
+  State<_RewardStoreTab> createState() => _RewardStoreTabState();
+}
+
+class _RewardStoreTabState extends State<_RewardStoreTab> {
+  final _storeModel = PhoneKingStoreModelImpl();
+
+  bool _loading = true;
+  String? _error;
+  List<StoreVO> _stores = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final res = await _storeModel.getStores();
+      if (!mounted) return;
+      setState(() {
+        _stores = res.data ?? const [];
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _onRefresh() => _load();
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          const SizedBox(height: 80),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Text('Error: $_error', textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                ElevatedButton(onPressed: _load, child: const Text('Retry')),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+    if (_stores.isEmpty) {
+      return const Center(child: Text('No stores available'));
+    }
+
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+        itemBuilder: (_, i) =>
+            _SectionBlock(store: _stores[i], allStores: _stores),
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        itemCount: _stores.length,
+      ),
+    );
+  }
+}
+
+class _SectionBlock extends StatelessWidget {
+  final StoreVO store;
+  final List<StoreVO> allStores;
+
+  const _SectionBlock({required this.store, required this.allStores});
+
+  @override
+  Widget build(BuildContext context) {
+    final items = store.rewards ?? const <RewardVO>[];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE6E8F0)),
+      ),
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        children: [
+          // header: logo + View All
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Prefer store logo; fallback to app logo
+                SizedBox(
+                  height: 36,
+                  child: (store.logoUrl ?? '').isEmpty
+                      ? Image.asset(AssetImageUtils.appLogo, height: 36)
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CacheNetworkImageWidget(
+                            url: store.logoUrl!,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => StoreViewAllPage(stores: allStores),
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF0C34FF),
+                  ),
+                  icon: const Text(
+                    "View All",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  label: const Icon(
+                    Icons.arrow_outward_rounded,
+                    size: 16,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // rewards scroller
+          SizedBox(
+            height: 230,
+            child: items.isEmpty
+                ? const Center(child: Text('No rewards'))
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (_, i) =>
+                        _RewardCard(item: items[i % items.length]),
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemCount: items.length,
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RewardCard extends StatelessWidget {
+  final RewardVO item;
+
+  const _RewardCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 170,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE6E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // image
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: (item.imageUrl ?? '').isEmpty
+                  ? Container(
+                      color: Colors.grey.shade200,
+                      child: const Center(
+                        child: Icon(Icons.image, size: 36, color: Colors.grey),
+                      ),
+                    )
+                  : CacheNetworkImageWidget(
+                      url: item.imageUrl!,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
+            child: Text(
+              item.name ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF0F172A),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              '${item.requiredPoints} pts',
+              style: const TextStyle(
+                color: Color(0xFFEF4444),
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// Redeemed tab -> rewardModel.redeemReward()
+// -------------------------------------------------------------
+class _RedeemedTab extends StatefulWidget {
+  const _RedeemedTab();
+
+  @override
+  State<_RedeemedTab> createState() => _RedeemedTabState();
+}
+
+class _RedeemedTabState extends State<_RedeemedTab> {
+  final _rewardModel = PhoneKingRewardModelImpl();
+  bool _loading = true;
+  String? _error;
+  List<RewardVO> _items = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final res = await _rewardModel.redeemReward();
+      if (!mounted) return;
+      setState(() {
+        _items = res.data ?? const [];
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _onRefresh() => _load();
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          const SizedBox(height: 80),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Text('Error: $_error', textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                ElevatedButton(onPressed: _load, child: const Text('Retry')),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+    if (_items.isEmpty) {
+      return const Center(child: Text('No redeemed rewards'));
+    }
+
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+        itemBuilder: (_, i) => _RedeemedCard(item: _items[i]),
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemCount: _items.length,
+      ),
+    );
+  }
+}
+
+class _RedeemedCard extends StatelessWidget {
+  final RewardVO item;
+
+  const _RedeemedCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.navigateToNextPage(
+          RewardDetailsPage(rewardID: item.id ?? "", isRedeem: false),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE6E8F0)),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Thumbnail
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 64,
+                height: 64,
+                child: (item.imageUrl ?? '').isEmpty
+                    ? Container(
+                        color: Colors.grey.shade200,
+                        child: const Center(
+                          child: Icon(
+                            Icons.image,
+                            size: 28,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                    : CacheNetworkImageWidget(
+                        url: item.imageUrl!,
+                        fit: BoxFit.cover,
+                      ),
+              ),
+            ),
+            const SizedBox(width: 12),
+
+            // Texts
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    item.name ?? '',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Description
+                  if ((item.description ?? '').isNotEmpty)
+                    Text(
+                      item.description!,
+                      style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        height: 1.35,
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+
+                  // Points row with star
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        size: 20,
+                        color: Color(0xFFFFC107),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${item.requiredPoints} pts',
+                        style: const TextStyle(
+                          color: Color(0xFFEF4444),
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// Used tab -> rewardModel.getUsedRewards()
+// -------------------------------------------------------------
+class _UsedTab extends StatefulWidget {
+  const _UsedTab();
+
+  @override
+  State<_UsedTab> createState() => _UsedTabState();
+}
+
+class _UsedTabState extends State<_UsedTab> {
+  final _rewardModel = PhoneKingRewardModelImpl();
+  bool _loading = true;
+  String? _error;
+  List<RewardVO> _items = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final res = await _rewardModel.getUsedRewards();
+      if (!mounted) return;
+      setState(() {
+        _items = res.data ?? const [];
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _onRefresh() => _load();
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          const SizedBox(height: 80),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Text('Error: $_error', textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                ElevatedButton(onPressed: _load, child: const Text('Retry')),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+    if (_items.isEmpty) {
+      return const Center(child: Text('No used rewards'));
+    }
+
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+        itemBuilder: (_, i) => _UsedCard(item: _items[i]),
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemCount: _items.length,
+      ),
+    );
+  }
 }
 
 class _UsedCard extends StatelessWidget {
-  final _UsedItem item;
+  final RewardVO item;
 
   const _UsedCard({required this.item});
 
@@ -104,22 +634,37 @@ class _UsedCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // Replace Placeholder with Image.asset(...)
-                  ColorFiltered(
-                    colorFilter: const ColorFilter.mode(
-                      Colors.black26, // dim
-                      BlendMode.darken,
-                    ),
-                    child: const Placeholder(),
-                  ),
-                  if (item.isUsed)
-                    const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Used',
-                        style: TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
+                  (item.imageUrl ?? '').isEmpty
+                      ? Container(
+                          color: Colors.grey.shade200,
+                          child: const Center(
+                            child: Icon(
+                              Icons.image,
+                              size: 28,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black26, // dim
+                            BlendMode.darken,
+                          ),
+                          child: CacheNetworkImageWidget(
+                            url: item.imageUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Used',
+                      style: TextStyle(
+                        color: Color(0xFFEF4444),
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
@@ -132,303 +677,59 @@ class _UsedCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
-                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF0F172A)),
+                  item.name ?? '',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    color: Color(0xFF0F172A),
+                  ),
                 ),
                 const SizedBox(height: 6),
-                Text(item.desc, style: const TextStyle(color: Color(0xFF6B7280), height: 1.35)),
+                if ((item.description ?? '').isNotEmpty)
+                  Text(
+                    item.description!,
+                    style: const TextStyle(
+                      color: Color(0xFF6B7280),
+                      height: 1.35,
+                    ),
+                  ),
                 const SizedBox(height: 8),
                 Row(
-                  children: [
-                    Image.asset(AssetImageUtils.confirmRedeemIcon, width: 16, height: 16, color: const Color(0xFF98A2B3)),
-                    const SizedBox(width: 6),
+                  children: const [
+                    // you can replace with your calendar asset if needed
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 16,
+                      color: Color(0xFF98A2B3),
+                    ),
+                    SizedBox(width: 6),
                     Text(
-                      item.dateText,
-                      style: const TextStyle(fontSize: 13, color: Color(0xFF98A2B3), fontWeight: FontWeight.w600),
+                      'Redeemed',
+                      // API doesn’t provide date in RewardVO; label only
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF98A2B3),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Image.asset(AssetImageUtils.confirmRedeemIcon, width: 18, height: 18, color: const Color(0xFFFFC107)),
+                    const Icon(Icons.star, size: 18, color: Color(0xFFFFC107)),
                     const SizedBox(width: 6),
                     Text(
-                      item.pointsText,
-                      style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
+                      '${item.requiredPoints} pts',
+                      style: const TextStyle(
+                        color: Color(0xFFEF4444),
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RedeemedTab extends StatelessWidget {
-  const _RedeemedTab();
-
-  @override
-  Widget build(BuildContext context) {
-    final items = const [
-      _RedeemedItem(title: '20% Screen Protector', desc: 'iphone 14 screen repaired.', dateText: 'Redeemed on Sep 12, 2025', pointsText: '2,000 pts'),
-    ];
-
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-      itemBuilder: (_, i) => _RedeemedCard(item: items[i]),
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemCount: items.length,
-    );
-  }
-}
-
-class _RedeemedItem {
-  final String title;
-  final String desc;
-  final String dateText; // already formatted
-  final String pointsText; // e.g. "2,000 pts"
-  const _RedeemedItem({required this.title, required this.desc, required this.dateText, required this.pointsText});
-}
-
-class _RedeemedCard extends StatelessWidget {
-  final _RedeemedItem item;
-
-  const _RedeemedCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Thumbnail
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              width: 64,
-              height: 64,
-              child: const Placeholder(), // swap with Image.asset(...)
-            ),
-          ),
-          const SizedBox(width: 12),
-
-          // Texts
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title
-                Text(
-                  item.title,
-                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF0F172A)),
-                ),
-                const SizedBox(height: 6),
-
-                // Description
-                Text(item.desc, style: const TextStyle(color: Color(0xFF6B7280), height: 1.35)),
-                const SizedBox(height: 8),
-
-                // Calendar row
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today_outlined, size: 16, color: Color(0xFF98A2B3)),
-                    const SizedBox(width: 6),
-                    Text(
-                      item.dateText,
-                      style: const TextStyle(fontSize: 13, color: Color(0xFF98A2B3), fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-
-                // Points row with star
-                Row(
-                  children: [
-                    const Icon(Icons.star, size: 20, color: Color(0xFFFFC107)),
-                    const SizedBox(width: 6),
-                    Text(
-                      item.pointsText,
-                      style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// ----- Reward Store (cards + horizontal lists) -----
-class _RewardStoreTab extends StatelessWidget {
-  const _RewardStoreTab();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-      children: const [
-        _SectionBlock(brand: "PhoneKing"),
-        SizedBox(height: 16),
-        _SectionBlock(brand: "KingPlus"),
-        SizedBox(height: 16),
-        _SectionBlock(brand: "GadgetPlus"),
-      ],
-    );
-  }
-}
-
-class _SectionBlock extends StatelessWidget {
-  final String brand;
-
-  const _SectionBlock({required this.brand});
-
-  @override
-  Widget build(BuildContext context) {
-    final items = const [
-      _RewardItem(name: "Screen Protector", pts: "1,000 pts"),
-      _RewardItem(name: "Phone Case", pts: "1,000 pts"),
-      _RewardItem(name: "Charger", pts: "1,200 pts"),
-      _RewardItem(name: "Earbuds", pts: "2,000 pts"),
-    ];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        children: [
-          // header
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(AssetImageUtils.appLogo, width: 130),
-                TextButton.icon(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(foregroundColor: const Color(0xFF0C34FF)),
-                  icon: const Text("View All", style: TextStyle(color: Colors.black)),
-                  label: const Icon(Icons.arrow_outward_rounded, size: 16, color: Colors.black),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 230,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, i) => _RewardCard(item: items[i % items.length]),
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemCount: 8,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RewardCard extends StatelessWidget {
-  final _RewardItem item;
-
-  const _RewardCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 170,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // image
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: SizedBox(
-              height: 120,
-              width: double.infinity,
-              child: const Placeholder(), // swap with Image.asset(...)
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-            child: Text(
-              item.name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              item.pts,
-              style: const TextStyle(color:  Color(0xFFEF4444), fontWeight: FontWeight.w800),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RewardItem {
-  final String name;
-  final String pts;
-
-  const _RewardItem({required this.name, required this.pts});
-}
-
-/// ----- iOS-like segmented control look (no packages) -----
-class _SegmentedTabBar extends StatelessWidget {
-  final TabController controller;
-
-  const _SegmentedTabBar({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    const selected = Color(0xFFEF4444);
-    const bg = Color(0xFFF0F1F6);
-
-    return Container(
-      height: 44,
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(22)),
-      child: TabBar(
-        controller: controller,
-        indicator: BoxDecoration(
-          color: selected,
-          borderRadius: BorderRadius.circular(22),
-          boxShadow: const [BoxShadow(color: Color(0x260C34FF), blurRadius: 8, offset: Offset(0, 4))],
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: const Color(0xFF5B667A),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w700),
-        dividerColor: Colors.transparent,
-        indicatorSize: TabBarIndicatorSize.tab,
-        tabs: const [
-          Tab(text: "Reward Store"),
-          Tab(text: "Redeemed"),
-          Tab(text: "Used"),
         ],
       ),
     );

@@ -26,7 +26,7 @@ class _SplashPageState extends State<SplashPage>
 
   final PhoneKingBannerModel _bannerModel = PhoneKingBannerModelImpl();
 
-  static const String _bannerType = 'SPLASH';
+  static const String _bannerType = 'SPLASH_SCREEN';
 
   @override
   void initState() {

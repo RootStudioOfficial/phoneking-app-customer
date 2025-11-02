@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
+import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
+import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
+import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
 import 'package:phone_king_customer/network/api/phone_king_api_constant.dart';
 import 'package:phone_king_customer/network/api/phone_king_interceptor.dart';
 import 'package:phone_king_customer/network/response/base_response.dart';
@@ -110,6 +114,115 @@ class PhoneKingCustomerAPI {
             .map((e) => BannerVO.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  /// ---------------- Balance ----------------
+  Future<BaseResponse<GetBalanceVO>> getBalance() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.getBalance);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => GetBalanceVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  /// ---------------- Store ----------------
+  Future<BaseResponse<List<StoreVO>>> getStore() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.store);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => (json as List)
+            .map((e) => StoreVO.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  /// ---------------- Reward ----------------
+  Future<BaseResponse<List<RewardVO>>> getRedeemReward() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.redeemReward);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => (json as List)
+            .map((e) => RewardVO.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<List<RewardVO>>> getAllReward(
+    String storeID,
+    String rewardType,
+  ) async {
+    try {
+      final response = await _dio.get(
+        PhoneKingCustomerApi.rewardAll,
+        queryParameters: {"storeId": storeID, "rewardType": rewardType},
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => (json as List)
+            .map((e) => RewardVO.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<List<RewardVO>>> getUsedReward() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.usedReward);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => (json as List)
+            .map((e) => RewardVO.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<RewardDetailsVO>> rewardDetails(String rewardID) async {
+    try {
+      final response = await _dio.get(
+        PhoneKingCustomerApi.rewardDetails(rewardID),
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => RewardDetailsVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<void>> rewardRedeem(String rewardID) async {
+    try {
+      final response = await _dio.post(
+        PhoneKingCustomerApi.rewardRedeem(rewardID),
+      );
+
+      return BaseResponse.fromJson(response.data, (_) => {});
     } catch (e, stack) {
       throw Exception(_throwException(e, stack));
     }
