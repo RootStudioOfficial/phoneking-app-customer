@@ -1,4 +1,5 @@
 import 'package:phone_king_customer/data/model/reward/phone_king_reward_model.dart';
+import 'package:phone_king_customer/data/vos/reward_vo/reward_claim_success_vo/reward_claim_success_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 import 'package:phone_king_customer/network/api/phone_king_api.dart';
@@ -32,4 +33,10 @@ class PhoneKingRewardModelImpl implements PhoneKingRewardModel {
     String storeID,
     String rewardType,
   ) => _api.getAllReward(storeID, rewardType);
+
+  @override
+  Future<BaseResponse<RewardClaimSuccessVO>> claimReward(
+    String redemptionConfirmId,
+    String password,
+  ) => _api.claimReward(redemptionConfirmId, password);
 }

@@ -3,6 +3,8 @@ import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl
 import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
+import 'package:phone_king_customer/page/index_page.dart';
+import 'package:phone_king_customer/page/reward/reward_scan_qr_code_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
@@ -369,38 +371,46 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
                                   ? null
                                   : () async {
                                       if (!widget.isRedeem) {
-                                        return;
-                                      }
-
-                                      final proceed =
-                                          await _showRedeemConfirmDialog(
-                                            context,
-                                          );
-                                      if (proceed != true) return;
-
-                                      setState(() => _redeemLoading = true);
-                                      try {
-                                        await _rewardModel.rewardRedeem(
-                                          _details!.id,
+                                        context.navigateToNextPage(
+                                          RewardScanQrCodePage(),
                                         );
+                                      } else {
+                                        final proceed =
+                                            await _showRedeemConfirmDialog(
+                                              context,
+                                            );
+                                        if (proceed != true) return;
 
-                                        if (context.mounted) {
-                                          context.showSuccessSnackBar(
-                                            'Redeemed successfully',
+                                        setState(() => _redeemLoading = true);
+                                        try {
+                                          await _rewardModel.rewardRedeem(
+                                            _details!.id,
                                           );
-                                          context.navigateBack();
-                                        }
-                                      } catch (e) {
-                                        if (context.mounted) {
-                                          context.showErrorSnackBar(
-                                            e.toString(),
-                                          );
-                                        }
-                                      } finally {
-                                        if (mounted) {
-                                          setState(
-                                            () => _redeemLoading = false,
-                                          );
+
+                                          if (context.mounted) {
+                                            context.showSuccessSnackBar(
+                                              'Redeemed successfully',
+                                            );
+                                            context
+                                                .navigateToNextPageWithRemoveUntil(
+                                                  IndexPage(
+                                                    desireIndex: 1,
+                                                    desireRewardIndex: 1,
+                                                  ),
+                                                );
+                                          }
+                                        } catch (e) {
+                                          if (context.mounted) {
+                                            context.showErrorSnackBar(
+                                              e.toString(),
+                                            );
+                                          }
+                                        } finally {
+                                          if (mounted) {
+                                            setState(
+                                              () => _redeemLoading = false,
+                                            );
+                                          }
                                         }
                                       }
                                     },

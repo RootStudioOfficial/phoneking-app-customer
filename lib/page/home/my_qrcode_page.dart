@@ -1,8 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
+import 'package:phone_king_customer/persistent/login_persistent.dart';
+import 'package:phone_king_customer/utils/encrypt_utils.dart';
 import 'package:phone_king_customer/widgets/qr_info_widget.dart';
 
-class MyQrCodePage extends StatelessWidget {
+class MyQrCodePage extends StatefulWidget {
   const MyQrCodePage({super.key});
+
+  @override
+  State<MyQrCodePage> createState() => _MyQrCodePageState();
+}
+
+class _MyQrCodePageState extends State<MyQrCodePage> {
+  final LoginPersistent loginPersistent = LoginPersistent();
+  QrPayloadVO? _qrPayloadVO;
+
+  @override
+  void initState() {
+    loginPersistent.getLoginData().then((data) {
+      setState(() {
+        _qrPayloadVO = QrPayloadVO.create(
+          data: QrDataVO(
+            userId: data?.id ?? '',
+            userName: data?.displayName ?? '',
+          ),
+        );
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +46,13 @@ class MyQrCodePage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
-      body: QrInfoWidget(qrData: "qrData"),
+      body: _qrPayloadVO == null
+          ? const Center(child: CircularProgressIndicator())
+          : QrInfoWidget(
+              qrData: EncryptUtils.encryptText(
+                jsonEncode(_qrPayloadVO?.toJson()),
+              ),
+            ),
     );
   }
 }

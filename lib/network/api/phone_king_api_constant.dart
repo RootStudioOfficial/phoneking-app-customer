@@ -19,7 +19,7 @@ class PhoneKingCustomerApi {
   static const String store = '$baseUrl/user/store';
 
   //Reward
-  static const String rewardAll='$baseUrl/user/reward';
+  static const String rewardAll = '$baseUrl/user/reward';
   static const String redeemReward = '$baseUrl/user/reward/redeem';
   static const String usedReward = '$baseUrl/user/reward/used';
 
@@ -27,5 +27,8 @@ class PhoneKingCustomerApi {
       '$baseUrl/user/reward/$rewardID';
 
   static String rewardRedeem(String rewardID) =>
-      '$baseUrl/api/v1/user/reward/$rewardID/redeem';
+      '$baseUrl/user/reward/$rewardID/redeem';
+
+  static String claimReward(String redemptionConfirmId) =>
+      '$baseUrl/user/reward/claim/$redemptionConfirmId';
 }

@@ -31,4 +31,3 @@ Map<String, dynamic> _$RewardDetailsVOToJson(RewardDetailsVO instance) =>
       'availableQuantity': instance.availableQuantity,
       'store': instance.store?.toJson(),
     };
-

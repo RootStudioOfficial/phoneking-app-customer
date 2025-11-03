@@ -13,7 +13,9 @@ import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart'
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
 class RewardsPage extends StatefulWidget {
-  const RewardsPage({super.key});
+  const RewardsPage({super.key, this.desireRewardIndex = 0});
+
+  final int desireRewardIndex;
 
   @override
   State<RewardsPage> createState() => _RewardsPageState();
@@ -22,6 +24,12 @@ class RewardsPage extends StatefulWidget {
 class _RewardsPageState extends State<RewardsPage>
     with SingleTickerProviderStateMixin {
   late final TabController _tab = TabController(length: 3, vsync: this);
+
+  @override
+  void initState() {
+    _tab.index = widget.desireRewardIndex;
+    super.initState();
+  }
 
   @override
   void dispose() {
