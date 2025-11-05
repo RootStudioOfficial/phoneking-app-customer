@@ -14,6 +14,8 @@ class PhoneKingCustomerApi {
 
   //Point
   static const String getBalance = '$baseUrl/user/point/balance';
+  static const String getSummary = '$baseUrl/user/point/summary';
+  static const String getHistory = '$baseUrl/user/point/history';
 
   //Store
   static const String store = '$baseUrl/user/store';
@@ -31,4 +33,11 @@ class PhoneKingCustomerApi {
 
   static String claimReward(String redemptionConfirmId) =>
       '$baseUrl/user/reward/claim/$redemptionConfirmId';
+
+  ///Support
+  static const String supportFaq = "$baseUrl/support/faq";
+  static const String contactInfo = "$baseUrl/support/contact-us";
+  static const String supportBranches = "$baseUrl/support/branches";
+  static const String supportTermsAndCondition =
+      "$baseUrl/support/terms-and-condition";
 }

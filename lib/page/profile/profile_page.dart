@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:phone_king_customer/data/model/auth/phone_king_auth_model.dart';
+import 'package:phone_king_customer/data/model/auth/phone_king_auth_model_impl.dart';
+import 'package:phone_king_customer/page/auth/onboarding_page.dart';
+import 'package:phone_king_customer/page/profile/contact_branches/contact_branches_page.dart';
+import 'package:phone_king_customer/page/profile/help_and_support/help_and_support_page.dart';
+import 'package:phone_king_customer/page/profile/terms_and_condition/terms_and_condition_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
+import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final PhoneKingAuthModel phoneKingAuthModel = PhoneKingAuthModelImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +27,10 @@ class ProfilePage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: const Text('Profile', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text(
+          'Profile',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
         centerTitle: false,
       ),
       body: ListView(
@@ -34,8 +52,18 @@ class ProfilePage extends StatelessWidget {
                     Container(
                       width: 54,
                       height: 54,
-                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFFEF4444)),
-                      child: Center(child: Image.asset(AssetImageUtils.profileIcon, width: 28, height: 28, color: Colors.white)),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFEF4444),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          AssetImageUtils.profileIcon,
+                          width: 28,
+                          height: 28,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 14),
                     const Expanded(
@@ -47,15 +75,26 @@ class ProfilePage extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   'John Doe',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color(0xFF0F172A),
+                                  ),
                                 ),
                               ),
                               // edit icon
-                              Icon(Icons.edit_outlined, size: 18, color: Color(0xFF9AA3B2)),
+                              Icon(
+                                Icons.edit_outlined,
+                                size: 18,
+                                color: Color(0xFF9AA3B2),
+                              ),
                             ],
                           ),
                           SizedBox(height: 2),
-                          Text('09420148498', style: TextStyle(color: Color(0xFF6B7280))),
+                          Text(
+                            '09420148498',
+                            style: TextStyle(color: Color(0xFF6B7280)),
+                          ),
                         ],
                       ),
                     ),
@@ -67,7 +106,11 @@ class ProfilePage extends StatelessWidget {
                 Row(
                   children: const [
                     Expanded(
-                      child: _StatTile(label: 'Member', value: '🥇 Gold', valueColor: Color(0xFFEEB60A)),
+                      child: _StatTile(
+                        label: 'Member',
+                        value: '🥇 Gold',
+                        valueColor: Color(0xFFEEB60A),
+                      ),
                     ),
                     Expanded(
                       child: _StatTile(label: 'Points', value: '11,968'),
@@ -84,22 +127,48 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 22),
           _sectionTitle('General'),
           _cardList(
-            children: const [
-              _SettingTile(asset: AssetImageUtils.changePinIcon, label: 'Change Pin'),
+            children: [
+              _SettingTile(
+                asset: AssetImageUtils.changePinIcon,
+                label: 'Change Pin',
+                onTap: () {},
+              ),
               _DividerTile(),
-              _SettingTile(asset: AssetImageUtils.shareAppIcon, label: 'Share App'),
+              _SettingTile(
+                asset: AssetImageUtils.shareAppIcon,
+                label: 'Share App',
+                onTap: () {},
+              ),
             ],
           ),
 
           const SizedBox(height: 18),
           _sectionTitle('Support'),
           _cardList(
-            children: const [
-              _SettingTile(asset: AssetImageUtils.helpAndSupportIcon, label: 'Help & Support'),
+            children: [
+              _SettingTile(
+                asset: AssetImageUtils.helpAndSupportIcon,
+                label: 'Help & Support',
+                onTap: () {
+                  context.navigateToNextPage(HelpAndSupportPage());
+                },
+              ),
               _DividerTile(),
-              _SettingTile(asset: AssetImageUtils.contactBranchesIcon, label: 'Contact Branches'),
+              _SettingTile(
+                asset: AssetImageUtils.contactBranchesIcon,
+                label: 'Contact Branches',
+                onTap: () {
+                  context.navigateToNextPage(ContactBranchesPage());
+                },
+              ),
               _DividerTile(),
-              _SettingTile(asset: AssetImageUtils.termsAndConditionIcon, label: 'Terms & Conditions'),
+              _SettingTile(
+                asset: AssetImageUtils.termsAndConditionIcon,
+                label: 'Terms & Conditions',
+                onTap: () {
+                  context.navigateToNextPage(TermsAndConditionPage());
+                },
+              ),
             ],
           ),
 
@@ -111,7 +180,28 @@ class ProfilePage extends StatelessWidget {
               border: Border.all(color: const Color(0xFFE6E8F0)),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const _SettingTile(asset: AssetImageUtils.signOutIcon, label: 'Sign Out', labelColor: Color(0xFFEF4444)),
+            child: _SettingTile(
+              asset: AssetImageUtils.signOutIcon,
+              label: 'Sign Out',
+              labelColor: Color(0xFFEF4444),
+              onTap: () {
+                phoneKingAuthModel
+                    .logout()
+                    .then((_) {
+                      if (context.mounted) {
+                        context.showSuccessSnackBar("Logout Success.");
+                        context.navigateToNextPageWithRemoveUntil(
+                          OnBoardingPage(),
+                        );
+                      }
+                    })
+                    .catchError((error) {
+                      if (context.mounted) {
+                        context.showErrorSnackBar(error.toString());
+                      }
+                    });
+              },
+            ),
           ),
           const SizedBox(height: 130),
         ],
@@ -137,12 +227,18 @@ class _StatTile extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: Color(0xFF6B7280), fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              color: Color(0xFF6B7280),
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(color: valueColor ?? const Color(0xFF0F172A), fontWeight: FontWeight.w800),
+            style: TextStyle(
+              color: valueColor ?? const Color(0xFF0F172A),
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -154,7 +250,10 @@ Widget _sectionTitle(String text) => Padding(
   padding: const EdgeInsets.only(left: 4, bottom: 8),
   child: Text(
     text,
-    style: const TextStyle(color: Color(0xFF818898), fontWeight: FontWeight.w700),
+    style: const TextStyle(
+      color: Color(0xFF818898),
+      fontWeight: FontWeight.w700,
+    ),
   ),
 );
 
@@ -171,8 +270,15 @@ class _SettingTile extends StatelessWidget {
   final String asset;
   final String label;
   final Color? labelColor;
+  final Function onTap;
 
-  const _SettingTile({required this.asset, required this.label, this.labelColor});
+  const _SettingTile({
+    required this.onTap,
+    required this.asset,
+    required this.label,
+
+    this.labelColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -180,16 +286,29 @@ class _SettingTile extends StatelessWidget {
       leading: Container(
         width: 34,
         height: 34,
-        decoration: BoxDecoration(color: const Color(0xFFF2F4F8), borderRadius: BorderRadius.circular(8)),
-        child: Center(child: Image.asset(asset, width: 20, height: 20, color: const Color(0xFF6B7280))),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF2F4F8),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Image.asset(
+            asset,
+            width: 20,
+            height: 20,
+            color: const Color(0xFF6B7280),
+          ),
+        ),
       ),
       title: Text(
         label,
-        style: TextStyle(color: labelColor ?? const Color(0xFF0F172A), fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: labelColor ?? const Color(0xFF0F172A),
+          fontWeight: FontWeight.w600,
+        ),
       ),
       trailing: const Icon(Icons.chevron_right, color: Color(0xFF9AA3B2)),
       onTap: () {
-        // TODO: hook up navigation
+        onTap();
       },
     );
   }
@@ -200,6 +319,11 @@ class _DividerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(height: 1, indent: 16, endIndent: 16, color: Color(0xFFE6E8F0));
+    return const Divider(
+      height: 1,
+      indent: 16,
+      endIndent: 16,
+      color: Color(0xFFE6E8F0),
+    );
   }
 }

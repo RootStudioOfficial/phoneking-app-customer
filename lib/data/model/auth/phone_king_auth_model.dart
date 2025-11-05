@@ -23,4 +23,6 @@ abstract class PhoneKingAuthModel {
     required String phoneNumber,
     required String otp,
   });
+
+  Future<void> logout();
 }

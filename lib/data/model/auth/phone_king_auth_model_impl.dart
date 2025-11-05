@@ -57,4 +57,7 @@ class PhoneKingAuthModelImpl implements PhoneKingAuthModel {
   Future<BaseResponse<void>> sendRegisterVerification({
     required String phoneNumber,
   }) => _api.sendRegisterVerification(phoneNumber: phoneNumber);
+
+  @override
+  Future<void> logout() => LoginPersistent().clearLoginData();
 }
