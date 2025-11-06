@@ -6,14 +6,14 @@ import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart'; // for context.showErrorSnackBar
 
-class MyHistoryPage extends StatefulWidget {
-  const MyHistoryPage({super.key});
+class ActivityPage extends StatefulWidget {
+  const ActivityPage({super.key});
 
   @override
-  State<MyHistoryPage> createState() => _MyHistoryPageState();
+  State<ActivityPage> createState() => _ActivityPageState();
 }
 
-class _MyHistoryPageState extends State<MyHistoryPage> {
+class _ActivityPageState extends State<ActivityPage> {
   final _pointModel = PhoneKingPointModelImpl();
 
   // API state

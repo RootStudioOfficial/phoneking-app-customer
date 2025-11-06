@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
@@ -7,11 +9,15 @@ import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart'
 import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
 import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
 import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
+import 'package:phone_king_customer/data/vos/member_tier_vo/member_tier_vo.dart';
+import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_claim_success_vo/reward_claim_success_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phone_king_customer/data/vos/scan_payment_vo/scan_payment_vo.dart';
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
 import 'package:phone_king_customer/data/vos/terms_and_condition_vo/terms_and_condition_vo.dart';
+import 'package:phone_king_customer/data/vos/user_vo/user_vo.dart';
 import 'package:phone_king_customer/network/api/phone_king_api_constant.dart';
 import 'package:phone_king_customer/network/api/phone_king_interceptor.dart';
 import 'package:phone_king_customer/network/response/base_response.dart';
@@ -351,6 +357,127 @@ class PhoneKingCustomerAPI {
         (json) => (json as List)
             .map((e) => TermsAndConditionVO.fromJson(e as Map<String, dynamic>))
             .toList(),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<UserVO>> getProfile() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.getProfile);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => UserVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<MemberTierVO>> getMemberTier() async {
+    try {
+      final response = await _dio.get(PhoneKingCustomerApi.getMemberTier);
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => MemberTierVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<void>> changePassword(
+    String newPassword,
+    String oldPassword,
+  ) async {
+    try {
+      final response = await _dio.put(
+        PhoneKingCustomerApi.changePassword,
+        data: {"newPassword": newPassword, "oldPassword": oldPassword},
+      );
+
+      return BaseResponse.fromJson(response.data, (_) => {});
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<void>> updateProfile(
+    String profileImageUrl,
+    String displayName,
+    String phoneNumber,
+  ) async {
+    try {
+      final response = await _dio.get(
+        PhoneKingCustomerApi.changePassword,
+        data: {
+          "profileImageUrl": profileImageUrl,
+          "displayName": displayName,
+          "phoneNumber": phoneNumber,
+        },
+      );
+
+      return BaseResponse.fromJson(response.data, (_) => {});
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<String>> uploadFile(File file, String folder) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
+        'folder': folder,
+      });
+      final response = await _dio.post(
+        PhoneKingCustomerApi.fileUpload,
+        data: formData,
+      );
+      final baseResponse = BaseResponse<String>.fromJson(
+        response.data,
+        (json) => json['url'] as String,
+      );
+      return baseResponse;
+    } catch (e, s) {
+      throw _throwException(e, s);
+    }
+  }
+
+  Future<BaseResponse<ScanPaymentVO>> scanPaymentQrInfo(String key) async {
+    try {
+      final response = await _dio.get(
+        PhoneKingCustomerApi.scanQrInfo,
+        queryParameters: {"key": key},
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => ScanPaymentVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<PaymentSuccessVO>> makePayment(
+    String key,
+    String password,
+  ) async {
+    try {
+      final response = await _dio.post(
+        PhoneKingCustomerApi.makePayment,
+        data: {"key": key, "password": password},
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => PaymentSuccessVO.fromJson(json as Map<String, dynamic>),
       );
     } catch (e, stack) {
       throw Exception(_throwException(e, stack));

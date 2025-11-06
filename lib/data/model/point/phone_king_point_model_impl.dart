@@ -2,6 +2,8 @@ import 'package:phone_king_customer/data/model/point/phone_king_point_model.dart
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
 import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
+import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
+import 'package:phone_king_customer/data/vos/scan_payment_vo/scan_payment_vo.dart';
 import 'package:phone_king_customer/network/api/phone_king_api.dart';
 import 'package:phone_king_customer/network/response/base_response.dart';
 
@@ -27,5 +29,18 @@ class PhoneKingPointModelImpl implements PhoneKingPointModel {
     String toDate,
   ) {
     return _api.getSummary(fromDate, toDate);
+  }
+
+  @override
+  Future<BaseResponse<PaymentSuccessVO>> makePayment(
+    String key,
+    String password,
+  ) {
+    return _api.makePayment(key, password);
+  }
+
+  @override
+  Future<BaseResponse<ScanPaymentVO>> scanPaymentQrInfo(String key) {
+    return _api.scanPaymentQrInfo(key);
   }
 }

@@ -34,10 +34,22 @@ class PhoneKingCustomerApi {
   static String claimReward(String redemptionConfirmId) =>
       '$baseUrl/user/reward/claim/$redemptionConfirmId';
 
+  static const String getProfile = '$baseUrl/user/profile';
+  static const String getMemberTier = '$baseUrl/user/profile/summary';
+  static const String changePassword = '$baseUrl/user/auth/change-password';
+  static const String updateProfile = '$baseUrl/user/profile';
+
   ///Support
   static const String supportFaq = "$baseUrl/support/faq";
   static const String contactInfo = "$baseUrl/support/contact-us";
   static const String supportBranches = "$baseUrl/support/branches";
   static const String supportTermsAndCondition =
       "$baseUrl/support/terms-and-condition";
+
+  ///Payment
+  static const String scanQrInfo = '$baseUrl/user/point/qr-payment/scan';
+  static const String makePayment = '$baseUrl/user/point/qr-payment';
+
+  ///File Upload
+  static const String fileUpload = '$baseUrl/file/upload';
 }

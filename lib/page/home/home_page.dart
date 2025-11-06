@@ -7,9 +7,10 @@ import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
-import 'package:phone_king_customer/page/home/my_history_page.dart';
-import 'package:phone_king_customer/page/home/my_qrcode_page.dart';
+import 'package:phone_king_customer/page/home/activity/activity_page.dart';
+import 'package:phone_king_customer/page/home/qr_code/qrcode_page.dart';
 import 'package:phone_king_customer/page/home/notification/notification_page.dart';
+import 'package:phone_king_customer/page/home/scan_to_pay/payment_qr_scan_page.dart';
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
@@ -155,37 +156,54 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.asset(
-                                AssetImageUtils.goldSetIcon,
-                                width: 20,
-                                height: 20,
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Point Balance",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    _formatPoints(_balance?.totalBalance ?? 0),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 4),
-                              const Text(
-                                "Gold",
-                                style: TextStyle(
-                                  color: Colors.amber,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                              GestureDetector(
+                                onTap: () {
+                                  context.navigateToNextPage(
+                                    const ActivityPage(),
+                                  );
+                                },
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      "Activity",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            "Point Balance",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            _formatPoints(_balance?.totalBalance ?? 0),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 34,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+
                           const SizedBox(height: 14),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -195,17 +213,17 @@ class _HomePageState extends State<HomePage> {
                                 "QR Code",
                                 () {
                                   context.navigateToNextPage(
-                                    const MyQrCodePage(),
+                                    const QrCodePage(),
                                   );
                                 },
                               ),
                               const SizedBox(width: 12),
                               _actionButton(
-                                AssetImageUtils.historyIcon,
-                                "History",
+                                AssetImageUtils.scanQrIcon,
+                                "Scan to Pay",
                                 () {
                                   context.navigateToNextPage(
-                                    const MyHistoryPage(),
+                                    const PaymentQrScanPage(),
                                   );
                                 },
                               ),

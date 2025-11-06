@@ -25,10 +25,12 @@ QrDataVO _$QrDataVOFromJson(Map<String, dynamic> json) => QrDataVO(
   redemptionConfirmId: json['redemptionConfirmId'] as String?,
   userId: json['userId'] as String?,
   userName: json['userName'] as String?,
+  paymentKey: json['paymentKey'] as String?,
 );
 
 Map<String, dynamic> _$QrDataVOToJson(QrDataVO instance) => <String, dynamic>{
   'redemptionConfirmId': instance.redemptionConfirmId,
   'userId': instance.userId,
   'userName': instance.userName,
+  'paymentKey': instance.paymentKey,
 };

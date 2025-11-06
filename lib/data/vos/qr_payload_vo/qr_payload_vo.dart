@@ -51,8 +51,14 @@ class QrDataVO {
   final String? redemptionConfirmId;
   final String? userId;
   final String? userName;
+  final String? paymentKey;
 
-  QrDataVO({this.redemptionConfirmId, this.userId, this.userName});
+  QrDataVO({
+    this.redemptionConfirmId,
+    this.userId,
+    this.userName,
+    this.paymentKey,
+  });
 
   factory QrDataVO.fromJson(Map<String, dynamic> json) =>
       _$QrDataVOFromJson(json);

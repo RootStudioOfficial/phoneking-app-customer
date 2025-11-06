@@ -6,14 +6,14 @@ import 'package:phone_king_customer/persistent/login_persistent.dart';
 import 'package:phone_king_customer/utils/encrypt_utils.dart';
 import 'package:phone_king_customer/widgets/qr_info_widget.dart';
 
-class MyQrCodePage extends StatefulWidget {
-  const MyQrCodePage({super.key});
+class QrCodePage extends StatefulWidget {
+  const QrCodePage({super.key});
 
   @override
-  State<MyQrCodePage> createState() => _MyQrCodePageState();
+  State<QrCodePage> createState() => _QrCodePageState();
 }
 
-class _MyQrCodePageState extends State<MyQrCodePage> {
+class _QrCodePageState extends State<QrCodePage> {
   final LoginPersistent loginPersistent = LoginPersistent();
   QrPayloadVO? _qrPayloadVO;
 

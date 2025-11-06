@@ -9,6 +9,8 @@ class AssetImageUtils {
   static const String profileIcon = 'assets/profile_icon.png';
   static const String rewardIcon = 'assets/reward_icon.png';
   static const String qrIcon = 'assets/qr_icon.png';
+  static const String scanQrIcon = 'assets/scan_qr_icon.png';
+
   static const String notificationIcon = 'assets/notification_icon.png';
   static const String historyIcon = 'assets/history_icon.png';
 
@@ -22,10 +24,16 @@ class AssetImageUtils {
   static const String signOutIcon = 'assets/sign_out_icon.png';
   static const String translateIcon = 'assets/translate_icon.png';
   static const String redeemConfirmIcon = 'assets/redeem_confirm_icon.png';
+  static const String facebookIcon = 'assets/facebook_icon.png';
+  static const String instagramIcon = 'assets/instagram_icon.png';
+  static const String viberIcon = 'assets/viber_icon.png';
+  static const String telegramIcon = 'assets/telegram_icon.png';
 
   // Reward / Top-up icons
   static const String confirmRedeemIcon = 'assets/confirm_redeem_icon.png';
   static const String rewardSuccessfulIcon =
       'assets/reward_successful_icon.png';
   static const String topUpSuccessfulIcon = 'assets/top_up_successful_icon.png';
+  static const String paymentSuccessfulIcon =
+      'assets/payment_successful_icon.png';
 }
