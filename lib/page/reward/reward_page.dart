@@ -189,157 +189,16 @@ class _RewardStoreTabState extends State<_RewardStoreTab> {
       onRefresh: _onRefresh,
       child: ListView.separated(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-        itemBuilder: (_, i) =>
-            _SectionBlock(store: _stores[i], allStores: _stores),
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemCount: _stores.length,
-      ),
-    );
-  }
-}
-
-class _SectionBlock extends StatelessWidget {
-  final StoreVO store;
-  final List<StoreVO> allStores;
-
-  const _SectionBlock({required this.store, required this.allStores});
-
-  @override
-  Widget build(BuildContext context) {
-    final items = store.rewards ?? const <RewardVO>[];
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        children: [
-          // header: logo + View All
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Prefer store logo; fallback to app logo
-                SizedBox(
-                  height: 36,
-                  child: (store.logoUrl ?? '').isEmpty
-                      ? Image.asset(AssetImageUtils.appLogo, height: 36)
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CacheNetworkImageWidget(
-                            url: store.logoUrl!,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => StoreViewAllPage(stores: allStores),
-                      ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF0C34FF),
-                  ),
-                  icon: const Text(
-                    "View All",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  label: const Icon(
-                    Icons.arrow_outward_rounded,
-                    size: 16,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // rewards scroller
-          SizedBox(
-            height: 230,
-            child: items.isEmpty
-                ? const Center(child: Text('No rewards'))
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, i) =>
-                        _RewardCard(item: items[i % items.length]),
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
-                    itemCount: items.length,
-                  ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RewardCard extends StatelessWidget {
-  final RewardVO item;
-
-  const _RewardCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 170,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // image
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: SizedBox(
-              height: 120,
-              width: double.infinity,
-              child: (item.imageUrl ?? '').isEmpty
-                  ? Container(
-                      color: Colors.grey.shade200,
-                      child: const Center(
-                        child: Icon(Icons.image, size: 36, color: Colors.grey),
-                      ),
-                    )
-                  : CacheNetworkImageWidget(
-                      url: item.imageUrl!,
-                      fit: BoxFit.cover,
-                    ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-            child: Text(
-              item.name ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF0F172A),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              '${item.requiredPoints} pts',
-              style: const TextStyle(
-                color: Color(0xFFEF4444),
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-        ],
+        itemBuilder: (_, i) {
+          if (i <= _stores.length - 1) {
+            return _storeSection(_stores[i], () {
+              context.navigateToNextPage(StoreViewAllPage(stores: _stores));
+            });
+          }
+          return SizedBox(height: 100);
+        },
+        separatorBuilder: (_, _) => const SizedBox(height: 16),
+        itemCount: _stores.length + 1,
       ),
     );
   }
@@ -742,4 +601,174 @@ class _UsedCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// ---------- Sections ----------
+
+Widget _storeSection(StoreVO store, Function onTapViewAll) {
+  final rewards = store.rewards ?? const <RewardVO>[];
+
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 10),
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: const Color(0xFFE6E8F0)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _storeHeader(store, onTapViewAll),
+        const SizedBox(height: 12),
+        _rewardGrid(rewards),
+      ],
+    ),
+  );
+}
+
+// ---------- UI helpers ----------
+
+Widget _storeHeader(StoreVO store, Function onTapViewAll) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            if ((store.logoUrl ?? '').isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CacheNetworkImageWidget(
+                      url: store.logoUrl!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 180),
+              child: Text(
+                store.name ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTap: () {
+            onTapViewAll();
+          },
+          child: const Text(
+            "View All →",
+            style: TextStyle(
+              color: Color(0xFF0C34FF),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _rewardGrid(List<RewardVO> rewards) {
+  if (rewards.isEmpty) {
+    return const SizedBox(
+      height: 120,
+      child: Center(child: Text("No rewards available")),
+    );
+  }
+
+  return SizedBox(
+    height: 240,
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: rewards.length,
+      itemBuilder: (context, i) {
+        final r = rewards[i];
+        return Container(
+          width: 160,
+          margin: const EdgeInsets.only(right: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE6E8F0)),
+          ),
+          child: InkWell(
+            onTap: () {
+              context.navigateToNextPage(
+                RewardDetailsPage(rewardID: r.id ?? ''),
+              );
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // image
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: SizedBox(
+                    height: 130,
+                    child: (r.imageUrl ?? '').isEmpty
+                        ? const Center(child: Text("Image"))
+                        : Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: CacheNetworkImageWidget(
+                              url: r.imageUrl!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                  ),
+                ),
+                // name
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  child: Text(
+                    r.name ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                // points
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    "${r.requiredPoints} pts",
+                    style: const TextStyle(
+                      color: Color(0xFF0C34FF),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }

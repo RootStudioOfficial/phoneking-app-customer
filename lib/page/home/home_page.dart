@@ -16,6 +16,7 @@ import 'package:phone_king_customer/page/reward/reward_details_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,6 +36,8 @@ class _HomePageState extends State<HomePage> {
   GetBalanceVO? _balance;
   List<BannerVO> _banners = const [];
   List<StoreVO> _stores = const [];
+
+  int _bannerActiveIndex = 0;
 
   static const String _bannerTypeAnnouncement = 'ANNOUNCEMENT';
 
@@ -236,34 +239,60 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 16),
 
                     // ===== Banners =====
-                    SizedBox(
-                      height: w * 0.5,
-                      child: _banners.isEmpty
-                          ? Container(
-                              color: Colors.black12,
-                              child: const Center(
-                                child: Text("Banner Placeholder"),
-                              ),
-                            )
-                          : PageView.builder(
-                              itemCount: _banners.length,
-                              itemBuilder: (context, i) {
-                                final b = _banners[i];
-                                final img = b.imageUrl;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 10,
+                      children: [
+                        SizedBox(
+                          height: w * 0.5,
+                          child: _banners.isEmpty
+                              ? Container(
+                                  color: Colors.black12,
+                                  child: const Center(
+                                    child: Text("Banner Placeholder"),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: CacheNetworkImageWidget(
-                                      url: img,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                );
-                              },
+                                )
+                              : PageView.builder(
+                                  onPageChanged: (index) {
+                                    if (mounted) {
+                                      setState(() {
+                                        _bannerActiveIndex = index;
+                                      });
+                                    }
+                                  },
+                                  itemCount: _banners.length,
+                                  itemBuilder: (context, i) {
+                                    final b = _banners[i];
+                                    final img = b.imageUrl;
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: CacheNetworkImageWidget(
+                                          url: img,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+                        if (_banners.isEmpty) ...[
+                          const SizedBox.shrink(),
+                        ] else ...[
+                          AnimatedSmoothIndicator(
+                            activeIndex: _bannerActiveIndex,
+                            count: _banners.length,
+                            effect: WormEffect(
+                              dotWidth: 10,
+                              dotHeight: 10,
+                              activeDotColor: Color(0xFFED5B23),
                             ),
+                          ),
+                        ],
+                      ],
                     ),
 
                     const SizedBox(height: 24),

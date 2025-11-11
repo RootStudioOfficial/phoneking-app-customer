@@ -332,24 +332,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   labelColor: const Color(0xFFEF4444),
                   onTap: _loading || _updating
                       ? null
-                      : () {
-                          _authModel
-                              .logout()
-                              .then((_) {
-                                if (context.mounted) {
-                                  context.showSuccessSnackBar(
-                                    "Logout Success.",
-                                  );
-                                  context.navigateToNextPageWithRemoveUntil(
-                                    const OnBoardingPage(),
-                                  );
-                                }
-                              })
-                              .catchError((error) {
-                                if (context.mounted) {
-                                  context.showErrorSnackBar(error.toString());
-                                }
-                              });
+                      : () async {
+                          final isLogout = await showLogoutDialog(context);
+                          if (isLogout ?? false) {
+                            _authModel
+                                .logout()
+                                .then((_) {
+                                  if (context.mounted) {
+                                    context.showSuccessSnackBar(
+                                      "Logout Success.",
+                                    );
+                                    context.navigateToNextPageWithRemoveUntil(
+                                      const OnBoardingPage(),
+                                    );
+                                  }
+                                })
+                                .catchError((error) {
+                                  if (context.mounted) {
+                                    context.showErrorSnackBar(error.toString());
+                                  }
+                                });
+                          }
                         },
                 ),
               ),
@@ -849,4 +852,102 @@ Future<Map<String, dynamic>?> openEditProfile(
     profileImageUrl: profileImage,
   );
   return result;
+}
+
+Future<bool?> showLogoutDialog(BuildContext ctx) {
+  return showDialog<bool>(
+    context: ctx,
+    barrierDismissible: false,
+    builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon
+                Image.asset(
+                  AssetImageUtils.logoutIcon,
+                  width: 84,
+                  height: 84,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Are you sure you want to\nlog out?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    height: 1.3,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => ctx.navigateBack(false),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          side: BorderSide(color: Colors.grey.shade300),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => ctx.navigateBack(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Close (X)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              icon: const Icon(Icons.close, size: 22),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

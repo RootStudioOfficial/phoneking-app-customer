@@ -28,6 +28,7 @@ class AssetImageUtils {
   static const String instagramIcon = 'assets/instagram_icon.png';
   static const String viberIcon = 'assets/viber_icon.png';
   static const String telegramIcon = 'assets/telegram_icon.png';
+  static const String logoutIcon = 'assets/logout_icon.png';
 
   // Reward / Top-up icons
   static const String confirmRedeemIcon = 'assets/confirm_redeem_icon.png';

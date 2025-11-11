@@ -83,7 +83,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
     if (!mounted) return;
     setState(() => _sheet = _Sheet.none);
     if (!mounted) return;
-    context.navigateToNextPage(const IndexPage());
+    context.navigateToNextPageWithRemoveUntil(const IndexPage());
   }
 
   Future<void> _closeAny() async {
