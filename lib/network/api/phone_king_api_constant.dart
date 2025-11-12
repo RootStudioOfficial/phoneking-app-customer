@@ -52,4 +52,11 @@ class PhoneKingCustomerApi {
 
   ///File Upload
   static const String fileUpload = '$baseUrl/file/upload';
+
+  ///Notification
+  static const String getAllNotification = '$baseUrl/notifications';
+
+  static String readNotification(String notificationID) =>
+      '$baseUrl/notifications/$notificationID/read';
+  static const String readAllNotification = '$baseUrl/notifications/read-all';
 }

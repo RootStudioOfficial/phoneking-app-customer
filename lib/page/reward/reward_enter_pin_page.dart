@@ -5,6 +5,7 @@ import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
 import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
+import 'package:pinput/pinput.dart';
 
 class RewardEnterPinPage extends StatefulWidget {
   const RewardEnterPinPage({super.key, required this.redemptionConfirmId});
@@ -17,8 +18,6 @@ class RewardEnterPinPage extends StatefulWidget {
 
 class _RewardEnterPinPageState extends State<RewardEnterPinPage>
     with SingleTickerProviderStateMixin {
-  final _nodes = List.generate(6, (_) => FocusNode());
-  final _ctls = List.generate(6, (_) => TextEditingController());
 
   // API model
   final _rewardModel = PhoneKingRewardModelImpl();
@@ -29,23 +28,14 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _nodes.first.requestFocus(),
-    );
   }
 
   @override
   void dispose() {
-    for (final c in _ctls) {
-      c.dispose();
-    }
-    for (final n in _nodes) {
-      n.dispose();
-    }
     super.dispose();
   }
 
-  String get _pin => _ctls.map((e) => e.text).join();
+  String _pin ="";
 
   Future<void> _confirm() async {
     if (_pin.length != 6) {
@@ -139,28 +129,19 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                           ),
                         ],
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          6,
-                          (i) => _PinBox(
-                            controller: _ctls[i],
-                            focusNode: _nodes[i],
-                            onChanged: (val) {
-                              if (val.isNotEmpty && i < 5) {
-                                _nodes[i + 1].requestFocus();
-                              }
-                              setState(() {});
-                            },
-                            onBackspace: () {
-                              if (_ctls[i].text.isEmpty && i > 0) {
-                                _nodes[i - 1].requestFocus();
-                                _ctls[i - 1].clear();
-                              }
-                              setState(() {});
-                            },
-                          ),
-                        ),
+                      child: Pinput(
+                        length: 6,
+                        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                        showCursor: true,
+                        closeKeyboardWhenCompleted: true,
+                        obscureText: true,
+                        onCompleted: (pin) {
+                          if (mounted) {
+                            setState(() {
+                              _pin = pin;
+                            });
+                          }
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),

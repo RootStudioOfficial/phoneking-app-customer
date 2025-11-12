@@ -10,6 +10,7 @@ import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/histo
 import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
 import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
 import 'package:phone_king_customer/data/vos/member_tier_vo/member_tier_vo.dart';
+import 'package:phone_king_customer/data/vos/notification_vo/notification_vo.dart';
 import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_claim_success_vo/reward_claim_success_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
@@ -479,6 +480,49 @@ class PhoneKingCustomerAPI {
         response.data,
         (json) => PaymentSuccessVO.fromJson(json as Map<String, dynamic>),
       );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<NotificationVO>> getAllNotification(
+    String size,
+    String page,
+  ) async {
+    try {
+      final response = await _dio.get(
+        PhoneKingCustomerApi.getAllNotification,
+        data: {"size": size, "page": page},
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => NotificationVO.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<void>> readNotificationByID(String notificationID) async {
+    try {
+      final response = await _dio.patch(
+        PhoneKingCustomerApi.readNotification(notificationID),
+      );
+
+      return BaseResponse.fromJson(response.data, (_) => {});
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<void>> readAllNotification() async {
+    try {
+      final response = await _dio.patch(
+        PhoneKingCustomerApi.readAllNotification,
+      );
+
+      return BaseResponse.fromJson(response.data, (_) => {});
     } catch (e, stack) {
       throw Exception(_throwException(e, stack));
     }
