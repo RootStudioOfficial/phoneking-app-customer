@@ -78,12 +78,16 @@ class _OnBoardingPageState extends State<OnBoardingPage>
     _ac.forward(from: 0);
   }
 
-  Future<void> _finishFlow() async {
+  Future<void> _finishFlow(bool isRegister) async {
     await _ac.reverse();
     if (!mounted) return;
-    setState(() => _sheet = _Sheet.none);
-    if (!mounted) return;
-    context.navigateToNextPageWithRemoveUntil(const IndexPage());
+    if (isRegister) {
+      setState(() => _sheet = _Sheet.login);
+    } else {
+      setState(() => _sheet = _Sheet.none);
+      if (!mounted) return;
+      context.navigateToNextPageWithRemoveUntil(const IndexPage());
+    }
   }
 
   Future<void> _closeAny() async {
@@ -164,12 +168,10 @@ class _OnBoardingPageState extends State<OnBoardingPage>
       );
       if (res.data != null) {
         _snack('Registration successful');
-        await _finishFlow();
+        await _finishFlow(true);
       } else {
         _snack(res.message, isError: true);
       }
-
-      await _finishFlow();
     } catch (e) {
       _snack(e.toString(), isError: true);
     } finally {
@@ -187,7 +189,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
       );
       if (loginRes.data != null) {
         _snack('Login success');
-        await _finishFlow();
+        await _finishFlow(false);
       } else {
         _snack(loginRes.message, isError: true);
       }
