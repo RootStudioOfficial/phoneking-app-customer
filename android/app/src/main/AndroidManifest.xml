@@ -18,7 +18,7 @@
     </queries>
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:name="${applicationName}"
+        android:name="PhoneKing"
         android:icon="@mipmap/ic_launcher"
         android:label="phone_king_customer">
         <activity

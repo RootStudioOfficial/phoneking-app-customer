@@ -124,7 +124,7 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
                     fit: StackFit.expand,
                     children: [
                       CacheNetworkImageWidget(
-                        url: selected?.logoUrl ?? '',
+                        url: selected?.bannerUrl ?? '',
                         fit: BoxFit.cover,
                       ),
                       // Optional overlay for readability
