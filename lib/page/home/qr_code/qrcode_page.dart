@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
 import 'package:phone_king_customer/persistent/login_persistent.dart';
-import 'package:phone_king_customer/utils/encrypt_utils.dart';
 import 'package:phone_king_customer/widgets/qr_info_widget.dart';
 
 class QrCodePage extends StatefulWidget {
@@ -48,11 +47,7 @@ class _QrCodePageState extends State<QrCodePage> {
       ),
       body: _qrPayloadVO == null
           ? const Center(child: CircularProgressIndicator())
-          : QrInfoWidget(
-              qrData: EncryptUtils.encryptText(
-                jsonEncode(_qrPayloadVO?.toJson()),
-              ),
-            ),
+          : QrInfoWidget(qrData: jsonEncode(_qrPayloadVO?.toJson())),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
-import 'package:phone_king_customer/utils/encrypt_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 
 class ScanQrWidget extends StatefulWidget {
@@ -41,9 +40,7 @@ class _ScanQrWidgetState extends State<ScanQrWidget> {
     isScanning = false;
 
     try {
-      final decrypted = EncryptUtils.decryptText(raw);
-
-      final Map<String, dynamic> jsonMap = jsonDecode(decrypted);
+      final Map<String, dynamic> jsonMap = jsonDecode(raw);
       final payload = QrPayloadVO.fromJson(jsonMap);
 
       if (!payload.isValidApp) {

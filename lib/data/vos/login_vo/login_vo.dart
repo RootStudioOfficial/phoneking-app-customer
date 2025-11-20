@@ -14,6 +14,7 @@ class LoginVO {
   final bool? active;
   final bool? deleted;
   final bool? notLocked;
+  final String? referralCode;
 
   LoginVO({
     this.id,
@@ -26,6 +27,7 @@ class LoginVO {
     this.active,
     this.deleted,
     this.notLocked,
+    this.referralCode,
   });
 
   factory LoginVO.fromJson(Map<String, dynamic> json) =>
@@ -69,12 +71,7 @@ class RoleVO {
   final String? description;
   final List<MenuVO>? menuList;
 
-  RoleVO({
-    this.id,
-    this.roleName,
-    this.description,
-    this.menuList,
-  });
+  RoleVO({this.id, this.roleName, this.description, this.menuList});
 
   factory RoleVO.fromJson(Map<String, dynamic> json) => _$RoleVOFromJson(json);
 
@@ -102,22 +99,14 @@ class MenuVO {
   final String? code;
   final String? name;
 
-  MenuVO({
-    this.id,
-    this.code,
-    this.name,
-  });
+  MenuVO({this.id, this.code, this.name});
 
   factory MenuVO.fromJson(Map<String, dynamic> json) => _$MenuVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$MenuVOToJson(this);
 
   // ✅ copyWith method
-  MenuVO copyWith({
-    String? id,
-    String? code,
-    String? name,
-  }) {
+  MenuVO copyWith({String? id, String? code, String? name}) {
     return MenuVO(
       id: id ?? this.id,
       code: code ?? this.code,

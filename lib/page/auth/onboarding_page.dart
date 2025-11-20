@@ -150,6 +150,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
     required String day,
     required String month,
     required String year,
+    required String referralCode,
   }) async {
     if (_phone == null || _pin == null) {
       _snack('Something went wrong. Please try again.', isError: true);
@@ -165,6 +166,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
         password: _pin!,
         phoneNumber: _phone!,
         birthday: birthday,
+        referralCode: referralCode,
       );
       if (res.data != null) {
         _snack('Registration successful');
@@ -684,6 +686,7 @@ class _PersonalInfoFormCard extends StatefulWidget {
     required String day,
     required String month,
     required String year,
+    required String referralCode,
   })
   onConfirm;
 
@@ -696,17 +699,24 @@ class _PersonalInfoFormCard extends StatefulWidget {
 class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
+  final _referralCodeCtrl = TextEditingController();
   String? _day, _month, _year;
 
   @override
   void dispose() {
     _nameCtrl.dispose();
+    _referralCodeCtrl.dispose();
     super.dispose();
   }
 
   String? _validateName(String v) {
     if (v.trim().isEmpty) return 'Name is required';
     if (v.trim().length < 2) return 'Please enter a valid name';
+    return null;
+  }
+
+  String? _validateReferralCode(String v) {
+    if (v.trim().isEmpty) return 'ReferralCode is required';
     return null;
   }
 
@@ -725,6 +735,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
       day: _day!,
       month: _month!,
       year: _year!,
+      referralCode: _referralCodeCtrl.text.trim(),
     );
   }
 
@@ -758,6 +769,19 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                   validator: (v) => _validateName(v ?? ''),
                   decoration: _Decorations.inputRoundedAll(
                     hint: "Enter Your Name",
+                  ),
+                ),
+
+                _Gaps.v18,
+                _label("Your ReferralCode"),
+                _Gaps.v8,
+                TextFormField(
+                  controller: _referralCodeCtrl,
+                  enabled: widget.enabled,
+                  textInputAction: TextInputAction.done,
+                  validator: (v) => _validateReferralCode(v ?? ''),
+                  decoration: _Decorations.inputRoundedAll(
+                    hint: "Enter Your ReferralCode",
                   ),
                 ),
 

@@ -19,6 +19,7 @@ LoginVO _$LoginVOFromJson(Map<String, dynamic> json) => LoginVO(
   active: json['active'] as bool?,
   deleted: json['deleted'] as bool?,
   notLocked: json['notLocked'] as bool?,
+  referralCode: json['referralCode'] as String?,
 );
 
 Map<String, dynamic> _$LoginVOToJson(LoginVO instance) => <String, dynamic>{
@@ -32,6 +33,7 @@ Map<String, dynamic> _$LoginVOToJson(LoginVO instance) => <String, dynamic>{
   'active': instance.active,
   'deleted': instance.deleted,
   'notLocked': instance.notLocked,
+  'referralCode': instance.referralCode,
 };
 
 RoleVO _$RoleVOFromJson(Map<String, dynamic> json) => RoleVO(
