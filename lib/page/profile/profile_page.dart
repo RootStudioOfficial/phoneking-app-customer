@@ -10,6 +10,7 @@ import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/page/profile/change_pin/change_pin_page.dart';
 import 'package:phone_king_customer/page/profile/contact_branches/contact_branches_page.dart';
 import 'package:phone_king_customer/page/profile/help_and_support/help_and_support_page.dart';
+import 'package:phone_king_customer/page/profile/share_app/share_app_page.dart';
 import 'package:phone_king_customer/page/profile/terms_and_condition/terms_and_condition_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
@@ -279,7 +280,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   _SettingTile(
                     asset: AssetImageUtils.shareAppIcon,
                     label: 'Share App',
-                    onTap: () {},
+                    onTap: () {
+                      context.navigateToNextPage(ShareAppPage());
+                    },
                   ),
                 ],
               ),
