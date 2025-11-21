@@ -17,7 +17,6 @@ abstract class PhoneKingProfileModel {
   Future<BaseResponse<void>> updateProfile(
     String profileImageUrl,
     String displayName,
-      String phoneNumber,
   );
 
   Future<BaseResponse<String>> uploadFile(File file, String folder);

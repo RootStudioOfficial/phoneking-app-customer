@@ -31,9 +31,8 @@ class PhoneKingProfileModelImpl implements PhoneKingProfileModel {
   Future<BaseResponse<void>> updateProfile(
     String profileImageUrl,
     String displayName,
-    String phoneNumber,
   ) {
-    return _api.updateProfile(profileImageUrl, displayName, phoneNumber);
+    return _api.updateProfile(profileImageUrl, displayName);
   }
 
   @override

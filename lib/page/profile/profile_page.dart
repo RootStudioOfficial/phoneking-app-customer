@@ -76,14 +76,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (result == null) return;
 
-    // result: {'name':..., 'phone':..., 'imagePath': ...? }
     final String newName = (result['name'] as String).trim();
-    final String newPhone = (result['phone'] as String).trim();
     final String? imagePath = result['imagePath'] as String?;
 
-    if (newName.isEmpty || newPhone.isEmpty) {
+    if (newName.isEmpty) {
       if (mounted) {
-        context.showErrorSnackBar('Name/Phone cannot be empty');
+        context.showErrorSnackBar('Name cannot be empty');
       }
       return;
     }
@@ -102,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       // 2) update profile
-      await _profileModel.updateProfile(uploadedUrl, newName, newPhone);
+      await _profileModel.updateProfile(uploadedUrl, newName);
 
       // 3) refresh profile
       await _loadAll();
@@ -579,20 +577,14 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
 
   void _saveChanges() {
     final name = _nameController.text.trim();
-    final phone = _phoneController.text.trim();
 
     if (name.isEmpty) {
       context.showErrorSnackBar('Please enter your full name');
       return;
     }
-    if (phone.isEmpty) {
-      context.showErrorSnackBar('Please enter your phone');
-      return;
-    }
 
     context.navigateBack({
       'name': name,
-      'phone': phone,
       'imagePath': _selectedImage?.path,
     });
   }
@@ -685,11 +677,6 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
-                'Click camera to change picture',
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
-              const SizedBox(height: 24),
 
               // Full name
               const Align(
@@ -737,6 +724,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               ),
               const SizedBox(height: 8),
               TextField(
+                readOnly: true,
                 controller: TextEditingController(text: widget.phoneNumber),
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(

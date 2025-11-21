@@ -409,16 +409,11 @@ class PhoneKingCustomerAPI {
   Future<BaseResponse<void>> updateProfile(
     String profileImageUrl,
     String displayName,
-    String phoneNumber,
   ) async {
     try {
-      final response = await _dio.get(
-        PhoneKingCustomerApi.changePassword,
-        data: {
-          "profileImageUrl": profileImageUrl,
-          "displayName": displayName,
-          "phoneNumber": phoneNumber,
-        },
+      final response = await _dio.put(
+        PhoneKingCustomerApi.updateProfile,
+        data: {"profileImageUrl": profileImageUrl, "displayName": displayName},
       );
 
       return BaseResponse.fromJson(response.data, (_) => {});
