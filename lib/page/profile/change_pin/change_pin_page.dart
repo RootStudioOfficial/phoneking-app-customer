@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/data/model/profile/phone_king_profile_model_impl.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 
 class ChangePinPage extends StatefulWidget {
   const ChangePinPage({super.key});
@@ -43,8 +45,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
       context.showErrorSnackBar('Please enter your current PIN');
       return;
     }
-    if (newPin.length != 6) {
-      context.showErrorSnackBar('New PIN must be 6 digits');
+    // UPDATED: at least 8 digits for new PIN
+    if (newPin.length < 8) {
+      context.showErrorSnackBar('New PIN must be at least 8 digits');
       return;
     }
     if (newPin != confirmPin) {
@@ -56,11 +59,11 @@ class _ChangePinPageState extends State<ChangePinPage> {
     setState(() => _submitting = true);
 
     try {
-      await _profileModel.changePassword(currentPin, newPin);
+      await _profileModel.changePassword(newPin, currentPin);
 
       if (!mounted) return;
       context.showSuccessSnackBar("PIN updated successfully");
-      Navigator.pop(context, true);
+      context.navigateToNextPageWithRemoveUntil(OnBoardingPage());
     } catch (e) {
       if (!mounted) return;
       context.showErrorSnackBar(e.toString());
@@ -196,12 +199,17 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _newPinController,
                           obscureText: _obscureNewPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 6,
+                          maxLength: 8, // UPDATED: 8 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'must be 6 digits',
+                            hintText: 'must be at least 8 digits',
+                            helperText: 'Password must be 8 digits',
+                            helperStyle: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 13,
+                            ),
                             hintStyle: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 15,
@@ -218,7 +226,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                               ),
                               onPressed: () {
                                 setState(
-                                  () => _obscureNewPin = !_obscureNewPin,
+                                      () => _obscureNewPin = !_obscureNewPin,
                                 );
                               },
                             ),
@@ -256,7 +264,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
 
                         // Confirm PIN
                         const Text(
-                          'Confirm New Pin',
+                          'Confirm New PIN',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -268,12 +276,17 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _confirmPinController,
                           obscureText: _obscureConfirmPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 6,
+                          maxLength: 8, // UPDATED: 8 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'must be 6 digits',
+                            hintText: 'must be at least 8 digits',
+                            helperText: 'Password must be 8 digits',
+                            helperStyle: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 13,
+                            ),
                             hintStyle: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 15,
@@ -290,8 +303,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                               ),
                               onPressed: () {
                                 setState(
-                                  () =>
-                                      _obscureConfirmPin = !_obscureConfirmPin,
+                                      () =>
+                                  _obscureConfirmPin = !_obscureConfirmPin,
                                 );
                               },
                             ),
@@ -347,21 +360,21 @@ class _ChangePinPageState extends State<ChangePinPage> {
                     ),
                     child: _submitting
                         ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
                         : const Text(
-                            'Update Pin',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
+                      'Update Pin',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
