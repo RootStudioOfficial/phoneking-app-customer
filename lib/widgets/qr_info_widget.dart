@@ -90,14 +90,15 @@ class QrInfoWidget extends StatelessWidget {
 
 class _Bullet extends StatelessWidget {
   const _Bullet(this.text);
+
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context)
-        .textTheme
-        .bodyMedium
-        ?.copyWith(color: Theme.of(context).hintColor, height: 1.4);
+    final style = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: Theme.of(context).hintColor,
+      height: 1.4,
+    );
     return Padding(
       padding: const EdgeInsets.only(top: 6),
       child: Row(

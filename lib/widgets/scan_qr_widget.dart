@@ -33,10 +33,12 @@ class _ScanQrWidgetState extends State<ScanQrWidget> {
         .map((b) => b.rawValue)
         .firstWhere(
           (v) => v != null && v.trim().isNotEmpty,
-          orElse: () => null,
-        );
+      orElse: () => null,
+    );
 
     if (raw == null) return;
+
+    // Stop scanning immediately
     isScanning = false;
 
     try {
@@ -50,15 +52,22 @@ class _ScanQrWidgetState extends State<ScanQrWidget> {
         throw Exception('QR expired');
       }
 
+      // 🔥 Stop camera so that scanner freezes
+      await cameraController.stop();
+
+      // 🔥 Navigate only once
       widget.onDetect(payload);
+
     } catch (e) {
       if (context.mounted) {
         context.showErrorSnackBar("Invalid QR: ${e.toString()}");
       }
-    } finally {
+
+      // Allow scanning again ONLY for errors
       isScanning = true;
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

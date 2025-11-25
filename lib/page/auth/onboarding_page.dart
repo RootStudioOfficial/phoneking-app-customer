@@ -161,19 +161,15 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
     _setBusy(true);
     try {
-      final BaseResponse<LoginVO> res = await _auth.register(
+      await _auth.register(
         displayName: name,
         password: _pin!,
         phoneNumber: _phone!,
         birthday: birthday,
         referralCode: referralCode,
       );
-      if (res.data != null) {
-        _snack('Registration successful');
-        await _finishFlow(true);
-      } else {
-        _snack(res.message, isError: true);
-      }
+      _snack('Registration successful');
+      await _finishFlow(true);
     } catch (e) {
       _snack(e.toString(), isError: true);
     } finally {
