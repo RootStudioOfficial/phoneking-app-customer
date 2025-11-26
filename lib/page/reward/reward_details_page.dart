@@ -372,7 +372,9 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
                                   : () async {
                                       if (!widget.isRedeem) {
                                         context.navigateToNextPage(
-                                          RewardScanQrCodePage(),
+                                          RewardScanQrCodePage(
+                                            redemptionId: _details?.id ?? '',
+                                          ),
                                         );
                                       } else {
                                         final proceed =

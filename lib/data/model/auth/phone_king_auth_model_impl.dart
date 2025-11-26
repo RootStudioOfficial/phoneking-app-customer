@@ -43,6 +43,7 @@ class PhoneKingAuthModelImpl implements PhoneKingAuthModel {
         password: password,
         phoneNumber: phoneNumber,
         birthday: birthday,
+        referralCode: referralCode,
       );
       if (res.data != null) {
         LoginPersistent().saveLoginData(res.data!);

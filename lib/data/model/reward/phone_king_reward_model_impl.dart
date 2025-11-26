@@ -36,7 +36,8 @@ class PhoneKingRewardModelImpl implements PhoneKingRewardModel {
 
   @override
   Future<BaseResponse<RewardClaimSuccessVO>> claimReward(
-    String redemptionConfirmId,
+    String paymentKey,
     String password,
-  ) => _api.claimReward(redemptionConfirmId, password);
+    String redemptionId,
+  ) => _api.claimReward(paymentKey, password, redemptionId);
 }

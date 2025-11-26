@@ -8,9 +8,14 @@ import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_im
 import 'package:pinput/pinput.dart';
 
 class RewardEnterPinPage extends StatefulWidget {
-  const RewardEnterPinPage({super.key, required this.redemptionConfirmId});
+  const RewardEnterPinPage({
+    super.key,
+    required this.paymentKey,
+    required this.redemptionId,
+  });
 
-  final String redemptionConfirmId;
+  final String paymentKey;
+  final String redemptionId;
 
   @override
   State<RewardEnterPinPage> createState() => _RewardEnterPinPageState();
@@ -18,24 +23,13 @@ class RewardEnterPinPage extends StatefulWidget {
 
 class _RewardEnterPinPageState extends State<RewardEnterPinPage>
     with SingleTickerProviderStateMixin {
-
   // API model
   final _rewardModel = PhoneKingRewardModelImpl();
 
   // UI state
   bool _submitting = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  String _pin ="";
+  String _pin = "";
 
   Future<void> _confirm() async {
     if (_pin.length != 6) {
@@ -47,8 +41,9 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
     setState(() => _submitting = true);
     try {
       final res = await _rewardModel.claimReward(
-        widget.redemptionConfirmId,
+        widget.paymentKey,
         _pin,
+        widget.redemptionId,
       );
 
       if (!mounted) return;
@@ -219,71 +214,6 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                 ),
               ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// A single PIN box (one character)
-class _PinBox extends StatelessWidget {
-  const _PinBox({
-    required this.controller,
-    required this.focusNode,
-    required this.onChanged,
-    required this.onBackspace,
-  });
-
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onBackspace;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 48,
-      child: Focus(
-        focusNode: focusNode,
-        onKeyEvent: (node, event) {
-          if (event is KeyDownEvent &&
-              event.logicalKey == LogicalKeyboardKey.backspace &&
-              controller.text.isEmpty) {
-            onBackspace();
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
-        },
-        child: TextField(
-          controller: controller,
-          textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-          obscureText: true,
-          obscuringCharacter: '•',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(1),
-          ],
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: const Color(0xFFF7F7F7),
-            contentPadding: EdgeInsets.zero,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE6E6E6)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE6E6E6)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
-            ),
-          ),
-          onChanged: onChanged,
         ),
       ),
     );

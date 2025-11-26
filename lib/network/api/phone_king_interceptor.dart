@@ -8,14 +8,17 @@ class PhoneKingInterceptor extends Interceptor {
 
   bool _isMultipart(RequestOptions o) =>
       o.contentType?.toLowerCase().contains('multipart/form-data') == true ||
-          o.data is FormData;
+      o.data is FormData;
 
   bool _isLogin(RequestOptions o) {
     return o.path.endsWith('/login') || o.path.contains('/auth/login');
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     debugPrint('============ Request URL    => ${options.uri}');
     debugPrint('============ Request Data   => ${options.data}');
 
@@ -76,15 +79,11 @@ class PhoneKingInterceptor extends Interceptor {
     if (res?.data is Map<String, dynamic>) {
       try {
         final parsed = ErrorResponse.fromJson(res!.data);
-        final msg = parsed.errorMessage;
 
-        if ((res.statusCode == 401) || (msg.toLowerCase() == 'expired jwt')) {
-          await LoginPersistent().clearTokenOnly();
-          debugPrint('============ Cleared expired JWT ============');
+        if ((res.statusCode == 401) || (parsed.errorCode == 'AUTH_0001')) {
+          throw Exception("session time out");
         }
-      } catch (_) {
-
-      }
+      } catch (_) {}
     }
 
     handler.reject(err);

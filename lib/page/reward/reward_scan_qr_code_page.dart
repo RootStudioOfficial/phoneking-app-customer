@@ -4,7 +4,9 @@ import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart'
 import 'package:phone_king_customer/widgets/scan_qr_widget.dart';
 
 class RewardScanQrCodePage extends StatefulWidget {
-  const RewardScanQrCodePage({super.key});
+  const RewardScanQrCodePage({super.key, required this.redemptionId});
+
+  final String redemptionId;
 
   @override
   State<RewardScanQrCodePage> createState() => _RewardScanQrCodePageState();
@@ -18,7 +20,8 @@ class _RewardScanQrCodePageState extends State<RewardScanQrCodePage> {
       onDetect: (payload) {
         context.navigateToNextPage(
           RewardEnterPinPage(
-            redemptionConfirmId: payload.data.redemptionConfirmId ?? '',
+            paymentKey: payload.data.paymentKey ?? '',
+            redemptionId: widget.redemptionId,
           ),
         );
       },

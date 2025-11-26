@@ -283,12 +283,13 @@ class PhoneKingCustomerAPI {
   }
 
   Future<BaseResponse<RewardClaimSuccessVO>> claimReward(
-    String redemptionConfirmId,
+    String paymentKey,
     String password,
+    String redemptionId,
   ) async {
     try {
       final response = await _dio.post(
-        PhoneKingCustomerApi.claimReward(redemptionConfirmId),
+        PhoneKingCustomerApi.claimReward(redemptionId, paymentKey),
         data: {"password": password},
       );
 

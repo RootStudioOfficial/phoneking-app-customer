@@ -31,8 +31,8 @@ class PhoneKingCustomerApi {
   static String rewardRedeem(String rewardID) =>
       '$baseUrl/user/reward/$rewardID/redeem';
 
-  static String claimReward(String redemptionConfirmId) =>
-      '$baseUrl/user/reward/claim/$redemptionConfirmId';
+  static String claimReward(String redemptionId,String paymentKey) =>
+      '$baseUrl/user/reward/claim/$redemptionId/$paymentKey';
 
   static const String getProfile = '$baseUrl/user/profile';
   static const String getMemberTier = '$baseUrl/user/profile/summary';

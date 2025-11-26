@@ -18,7 +18,8 @@ abstract class PhoneKingRewardModel {
   Future<BaseResponse<void>> rewardRedeem(String rewardId);
 
   Future<BaseResponse<RewardClaimSuccessVO>> claimReward(
-      String redemptionConfirmId,
+      String paymentKey,
       String password,
+      String redemptionId,
       );
 }

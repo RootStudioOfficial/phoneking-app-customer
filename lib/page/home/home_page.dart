@@ -7,15 +7,18 @@ import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
+import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/page/home/activity/activity_page.dart';
 import 'package:phone_king_customer/page/home/qr_code/qrcode_page.dart';
 import 'package:phone_king_customer/page/home/notification/notification_page.dart';
 import 'package:phone_king_customer/page/home/scan_to_pay/payment_qr_scan_page.dart';
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
+import 'package:phone_king_customer/persistent/login_persistent.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:phone_king_customer/widgets/session_time_out_dialog_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -531,11 +534,32 @@ class _HomeSkeleton extends StatelessWidget {
   }
 }
 
-class _ErrorView extends StatelessWidget {
+class _ErrorView extends StatefulWidget {
   const _ErrorView({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
+
+  @override
+  State<_ErrorView> createState() => _ErrorViewState();
+}
+
+class _ErrorViewState extends State<_ErrorView> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.message == 'session time out') {
+        _showSessionTimeoutDialog(
+          context,
+          onRestart: () {
+            LoginPersistent().clearLoginData();
+            context.navigateToNextPageWithRemoveUntil(OnBoardingPage());
+          },
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -545,12 +569,28 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(message, textAlign: TextAlign.center),
+            Text(widget.message, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            ElevatedButton(onPressed: onRetry, child: const Text("Retry")),
+            ElevatedButton(
+              onPressed: widget.onRetry,
+              child: const Text("Retry"),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _showSessionTimeoutDialog(
+    BuildContext context, {
+    required VoidCallback onRestart,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const SessionTimeoutDialog(),
+    ).then((_) {
+      onRestart();
+    });
   }
 }
