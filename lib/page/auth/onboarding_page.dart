@@ -85,7 +85,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
       setState(() => _sheet = _Sheet.login);
     } else {
       setState(() => _sheet = _Sheet.none);
-      if (!mounted) return;
       context.navigateToNextPageWithRemoveUntil(const IndexPage());
     }
   }
@@ -161,6 +160,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
     _setBusy(true);
     try {
+      await Future.delayed(const Duration(seconds: 3));
       await _auth.register(
         displayName: name,
         password: _pin!,
@@ -169,7 +169,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
         referralCode: referralCode,
       );
       _snack('Registration successful');
-      await _finishFlow(true);
+      await _finishFlow(false);
     } catch (e) {
       _snack(e.toString(), isError: true);
     } finally {

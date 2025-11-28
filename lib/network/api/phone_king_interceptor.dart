@@ -11,7 +11,7 @@ class PhoneKingInterceptor extends Interceptor {
       o.data is FormData;
 
   bool _isLogin(RequestOptions o) {
-    return o.path.endsWith('/login') || o.path.contains('/auth/login');
+    return o.path.endsWith('/auth') ||o.path.endsWith('/login') || o.path.contains('/auth/login');
   }
 
   @override
