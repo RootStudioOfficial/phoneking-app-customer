@@ -11,7 +11,9 @@ class PhoneKingInterceptor extends Interceptor {
       o.data is FormData;
 
   bool _isLogin(RequestOptions o) {
-    return o.path.endsWith('/auth') ||o.path.endsWith('/login') || o.path.contains('/auth/login');
+    return o.path.endsWith('/auth') ||
+        o.path.endsWith('/login') ||
+        o.path.contains('/auth/login');
   }
 
   @override
@@ -80,7 +82,7 @@ class PhoneKingInterceptor extends Interceptor {
       try {
         final parsed = ErrorResponse.fromJson(res!.data);
 
-        if ((res.statusCode == 401) || (parsed.errorCode == 'AUTH_0001')) {
+        if (parsed.errorCode == 'AUTH_0001') {
           throw Exception("session time out");
         }
       } catch (_) {}
