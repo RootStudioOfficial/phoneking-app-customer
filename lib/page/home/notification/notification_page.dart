@@ -7,6 +7,66 @@ import 'package:phone_king_customer/utils/asset_image_utils.dart';
 
 import 'dart:async';
 
+// ========= Typography helpers =========
+
+class _NotificationTextStyles {
+  // AppBar title
+  static const appBarTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 18,
+    color: Color(0xFF0F172A),
+  );
+
+  // Header text: "X unread notifications"
+  static const headerInfo = TextStyle(
+    fontSize: 13,
+    color: Color(0xFF4B5563),
+    fontWeight: FontWeight.w500,
+  );
+
+  // "Mark all as read"
+  static const headerAction = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+  );
+
+  // Error banner text
+  static const errorText = TextStyle(
+    color: Color(0xFFB00020),
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  // Notification title
+  static const cardTitle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w800,
+    color: Color(0xFF101828),
+  );
+
+  // Notification body
+  static const cardBody = TextStyle(
+    fontSize: 13,
+    color: Color(0xFF4B5563),
+    height: 1.45,
+    fontWeight: FontWeight.w400,
+  );
+
+  // Time label
+  static const cardTime = TextStyle(
+    fontSize: 11,
+    color: Color(0xFF9CA3AF),
+    fontWeight: FontWeight.w600,
+  );
+
+  // Tag chip text
+  static const tagText = TextStyle(
+    fontSize: 12,
+    color: Color(0xFF5B667A),
+    fontWeight: FontWeight.w600,
+  );
+}
+
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
@@ -109,7 +169,9 @@ class _NotificationPageState extends State<NotificationPage> {
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('All marked as read')));
+        ).showSnackBar(
+          const SnackBar(content: Text('All marked as read')),
+        );
       }
     } catch (e) {
       // revert on failure
@@ -165,6 +227,9 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final unreadText =
+        '$_unreadCount unread notification${_unreadCount == 1 ? '' : 's'}';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -173,7 +238,7 @@ class _NotificationPageState extends State<NotificationPage> {
         foregroundColor: Colors.black,
         title: const Text(
           'Notifications',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          style: _NotificationTextStyles.appBarTitle,
         ),
         centerTitle: true,
         leading: IconButton(
@@ -196,19 +261,18 @@ class _NotificationPageState extends State<NotificationPage> {
             child: Row(
               children: [
                 Text(
-                  '$_unreadCount unread notification${_unreadCount == 1 ? '' : 's'}',
-                  style: TextStyle(color: Colors.grey.shade700),
+                  unreadText,
+                  style: _NotificationTextStyles.headerInfo,
                 ),
                 const Spacer(),
                 GestureDetector(
                   onTap: _unreadCount == 0 ? null : _markAllAsRead,
                   child: Text(
                     'Mark all as read',
-                    style: TextStyle(
+                    style: _NotificationTextStyles.headerAction.copyWith(
                       color: _unreadCount == 0
                           ? Colors.grey
                           : const Color(0xFFEF4444),
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -232,10 +296,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
                 child: Text(
                   _error!,
-                  style: const TextStyle(
-                    color: Color(0xFFB00020),
-                    fontSize: 12,
-                  ),
+                  style: _NotificationTextStyles.errorText,
                 ),
               ),
             ),
@@ -246,40 +307,39 @@ class _NotificationPageState extends State<NotificationPage> {
               child: _loading && _items.isEmpty
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                      itemCount:
-                          _items.length + (_loadingMore || _hasNext ? 1 : 0),
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, i) {
-                        if (i >= _items.length) {
-                          // Infinite loader trigger
-                          if (_hasNext && !_loadingMore) {
-                            // slight delay to allow frame to build
-                            scheduleMicrotask(() => _load());
-                          }
-                          return _hasNext
-                              ? const Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : const SizedBox.shrink();
-                        }
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                itemCount:
+                _items.length + (_loadingMore || _hasNext ? 1 : 0),
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, i) {
+                  if (i >= _items.length) {
+                    // Infinite loader trigger
+                    if (_hasNext && !_loadingMore) {
+                      // slight delay to allow frame to build
+                      scheduleMicrotask(() => _load());
+                    }
+                    return _hasNext
+                        ? const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                        : const SizedBox.shrink();
+                  }
 
-                        final n = _items[i];
-                        return _NotificationCard(
-                          id: n.id,
-                          title: n.title,
-                          body: n.body,
-                          tag: n.notificationType,
-                          // string per your VO
-                          timeLabel: _timeAgo(n.localDateTime),
-                          isRead: n.read,
-                          onTap: () => _markOneAsRead(n, i),
-                        );
-                      },
-                    ),
+                  final n = _items[i];
+                  return _NotificationCard(
+                    id: n.id,
+                    title: n.title,
+                    body: n.body,
+                    tag: n.notificationType,
+                    timeLabel: _timeAgo(n.localDateTime),
+                    isRead: n.read,
+                    onTap: () => _markOneAsRead(n, i),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -381,20 +441,12 @@ class _NotificationCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF101828),
-                          ),
+                          style: _NotificationTextStyles.cardTitle,
                         ),
                       ),
                       Text(
                         timeLabel,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: _NotificationTextStyles.cardTime,
                       ),
                       const SizedBox(width: 6),
                       if (!isRead) const _Dot(color: Color(0xFF2F56FF)),
@@ -403,7 +455,7 @@ class _NotificationCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     body,
-                    style: TextStyle(color: Colors.grey.shade700, height: 1.45),
+                    style: _NotificationTextStyles.cardBody,
                   ),
                   const SizedBox(height: 10),
                   // tag chip
@@ -418,11 +470,7 @@ class _NotificationCard extends StatelessWidget {
                     ),
                     child: Text(
                       tag,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF5B667A),
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: _NotificationTextStyles.tagText,
                     ),
                   ),
                 ],

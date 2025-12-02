@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context,
       _user!.displayName ?? _user!.username,
       _user!.phoneNumber ?? '',
-      null,
+      null, // you can pass profile image URL later
     );
 
     if (result == null) return;
@@ -279,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     asset: AssetImageUtils.shareAppIcon,
                     label: 'Share App',
                     onTap: () {
-                      context.navigateToNextPage(ShareAppPage());
+                      context.navigateToNextPage(const ShareAppPage());
                     },
                   ),
                 ],
@@ -329,27 +329,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: _loading || _updating
                       ? null
                       : () async {
-                          final isLogout = await showLogoutDialog(context);
-                          if (isLogout ?? false) {
-                            _authModel
-                                .logout()
-                                .then((_) {
-                                  if (context.mounted) {
-                                    context.showSuccessSnackBar(
-                                      "Logout Success.",
-                                    );
-                                    context.navigateToNextPageWithRemoveUntil(
-                                      const OnBoardingPage(),
-                                    );
-                                  }
-                                })
-                                .catchError((error) {
-                                  if (context.mounted) {
-                                    context.showErrorSnackBar(error.toString());
-                                  }
-                                });
-                          }
-                        },
+                    final isLogout = await showLogoutDialog(context);
+                    if (isLogout ?? false) {
+                      _authModel
+                          .logout()
+                          .then((_) {
+                        if (context.mounted) {
+                          context.showSuccessSnackBar(
+                            "Logout Success.",
+                          );
+                          context.navigateToNextPageWithRemoveUntil(
+                            const OnBoardingPage(),
+                          );
+                        }
+                      })
+                          .catchError((error) {
+                        if (context.mounted) {
+                          context.showErrorSnackBar(error.toString());
+                        }
+                      });
+                    }
+                  },
                 ),
               ),
 
@@ -638,21 +638,21 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                       ),
                       child: _selectedImage != null
                           ? ClipOval(
-                              child: Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.cover,
-                              ),
-                            )
+                        child: Image.file(
+                          _selectedImage!,
+                          fit: BoxFit.cover,
+                        ),
+                      )
                           : (widget.profileImageUrl != null &&
-                                widget.profileImageUrl!.isNotEmpty)
+                          widget.profileImageUrl!.isNotEmpty)
                           ? ClipOval(
-                              child: Image.network(
-                                widget.profileImageUrl!,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) =>
-                                    _buildDefaultAvatar(),
-                              ),
-                            )
+                        child: Image.network(
+                          widget.profileImageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) =>
+                              _buildDefaultAvatar(),
+                        ),
+                      )
                           : _buildDefaultAvatar(),
                     ),
                     Positioned(
@@ -725,7 +725,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               const SizedBox(height: 8),
               TextField(
                 readOnly: true,
-                controller: TextEditingController(text: widget.phoneNumber),
+                controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   filled: true,
@@ -811,11 +811,11 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
 
 // helper: show dialog
 Future<Map<String, dynamic>?> showEditProfileDialog(
-  BuildContext context, {
-  required String initialName,
-  required String phoneNumber,
-  String? profileImageUrl,
-}) {
+    BuildContext context, {
+      required String initialName,
+      required String phoneNumber,
+      String? profileImageUrl,
+    }) {
   return showDialog<Map<String, dynamic>>(
     context: context,
     builder: (context) => EditProfileDialog(
@@ -827,11 +827,11 @@ Future<Map<String, dynamic>?> showEditProfileDialog(
 }
 
 Future<Map<String, dynamic>?> openEditProfile(
-  BuildContext context,
-  String userName,
-  String phoneNumber,
-  String? profileImage,
-) async {
+    BuildContext context,
+    String userName,
+    String phoneNumber,
+    String? profileImage,
+    ) async {
   final result = await showEditProfileDialog(
     context,
     initialName: userName,

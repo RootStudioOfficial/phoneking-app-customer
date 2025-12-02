@@ -12,6 +12,51 @@ class ChangePinPage extends StatefulWidget {
   State<ChangePinPage> createState() => _ChangePinPageState();
 }
 
+// ========= Typography helper =========
+
+class _ChangePinTextStyles {
+  static const appBarTitle = TextStyle(
+    color: Colors.black,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const pageTitle = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w800,
+    color: Colors.black,
+  );
+
+  static const subtitle = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280), // grey-600 style
+    fontWeight: FontWeight.w500,
+  );
+
+  static const fieldLabel = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const hint = TextStyle(
+    color: Color(0xFF9CA3AF),
+    fontSize: 14,
+  );
+
+  static const helper = TextStyle(
+    color: Color(0xFF6B7280),
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const buttonText = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+  );
+}
+
 class _ChangePinPageState extends State<ChangePinPage> {
   final TextEditingController _currentPinController = TextEditingController();
   final TextEditingController _newPinController = TextEditingController();
@@ -89,12 +134,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
               onPressed: _submitting ? null : () => Navigator.pop(context),
             ),
             title: const Text(
-              'Change Pin',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
+              'Change PIN',
+              style: _ChangePinTextStyles.appBarTitle,
             ),
           ),
           body: Column(
@@ -111,31 +152,20 @@ class _ChangePinPageState extends State<ChangePinPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Change Pin',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                          'Change PIN',
+                          style: _ChangePinTextStyles.pageTitle,
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        const Text(
                           'Update your security PIN for account access',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[600],
-                          ),
+                          style: _ChangePinTextStyles.subtitle,
                         ),
                         const SizedBox(height: 32),
 
                         // Current PIN
                         const Text(
                           'Current PIN',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                          style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
                         TextField(
@@ -147,11 +177,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'enter current pin',
-                            hintStyle: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 15,
-                            ),
+                            hintText: 'enter current PIN',
+                            hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
                             fillColor: Colors.grey[50],
                             counterText: '',
@@ -188,11 +215,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                         // New PIN
                         const Text(
                           'New PIN',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                          style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
                         TextField(
@@ -205,15 +228,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           ],
                           decoration: InputDecoration(
                             hintText: 'must be at least 8 digits',
-                            helperText: 'Password must be 8 digits',
-                            helperStyle: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 13,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 15,
-                            ),
+                            helperText: 'PIN must be 8 digits',
+                            helperStyle: _ChangePinTextStyles.helper,
+                            hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
                             fillColor: Colors.grey[50],
                             counterText: '',
@@ -265,11 +282,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                         // Confirm PIN
                         const Text(
                           'Confirm New PIN',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                          style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
                         TextField(
@@ -282,15 +295,9 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           ],
                           decoration: InputDecoration(
                             hintText: 'must be at least 8 digits',
-                            helperText: 'Password must be 8 digits',
-                            helperStyle: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 13,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 15,
-                            ),
+                            helperText: 'PIN must be 8 digits',
+                            helperStyle: _ChangePinTextStyles.helper,
+                            hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
                             fillColor: Colors.grey[50],
                             counterText: '',
@@ -303,8 +310,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                               ),
                               onPressed: () {
                                 setState(
-                                      () =>
-                                  _obscureConfirmPin = !_obscureConfirmPin,
+                                      () => _obscureConfirmPin =
+                                  !_obscureConfirmPin,
                                 );
                               },
                             ),
@@ -368,12 +375,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                       ),
                     )
                         : const Text(
-                      'Update Pin',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                      'Update PIN',
+                      style: _ChangePinTextStyles.buttonText,
                     ),
                   ),
                 ),

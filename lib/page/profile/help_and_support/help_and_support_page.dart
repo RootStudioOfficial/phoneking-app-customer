@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
 import 'package:phone_king_customer/data/vos/contact_us_vo/contact_us_vo.dart';
@@ -13,6 +11,74 @@ class HelpAndSupportPage extends StatefulWidget {
   @override
   State<HelpAndSupportPage> createState() => _HelpAndSupportPageState();
 }
+
+// ================== Typography Helper ==================
+
+class _HelpSupportTextStyles {
+  static const appBarTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const sectionTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827),
+  );
+
+  static const sectionSubtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+    height: 1.4,
+  );
+
+  static const errorBanner = TextStyle(
+    color: Color(0xFFB00020),
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const emptyState = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF9CA3AF),
+  );
+
+  static const contactCardTitle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF111827),
+  );
+
+  static const contactCardSubtitle = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+  );
+
+  static const businessHours = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF16A34A),
+  );
+
+  static const faqQuestion = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF111827),
+  );
+
+  static const faqAnswer = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+    height: 1.5,
+  );
+}
+
+// ================== Page ==================
 
 class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
   final _supportModel = PhoneKingSupportModelImpl();
@@ -114,7 +180,8 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
     final errorBanner = (_error?.isNotEmpty ?? false)
         ? Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding:
+      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       decoration: BoxDecoration(
         color: const Color(0xFFFFEAEA),
@@ -123,10 +190,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
       ),
       child: Text(
         _error ?? '',
-        style: const TextStyle(
-          color: Color(0xFFB00020),
-          fontSize: 12,
-        ),
+        style: _HelpSupportTextStyles.errorBanner,
       ),
     )
         : const SizedBox.shrink();
@@ -137,8 +201,14 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Help & Support'),
+        title: const Text(
+          'Help & Support',
+          style: _HelpSupportTextStyles.appBarTitle,
+        ),
         centerTitle: false,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -157,7 +227,15 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
                 // Error banner (if any)
                 errorBanner,
 
-                Text('Contact Us', style: theme.textTheme.titleMedium),
+                const Text(
+                  'Contact Us',
+                  style: _HelpSupportTextStyles.sectionTitle,
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Need help with your account, payments, or points? Reach us through the channels below.',
+                  style: _HelpSupportTextStyles.sectionSubtitle,
+                ),
                 const SizedBox(height: 12),
 
                 Row(
@@ -176,7 +254,8 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
                         icon: Icons.mail_rounded,
                         title: 'Email Us',
                         subtitle: email.isEmpty ? '—' : email,
-                        onTap: email.isEmpty ? null : () => _launchEmail(email),
+                        onTap:
+                        email.isEmpty ? null : () => _launchEmail(email),
                       ),
                     ),
                   ],
@@ -186,18 +265,16 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.access_time_rounded,
                         size: 18,
-                        color: Colors.green.shade700,
+                        color: Color(0xFF16A34A),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           'Business Hours: $hours',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.green.shade700,
-                          ),
+                          style: _HelpSupportTextStyles.businessHours,
                         ),
                       ),
                     ],
@@ -205,18 +282,16 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
                 ],
 
                 const SizedBox(height: 24),
-                Text(
+                const Text(
                   'Frequently Asked Questions',
-                  style: theme.textTheme.titleMedium,
+                  style: _HelpSupportTextStyles.sectionTitle,
                 ),
                 const SizedBox(height: 8),
 
                 if (!_isLoading && _faqs.isEmpty)
-                  Text(
+                  const Text(
                     'No FAQs available.',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.hintColor,
-                    ),
+                    style: _HelpSupportTextStyles.emptyState,
                   )
                 else
                   ..._faqs.map(
@@ -238,6 +313,8 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
     );
   }
 }
+
+// ================== Contact Card ==================
 
 class _ContactCard extends StatelessWidget {
   const _ContactCard({
@@ -287,13 +364,11 @@ class _ContactCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: theme.textTheme.titleSmall),
+                  Text(title, style: _HelpSupportTextStyles.contactCardTitle),
                   const SizedBox(height: 2),
                   Text(
                     subtitle.isEmpty ? '—' : subtitle,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.hintColor,
-                    ),
+                    style: _HelpSupportTextStyles.contactCardSubtitle,
                   ),
                 ],
               ),
@@ -305,6 +380,8 @@ class _ContactCard extends StatelessWidget {
     );
   }
 }
+
+// ================== FAQ ==================
 
 class _FaqItem {
   final String question;
@@ -339,16 +416,17 @@ class _FaqTile extends StatelessWidget {
           collapsedShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
-          title: Text(item.question, style: theme.textTheme.bodyLarge),
+          title: Text(
+            item.question,
+            style: _HelpSupportTextStyles.faqQuestion,
+          ),
           trailing: const Icon(Icons.keyboard_arrow_down_rounded),
           children: [
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 item.answer,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.hintColor,
-                ),
+                style: _HelpSupportTextStyles.faqAnswer,
               ),
             ),
           ],

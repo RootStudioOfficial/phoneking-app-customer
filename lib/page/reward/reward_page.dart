@@ -8,7 +8,6 @@ import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
@@ -61,7 +60,11 @@ class _RewardsPageState extends State<RewardsPage>
       ),
       body: TabBarView(
         controller: _tab,
-        children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()],
+        children: const [
+          _RewardStoreTab(),
+          _RedeemedTab(),
+          _UsedTab(),
+        ],
       ),
     );
   }
@@ -191,13 +194,19 @@ class _RewardStoreTabState extends State<_RewardStoreTab> {
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
         itemBuilder: (_, i) {
           if (i <= _stores.length - 1) {
-            return _storeSection(_stores[i], () {
-              context.navigateToNextPage(StoreViewAllPage(stores: _stores));
-            });
+            return _storeSection(
+              _stores[i],
+                  () {
+                // Pass all stores so StoreViewAllPage can switch between them
+                context.navigateToNextPage(
+                  StoreViewAllPage(stores: _stores),
+                );
+              },
+            );
           }
-          return SizedBox(height: 100);
+          return const SizedBox(height: 100);
         },
-        separatorBuilder: (_, _) => const SizedBox(height: 16),
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
         itemCount: _stores.length + 1,
       ),
     );
@@ -298,7 +307,10 @@ class _RedeemedCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.navigateToNextPage(
-          RewardDetailsPage(rewardID: item.id ?? "", isRedeem: false),
+          RewardDetailsPage(
+            rewardID: item.id ?? "",
+            isRedeem: false,
+          ),
         );
       },
       child: Container(
@@ -319,19 +331,19 @@ class _RedeemedCard extends StatelessWidget {
                 height: 64,
                 child: (item.imageUrl ?? '').isEmpty
                     ? Container(
-                        color: Colors.grey.shade200,
-                        child: const Center(
-                          child: Icon(
-                            Icons.image,
-                            size: 28,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      )
+                  color: Colors.grey.shade200,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image,
+                      size: 28,
+                      color: Colors.grey,
+                    ),
+                  ),
+                )
                     : CacheNetworkImageWidget(
-                        url: item.imageUrl!,
-                        fit: BoxFit.cover,
-                      ),
+                  url: item.imageUrl!,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -503,25 +515,25 @@ class _UsedCard extends StatelessWidget {
                 children: [
                   (item.imageUrl ?? '').isEmpty
                       ? Container(
-                          color: Colors.grey.shade200,
-                          child: const Center(
-                            child: Icon(
-                              Icons.image,
-                              size: 28,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
+                    color: Colors.grey.shade200,
+                    child: const Center(
+                      child: Icon(
+                        Icons.image,
+                        size: 28,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
                       : ColorFiltered(
-                          colorFilter: const ColorFilter.mode(
-                            Colors.black26, // dim
-                            BlendMode.darken,
-                          ),
-                          child: CacheNetworkImageWidget(
-                            url: item.imageUrl!,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                    colorFilter: const ColorFilter.mode(
+                      Colors.black26, // dim
+                      BlendMode.darken,
+                    ),
+                    child: CacheNetworkImageWidget(
+                      url: item.imageUrl!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   const Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -563,7 +575,6 @@ class _UsedCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: const [
-                    // you can replace with your calendar asset if needed
                     Icon(
                       Icons.check_circle_outline,
                       size: 16,
@@ -605,7 +616,7 @@ class _UsedCard extends StatelessWidget {
 
 // ---------- Sections ----------
 
-Widget _storeSection(StoreVO store, Function onTapViewAll) {
+Widget _storeSection(StoreVO store, VoidCallback onTapViewAll) {
   final rewards = store.rewards ?? const <RewardVO>[];
 
   return Container(
@@ -629,7 +640,7 @@ Widget _storeSection(StoreVO store, Function onTapViewAll) {
 
 // ---------- UI helpers ----------
 
-Widget _storeHeader(StoreVO store, Function onTapViewAll) {
+Widget _storeHeader(StoreVO store, VoidCallback onTapViewAll) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     child: Row(
@@ -667,9 +678,7 @@ Widget _storeHeader(StoreVO store, Function onTapViewAll) {
           ],
         ),
         GestureDetector(
-          onTap: () {
-            onTapViewAll();
-          },
+          onTap: onTapViewAll,
           child: const Text(
             "View All →",
             style: TextStyle(
@@ -727,12 +736,12 @@ Widget _rewardGrid(List<RewardVO> rewards) {
                     child: (r.imageUrl ?? '').isEmpty
                         ? const Center(child: Text("Image"))
                         : Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: CacheNetworkImageWidget(
-                              url: r.imageUrl!,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                      padding: const EdgeInsets.all(10),
+                      child: CacheNetworkImageWidget(
+                        url: r.imageUrl!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
                 // name

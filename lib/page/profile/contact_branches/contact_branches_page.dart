@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
 import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
@@ -12,6 +10,74 @@ class ContactBranchesPage extends StatefulWidget {
   @override
   State<ContactBranchesPage> createState() => _ContactBranchesPageState();
 }
+
+// ================== Typography Helper ==================
+
+class _ContactBranchesTextStyles {
+  static const appBarTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const sectionTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827),
+  );
+
+  static const sectionSubtitle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+    height: 1.4,
+  );
+
+  static const emptyState = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF9CA3AF),
+  );
+
+  static const errorBanner = TextStyle(
+    color: Color(0xFFB00020),
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const branchName = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827),
+  );
+
+  static const branchAddress = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF374151),
+    height: 1.4,
+  );
+
+  static const branchPhone = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFFFF6A00),
+  );
+
+  static const branchOpeningTime = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+    height: 1.4,
+  );
+
+  static const buttonLabel = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+  );
+}
+
+// ================== Page ==================
 
 class _ContactBranchesPageState extends State<ContactBranchesPage> {
   final _supportModel = PhoneKingSupportModelImpl();
@@ -53,8 +119,6 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     final loadingOverlay = Positioned.fill(
       child: IgnorePointer(
         ignoring: !_isLoading,
@@ -72,7 +136,8 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
     final errorBanner = (_error?.isNotEmpty ?? false)
         ? Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding:
+      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       decoration: BoxDecoration(
         color: const Color(0xFFFFEAEA),
@@ -81,18 +146,21 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
       ),
       child: Text(
         _error ?? '',
-        style: const TextStyle(
-          color: Color(0xFFB00020),
-          fontSize: 12,
-        ),
+        style: _ContactBranchesTextStyles.errorBanner,
       ),
     )
         : const SizedBox.shrink();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact Branches'),
+        title: const Text(
+          'Contact Branches',
+          style: _ContactBranchesTextStyles.appBarTitle,
+        ),
         centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -108,13 +176,14 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
               children: [
-                Text('Our Branches', style: theme.textTheme.titleMedium),
+                const Text(
+                  'Our Branches',
+                  style: _ContactBranchesTextStyles.sectionTitle,
+                ),
                 const SizedBox(height: 4),
-                Text(
+                const Text(
                   'Visit any of our branches for repairs, purchases, and support',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.hintColor,
-                  ),
+                  style: _ContactBranchesTextStyles.sectionSubtitle,
                 ),
                 const SizedBox(height: 12),
 
@@ -122,13 +191,11 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
                 errorBanner,
 
                 if (!_isLoading && _branches.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12),
                     child: Text(
                       'No branches available.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.hintColor,
-                      ),
+                      style: _ContactBranchesTextStyles.emptyState,
                     ),
                   )
                 else
@@ -144,6 +211,8 @@ class _ContactBranchesPageState extends State<ContactBranchesPage> {
     );
   }
 }
+
+// ================== Branch Card ==================
 
 class _BranchCard extends StatelessWidget {
   const _BranchCard({required this.branch});
@@ -208,9 +277,10 @@ class _BranchCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Branch name
             Text(
               branch.name ?? 'Unnamed Branch',
-              style: theme.textTheme.titleMedium,
+              style: _ContactBranchesTextStyles.branchName,
             ),
             const SizedBox(height: 10),
 
@@ -224,7 +294,7 @@ class _BranchCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       branch.location!,
-                      style: theme.textTheme.bodyMedium,
+                      style: _ContactBranchesTextStyles.branchAddress,
                     ),
                   ),
                 ],
@@ -240,7 +310,7 @@ class _BranchCard extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(
                     branch.phoneNumber!,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: orange),
+                    style: _ContactBranchesTextStyles.branchPhone,
                   ),
                 ],
               ),
@@ -256,9 +326,7 @@ class _BranchCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       branch.openingTime!,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.hintColor,
-                      ),
+                      style: _ContactBranchesTextStyles.branchOpeningTime,
                     ),
                   ),
                 ],
@@ -270,9 +338,13 @@ class _BranchCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: (branch.phoneNumber ?? '').isEmpty ? null : _call,
+                    onPressed:
+                    (branch.phoneNumber ?? '').isEmpty ? null : _call,
                     icon: const Icon(Icons.call_rounded),
-                    label: const Text('Call'),
+                    label: const Text(
+                      'Call',
+                      style: _ContactBranchesTextStyles.buttonLabel,
+                    ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -284,12 +356,15 @@ class _BranchCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed:
-                    (branch.latitude == null || branch.longitude == null)
+                    onPressed: (branch.latitude == null ||
+                        branch.longitude == null)
                         ? null
                         : _openDirections,
                     icon: const Icon(Icons.near_me_rounded),
-                    label: const Text('Directions'),
+                    label: const Text(
+                      'Directions',
+                      style: _ContactBranchesTextStyles.buttonLabel,
+                    ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(

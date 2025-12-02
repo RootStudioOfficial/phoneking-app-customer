@@ -28,12 +28,11 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
 
   // UI state
   bool _submitting = false;
-
   String _pin = "";
 
   Future<void> _confirm() async {
-    if (_pin.length != 6) {
-      context.showErrorSnackBar('Please enter your 6 digit PIN');
+    if (_pin.length != 8) {
+      context.showErrorSnackBar('Please enter your 8 digit PIN');
       return;
     }
     if (_submitting) return;
@@ -50,7 +49,9 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
 
       context.showSuccessSnackBar('Reward claimed successfully');
       if (res.data != null) {
-        context.navigateToNextPage(RewardSuccessPage(rewardData: res.data!));
+        context.navigateToNextPage(
+          RewardSuccessPage(rewardData: res.data!),
+        );
       }
     } catch (e) {
       if (!mounted) return;
@@ -71,7 +72,10 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
         appBar: AppBar(
           title: const Text(
             'Redeemed Confirm',
-            style: TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -90,7 +94,7 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                   children: [
                     const Center(
                       child: Text(
-                        'Enter Your 6 digit Pin',
+                        'Enter Your 8 digit PIN',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
@@ -100,7 +104,7 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                     const SizedBox(height: 6),
                     const Center(
                       child: Text(
-                        'Please enter your pin to confirm the transaction',
+                        'Please enter your PIN to confirm the transaction',
                         style: TextStyle(color: Color(0xFF9E9E9E)),
                       ),
                     ),
@@ -125,17 +129,20 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                         ],
                       ),
                       child: Pinput(
-                        length: 6,
+                        length: 8,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                         showCursor: true,
                         closeKeyboardWhenCompleted: true,
                         obscureText: true,
+                        onChanged: (pin) {
+                          _pin = pin;
+                        },
                         onCompleted: (pin) {
-                          if (mounted) {
-                            setState(() {
-                              _pin = pin;
-                            });
-                          }
+                          _pin = pin;
                         },
                       ),
                     ),
@@ -147,7 +154,8 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              side: const BorderSide(color: Color(0xFFE0E0E0)),
+                              side:
+                              const BorderSide(color: Color(0xFFE0E0E0)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -168,7 +176,8 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                             style: ElevatedButton.styleFrom(
                               backgroundColor: orange,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -177,19 +186,19 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                             onPressed: _submitting ? null : _confirm,
                             child: _submitting
                                 ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
                                 : const Text(
-                                    'Confirm',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              'Confirm',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       ],

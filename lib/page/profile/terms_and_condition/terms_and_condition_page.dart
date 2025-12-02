@@ -50,6 +50,25 @@ class _TermsAndConditionPageState extends State<TermsAndConditionPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final hasError = _error?.isNotEmpty ?? false;
+
+    final errorBanner = hasError
+        ? Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFEAEA),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFFFC9C9)),
+      ),
+      child: Text(
+        _error ?? '',
+        style: const TextStyle(color: Color(0xFFB00020), fontSize: 12),
+      ),
+    )
+        : const SizedBox.shrink();
+
     final loadingOverlay = Positioned.fill(
       child: IgnorePointer(
         ignoring: !_isLoading,
@@ -63,23 +82,6 @@ class _TermsAndConditionPageState extends State<TermsAndConditionPage> {
         ),
       ),
     );
-
-    final errorBanner = (_error?.isNotEmpty ?? false)
-        ? Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFEAEA),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFFFC9C9)),
-            ),
-            child: Text(
-              _error ?? '',
-              style: const TextStyle(color: Color(0xFFB00020), fontSize: 12),
-            ),
-          )
-        : const SizedBox.shrink();
 
     return Scaffold(
       appBar: AppBar(
@@ -96,76 +98,90 @@ class _TermsAndConditionPageState extends State<TermsAndConditionPage> {
         children: [
           RefreshIndicator(
             onRefresh: _onRefresh,
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-              itemCount: _terms.length + 1, // +1 to place error banner at top
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // Error banner slot
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: errorBanner,
-                  );
-                }
-
-                final term = _terms[index - 1];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: theme.colorScheme.surface,
-                    border: Border.all(
-                      color: theme.dividerColor.withValues(alpha: .2),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                        color: Colors.black.withValues(alpha: .04),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        term.title ?? 'Untitled Section',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        term.description ?? 'No description available.',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.hintColor,
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+            child: _buildBodyList(theme, errorBanner, hasError),
           ),
-
-          // Empty state (when not loading, no error, and no terms)
-          if (!_isLoading && _terms.isEmpty && !(_error?.isNotEmpty ?? false))
-            Center(
-              child: Text(
-                'No terms and conditions available.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.hintColor,
-                ),
-              ),
-            ),
 
           // Loading overlay
           loadingOverlay,
         ],
       ),
+    );
+  }
+
+  Widget _buildBodyList(
+      ThemeData theme,
+      Widget errorBanner,
+      bool hasError,
+      ) {
+    // Keep ListView for pull-to-refresh even in empty state
+    if (_terms.isEmpty && !hasError && !_isLoading) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 40, 16, 24),
+        children: [
+          Center(
+            child: Text(
+              'No terms and conditions available.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.hintColor,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+      itemCount: _terms.length + 1, // slot 0 reserved for error banner
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Align(
+            alignment: Alignment.topCenter,
+            child: errorBanner,
+          );
+        }
+
+        final term = _terms[index - 1];
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: theme.colorScheme.surface,
+            border: Border.all(
+              color: theme.dividerColor.withValues(alpha: .2),
+            ),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+                color: Colors.black.withValues(alpha: .04),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                term.title ?? 'Untitled Section',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                term.description ?? 'No description available.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.hintColor,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -22,11 +22,7 @@ class PaymentSuccessPage extends StatelessWidget {
         ),
         title: const Text(
           'Success Payment',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: _PaymentSuccessTextStyles.appBarTitle,
         ),
       ),
       body: Column(
@@ -50,11 +46,7 @@ class PaymentSuccessPage extends StatelessWidget {
                   // Success Message
                   const Text(
                     'Payment Completed Successfully.',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: _PaymentSuccessTextStyles.successTitle,
                     textAlign: TextAlign.center,
                   ),
 
@@ -75,11 +67,7 @@ class PaymentSuccessPage extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           child: Text(
                             'Payment Preview',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                            style: _PaymentSuccessTextStyles.cardTitle,
                           ),
                         ),
 
@@ -95,24 +83,19 @@ class PaymentSuccessPage extends StatelessWidget {
                                 label: 'Payment at',
                                 value: paymentData.processByName,
                               ),
-
                               const SizedBox(height: 16),
-
                               _buildDetailRow(
                                 label: 'Payment Date',
                                 value: paymentData.paymentDate,
                               ),
-
                               const SizedBox(height: 16),
-
                               _buildDetailRow(
                                 label: 'Used Points',
                                 value: paymentData.pointAmount.toString(),
                                 valueColor: Colors.deepOrange,
+                                highlight: true,
                               ),
-
                               const SizedBox(height: 16),
-
                               _buildDetailRow(
                                 label: 'Invoice No',
                                 value: paymentData.invoiceNo,
@@ -147,11 +130,7 @@ class PaymentSuccessPage extends StatelessWidget {
                 ),
                 child: const Text(
                   'Go Back Home',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+                  style: _PaymentSuccessTextStyles.buttonText,
                 ),
               ),
             ),
@@ -165,25 +144,74 @@ class PaymentSuccessPage extends StatelessWidget {
     required String label,
     required String value,
     Color? valueColor,
+    bool highlight = false,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 15, color: Colors.grey[600])),
+        Text(
+          label,
+          style: _PaymentSuccessTextStyles.detailLabel,
+        ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
             value,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: valueColor ?? Colors.black,
-            ),
+            style: (highlight
+                ? _PaymentSuccessTextStyles.detailValueHighlight
+                : _PaymentSuccessTextStyles.detailValue)
+                .copyWith(color: valueColor ?? Colors.black),
             textAlign: TextAlign.right,
           ),
         ),
       ],
     );
   }
+}
+
+// ========= Typography helper =========
+
+class _PaymentSuccessTextStyles {
+  static const appBarTitle = TextStyle(
+    color: Colors.black,
+    fontSize: 18,
+    fontWeight: FontWeight.w800,
+  );
+
+  static const successTitle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    color: Colors.black,
+  );
+
+  static const cardTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const detailLabel = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const detailValue = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const detailValueHighlight = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Colors.deepOrange,
+  );
+
+  static const buttonText = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
 }

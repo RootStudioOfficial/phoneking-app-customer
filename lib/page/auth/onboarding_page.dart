@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
 import 'package:phone_king_customer/page/index_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
@@ -7,7 +6,6 @@ import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart'
 
 import 'package:phone_king_customer/data/model/auth/phone_king_auth_model.dart';
 import 'package:phone_king_customer/data/model/auth/phone_king_auth_model_impl.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
 
 enum _Sheet { none, phone, otp, pin, personal, login }
 
@@ -36,7 +34,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   _Sheet _sheet = _Sheet.none;
 
   bool _busy = false;
-  String? _phone;
+  String? _phone; // normalized (+95xxxxxxxxx)
   String? _pin;
 
   final PhoneKingAuthModel _auth = PhoneKingAuthModelImpl();
@@ -109,6 +107,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   }
 
   Future<void> _handleSendOtp(String fullPhone) async {
+    // fullPhone is already +95xxxxxxxxx from _PhoneFormCard
     _setBusy(true);
     try {
       await _auth.sendRegisterVerification(phoneNumber: fullPhone);
@@ -160,7 +159,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
     _setBusy(true);
     try {
-      await Future.delayed(const Duration(seconds: 3));
       await _auth.register(
         displayName: name,
         password: _pin!,
@@ -177,8 +175,9 @@ class _OnBoardingPageState extends State<OnBoardingPage>
     }
   }
 
-  // ---- Login flow handler (🔗 API wired) ----
+  // ---- Login flow handler ----
   Future<void> _handleLogin(String fullPhone, String password) async {
+    // fullPhone is already normalized (+95…) from _LoginFormCard
     _setBusy(true);
     try {
       final loginRes = await _auth.login(
@@ -235,7 +234,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                     _BottomCard(
                       title: "PhoneKing",
                       subtitle:
-                          "Your gateway to exclusive rewards,\namazing deals and premium services",
+                      "Your gateway to exclusive rewards,\namazing deals and premium services",
                       buttonText: "Get Started",
                       onPressed: _busy ? null : _openPhone,
                       secondary: TextButton(
@@ -260,8 +259,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                   onTap: _busy ? null : _closeAny,
                   child: AnimatedBuilder(
                     animation: _ac,
-                    builder: (_, _) => ColoredBox(
-                      // 🔧 safer API than withValues
+                    builder: (_, __) => ColoredBox(
                       color: Colors.black.withValues(alpha: .35 * _ac.value),
                     ),
                   ),
@@ -333,7 +331,8 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
 class _PhoneFormCard extends StatefulWidget {
   final bool enabled;
-  final ValueChanged<String> onConfirm; // returns phone with +95
+  /// returns phone with +95 prefix
+  final ValueChanged<String> onConfirm;
   final VoidCallback onTapLogin;
 
   const _PhoneFormCard({
@@ -367,8 +366,16 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
     if (!widget.enabled) return;
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
-    final full = _phoneCtrl.text.trim();
-    widget.onConfirm(full);
+
+    final raw = _phoneCtrl.text.trim();
+    // Normalise to +95... — adjust if BE expects different pattern
+    final normalized = raw.startsWith('+95')
+        ? raw
+        : raw.startsWith('0')
+        ? '+95${raw.substring(1)}'
+        : '+95$raw';
+
+    widget.onConfirm(normalized);
   }
 
   @override
@@ -507,13 +514,14 @@ class _OtpFormCardState extends State<_OtpFormCard> {
                     enabled: widget.enabled,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    buildCounter:
-                        (
-                          _, {
+                    buildCounter: (
+                        _,
+                        {
                           int? currentLength,
                           bool? isFocused,
                           int? maxLength,
-                        }) => const SizedBox.shrink(),
+                        }) =>
+                    const SizedBox.shrink(),
                     validator: (v) => _validateOtp(v ?? ''),
                     decoration: _Decorations.inputRoundedAll(
                       hint: "e.g. 123456",
@@ -658,7 +666,7 @@ class _PinFormCardState extends State<_PinFormCard> {
         validator: validator,
         buildCounter:
             (_, {int? currentLength, bool? isFocused, int? maxLength}) =>
-                const SizedBox(),
+        const SizedBox(),
         decoration: _Decorations.inputRoundedAll(
           hint: "must be 6 digits",
           suffix: IconButton(
@@ -678,15 +686,17 @@ class _PinFormCardState extends State<_PinFormCard> {
 class _PersonalInfoFormCard extends StatefulWidget {
   final bool enabled;
   final Future<void> Function({
-    required String name,
-    required String day,
-    required String month,
-    required String year,
-    required String referralCode,
-  })
-  onConfirm;
+  required String name,
+  required String day,
+  required String month,
+  required String year,
+  required String referralCode,
+  }) onConfirm;
 
-  const _PersonalInfoFormCard({required this.onConfirm, required this.enabled});
+  const _PersonalInfoFormCard({
+    required this.onConfirm,
+    required this.enabled,
+  });
 
   @override
   State<_PersonalInfoFormCard> createState() => _PersonalInfoFormCardState();
@@ -863,6 +873,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
 
 class _LoginFormCard extends StatefulWidget {
   final bool enabled;
+  /// returns normalized phone with +95 prefix
   final Future<void> Function(String phone, String password) onConfirm;
   final VoidCallback onTapRegister;
 
@@ -906,7 +917,15 @@ class _LoginFormCardState extends State<_LoginFormCard> {
     if (!widget.enabled) return;
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
-    final full = _phoneCtrl.text.trim();
+
+    final raw = _phoneCtrl.text.trim();
+    // Same normalization as register
+    final full = raw.startsWith('+95')
+        ? raw
+        : raw.startsWith('0')
+        ? '+95${raw.substring(1)}'
+        : '+95$raw';
+
     widget.onConfirm(full, _pwdCtrl.text);
   }
 

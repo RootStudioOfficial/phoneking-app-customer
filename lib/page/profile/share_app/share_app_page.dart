@@ -13,18 +13,75 @@ class ShareAppPage extends StatefulWidget {
 class _ShareAppPageState extends State<ShareAppPage> {
   final LoginPersistent _loginPersistent = LoginPersistent();
 
-  String? referralLink;
+  String? _referralCode;
 
   @override
   void initState() {
-    _loginPersistent.getLoginData().then((data) {
-      if (mounted) {
-        setState(() {
-          referralLink = data?.referralCode ?? '';
-        });
-      }
-    });
     super.initState();
+    _loadReferral();
+  }
+
+  Future<void> _loadReferral() async {
+    final data = await _loginPersistent.getLoginData();
+    if (!mounted) return;
+    setState(() {
+      _referralCode = data?.referralCode ?? '';
+    });
+  }
+
+  bool get _hasReferral => _referralCode != null && _referralCode!.isNotEmpty;
+
+  String get _shareMessage {
+    final code = _referralCode ?? '';
+    return '''
+Join me on Phone King and earn points together!  
+Use my referral code: $code  
+
+Download the app from the store and enter this code during signup.
+''';
+  }
+
+  void _copyReferral(BuildContext context) {
+    if (!_hasReferral) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Referral link not available yet'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    Clipboard.setData(ClipboardData(text: _referralCode!));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Referral link copied'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+  }
+
+  // Later you can plug this into share_plus:
+  // Share.share(_shareMessage);
+  void _shareTo(BuildContext context, String channel) {
+    if (!_hasReferral) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Referral link not available yet'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    // For now just copy and show toast.
+    Clipboard.setData(ClipboardData(text: _shareMessage));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Referral message copied for $channel'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 
   @override
@@ -88,7 +145,7 @@ class _ShareAppPageState extends State<ShareAppPage> {
           const SizedBox(height: 8),
           const Text(
             'Invite your friends to join Phone King\n'
-            'and earn 1,000 Pts per person.',
+                'and earn 1,000 Pts per person.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: Colors.black54, height: 1.4),
           ),
@@ -130,7 +187,7 @@ class _ShareAppPageState extends State<ShareAppPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          referralLink ?? '',
+                          _referralCode ?? '',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 13,
@@ -152,17 +209,7 @@ class _ShareAppPageState extends State<ShareAppPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () {
-                          Clipboard.setData(
-                            ClipboardData(text: referralLink ?? ''),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Referral link copied'),
-                              duration: Duration(seconds: 1),
-                            ),
-                          );
-                        },
+                        onPressed: () => _copyReferral(context),
                         icon: const Icon(Icons.copy, size: 18),
                         label: const Text(
                           'Copy',
@@ -212,19 +259,19 @@ class _ShareAppPageState extends State<ShareAppPage> {
             children: [
               _SocialIconButton(
                 assetPath: AssetImageUtils.facebookIcon,
-                onTap: () {},
+                onTap: () => _shareTo(context, 'Facebook'),
               ),
               _SocialIconButton(
                 assetPath: AssetImageUtils.instagramIcon,
-                onTap: () {},
+                onTap: () => _shareTo(context, 'Instagram'),
               ),
               _SocialIconButton(
                 assetPath: AssetImageUtils.viberIcon,
-                onTap: () {},
+                onTap: () => _shareTo(context, 'Viber'),
               ),
               _SocialIconButton(
                 assetPath: AssetImageUtils.telegramIcon,
-                onTap: () {},
+                onTap: () => _shareTo(context, 'Telegram'),
               ),
             ],
           ),

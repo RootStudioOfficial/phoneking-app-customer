@@ -28,6 +28,82 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+// ========= Typography helper =========
+
+class _HomeTextStyles {
+  static const balanceLabel = TextStyle(
+    color: Colors.white,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const balanceValue = TextStyle(
+    color: Colors.white,
+    fontSize: 32,
+    fontWeight: FontWeight.w800,
+  );
+
+  static const activityButton = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827),
+  );
+
+  static const actionLabel = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const bannerPlaceholder = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const storeName = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 16,
+    color: Color(0xFF111827),
+  );
+
+  static const viewAll = TextStyle(
+    color: Color(0xFF0C34FF),
+    fontWeight: FontWeight.w600,
+    fontSize: 13,
+  );
+
+  static const rewardName = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    color: Color(0xFF111827),
+  );
+
+  static const rewardPoints = TextStyle(
+    color: Color(0xFF0C34FF),
+    fontWeight: FontWeight.w700,
+    fontSize: 13,
+  );
+
+  static const noData = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const errorMessage = TextStyle(
+    fontSize: 14,
+    color: Color(0xFFB00020),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const errorButton = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+}
+
 class _HomePageState extends State<HomePage> {
   final _pointModel = PhoneKingPointModelImpl();
   final _bannerModel = PhoneKingBannerModelImpl();
@@ -137,190 +213,202 @@ class _HomePageState extends State<HomePage> {
             : _error != null
             ? _ErrorView(message: _error!, onRetry: _loadAll)
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ===== Points Balance =====
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFED5B23),
+                      Color(0xFFED5B23),
+                      Color(0xFFED5B23),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ===== Points Balance =====
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFFED5B23),
-                            Color(0xFFED5B23),
-                            Color(0xFFED5B23),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Point Balance",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Text(
-                                    _formatPoints(_balance?.totalBalance ?? 0),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  context.navigateToNextPage(
-                                    const ActivityPage(),
-                                  );
-                                },
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 5,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      "Activity",
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 14),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _actionButton(
-                                AssetImageUtils.qrIcon,
-                                "QR Code",
-                                () {
-                                  context.navigateToNextPage(
-                                    const QrCodePage(),
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 12),
-                              _actionButton(
-                                AssetImageUtils.scanQrIcon,
-                                "Scan to Pay",
-                                () {
-                                  context.navigateToNextPage(
-                                    const PaymentQrScanPage(),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // ===== Banners =====
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          height: w * 0.5,
-                          child: _banners.isEmpty
-                              ? Container(
-                                  color: Colors.black12,
-                                  child: const Center(
-                                    child: Text("Banner Placeholder"),
-                                  ),
-                                )
-                              : PageView.builder(
-                                  onPageChanged: (index) {
-                                    if (mounted) {
-                                      setState(() {
-                                        _bannerActiveIndex = index;
-                                      });
-                                    }
-                                  },
-                                  itemCount: _banners.length,
-                                  itemBuilder: (context, i) {
-                                    final b = _banners[i];
-                                    final img = b.imageUrl;
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
-                                        child: CacheNetworkImageWidget(
-                                          url: img,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Point Balance",
+                              style: _HomeTextStyles.balanceLabel,
+                            ),
+                            Text(
+                              _formatPoints(
+                                  _balance?.totalBalance ?? 0),
+                              style:
+                              _HomeTextStyles.balanceValue,
+                            ),
+                          ],
                         ),
-                        if (_banners.isEmpty) ...[
-                          const SizedBox.shrink(),
-                        ] else ...[
-                          AnimatedSmoothIndicator(
-                            activeIndex: _bannerActiveIndex,
-                            count: _banners.length,
-                            effect: WormEffect(
-                              dotWidth: 10,
-                              dotHeight: 10,
-                              activeDotColor: Color(0xFFED5B23),
+                        GestureDetector(
+                          onTap: () {
+                            context.navigateToNextPage(
+                              const ActivityPage(),
+                            );
+                          },
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.circular(10),
+                              ),
+                              child: const Text(
+                                "Activity",
+                                style:
+                                _HomeTextStyles.activityButton,
+                              ),
                             ),
                           ),
-                        ],
+                        ),
                       ],
                     ),
 
-                    const SizedBox(height: 24),
-
-                    // ===== Stores (each with its Reward list) =====
-                    if (_stores.isEmpty)
-                      const SizedBox(
-                        height: 120,
-                        child: Center(child: Text("No stores available")),
-                      )
-                    else
-                      ..._stores
-                          .map(
-                            (s) => _storeSection(s, () {
-                              context.navigateToNextPage(
-                                StoreViewAllPage(stores: _stores),
-                              );
-                            }),
-                          )
-                          .expand((w) => [w, const SizedBox(height: 16)]),
-
-                    const SizedBox(height: 150),
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _actionButton(
+                          AssetImageUtils.qrIcon,
+                          "QR Code",
+                              () {
+                            context.navigateToNextPage(
+                              const QrCodePage(),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 12),
+                        _actionButton(
+                          AssetImageUtils.scanQrIcon,
+                          "Scan to Pay",
+                              () {
+                            context.navigateToNextPage(
+                              const PaymentQrScanPage(),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
+
+              const SizedBox(height: 16),
+
+              // ===== Banners =====
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: w * 0.5,
+                    child: _banners.isEmpty
+                        ? Container(
+                      color: Colors.black12,
+                      child: const Center(
+                        child: Text(
+                          "Banner Placeholder",
+                          style: _HomeTextStyles
+                              .bannerPlaceholder,
+                        ),
+                      ),
+                    )
+                        : PageView.builder(
+                      onPageChanged: (index) {
+                        if (mounted) {
+                          setState(() {
+                            _bannerActiveIndex = index;
+                          });
+                        }
+                      },
+                      itemCount: _banners.length,
+                      itemBuilder: (context, i) {
+                        final b = _banners[i];
+                        final img = b.imageUrl;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                          ),
+                          child: ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(16),
+                            child: CacheNetworkImageWidget(
+                              url: img,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  if (_banners.isEmpty)
+                    const SizedBox.shrink()
+                  else
+                    AnimatedSmoothIndicator(
+                      activeIndex: _bannerActiveIndex,
+                      count: _banners.length,
+                      effect: const WormEffect(
+                        dotWidth: 10,
+                        dotHeight: 10,
+                        activeDotColor: Color(0xFFED5B23),
+                      ),
+                    ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // ===== Stores (each with its Reward list) =====
+              if (_stores.isEmpty)
+                const SizedBox(
+                  height: 120,
+                  child: Center(
+                    child: Text(
+                      "No stores available",
+                      style: _HomeTextStyles.noData,
+                    ),
+                  ),
+                )
+              else
+                ..._stores
+                    .map(
+                      (s) => _storeSection(s, () {
+                    context.navigateToNextPage(
+                      StoreViewAllPage(stores: _stores),
+                    );
+                  }),
+                )
+                    .expand((w) => [w, const SizedBox(height: 16)]),
+
+              const SizedBox(height: 150),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -380,10 +468,7 @@ class _HomePageState extends State<HomePage> {
                   store.name ?? '',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
+                  style: _HomeTextStyles.storeName,
                 ),
               ),
             ],
@@ -394,10 +479,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: const Text(
               "View All →",
-              style: TextStyle(
-                color: Color(0xFF0C34FF),
-                fontWeight: FontWeight.w600,
-              ),
+              style: _HomeTextStyles.viewAll,
             ),
           ),
         ],
@@ -409,7 +491,12 @@ class _HomePageState extends State<HomePage> {
     if (rewards.isEmpty) {
       return const SizedBox(
         height: 120,
-        child: Center(child: Text("No rewards available")),
+        child: Center(
+          child: Text(
+            "No rewards available",
+            style: _HomeTextStyles.noData,
+          ),
+        ),
       );
     }
 
@@ -447,14 +534,19 @@ class _HomePageState extends State<HomePage> {
                     child: SizedBox(
                       height: 130,
                       child: (r.imageUrl ?? '').isEmpty
-                          ? const Center(child: Text("Image"))
+                          ? const Center(
+                        child: Text(
+                          "Image",
+                          style: _HomeTextStyles.noData,
+                        ),
+                      )
                           : Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: CacheNetworkImageWidget(
-                                url: r.imageUrl!,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
+                        padding: const EdgeInsets.all(10),
+                        child: CacheNetworkImageWidget(
+                          url: r.imageUrl!,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                   ),
                   // name
@@ -467,10 +559,7 @@ class _HomePageState extends State<HomePage> {
                       r.name ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      style: _HomeTextStyles.rewardName,
                     ),
                   ),
                   // points
@@ -478,11 +567,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       "${r.requiredPoints} pts",
-                      style: const TextStyle(
-                        color: Color(0xFF0C34FF),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
+                      style: _HomeTextStyles.rewardPoints,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -496,10 +581,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   static Widget _actionButton(
-    String iconPath,
-    String label,
-    VoidCallback onPressed,
-  ) {
+      String iconPath,
+      String label,
+      VoidCallback onPressed,
+      ) {
     return Expanded(
       child: ElevatedButton.icon(
         onPressed: onPressed,
@@ -513,7 +598,10 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
         ),
         icon: Image.asset(iconPath, width: 20, height: 20),
-        label: Text(label, style: const TextStyle(color: Colors.black)),
+        label: Text(
+          label,
+          style: _HomeTextStyles.actionLabel,
+        ),
       ),
     );
   }
@@ -565,15 +653,26 @@ class _ErrorViewState extends State<_ErrorView> {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        padding:
+        const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(widget.message, textAlign: TextAlign.center),
+            Text(
+              widget.message,
+              textAlign: TextAlign.center,
+              style: _HomeTextStyles.errorMessage,
+            ),
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: widget.onRetry,
-              child: const Text("Retry"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFED5B23),
+              ),
+              child: const Text(
+                "Retry",
+                style: _HomeTextStyles.errorButton,
+              ),
             ),
           ],
         ),
@@ -582,9 +681,9 @@ class _ErrorViewState extends State<_ErrorView> {
   }
 
   void _showSessionTimeoutDialog(
-    BuildContext context, {
-    required VoidCallback onRestart,
-  }) {
+      BuildContext context, {
+        required VoidCallback onRestart,
+      }) {
     showDialog(
       context: context,
       barrierDismissible: false,

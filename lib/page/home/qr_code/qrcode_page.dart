@@ -12,12 +12,23 @@ class QrCodePage extends StatefulWidget {
   State<QrCodePage> createState() => _QrCodePageState();
 }
 
+// ========= Typography for this page =========
+
+class _QrTextStyles {
+  static const appBarTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 18,
+    color: Color(0xFF0F172A),
+  );
+}
+
 class _QrCodePageState extends State<QrCodePage> {
   final LoginPersistent loginPersistent = LoginPersistent();
   QrPayloadVO? _qrPayloadVO;
 
   @override
   void initState() {
+    super.initState();
     loginPersistent.getLoginData().then((data) {
       setState(() {
         _qrPayloadVO = QrPayloadVO.create(
@@ -28,7 +39,6 @@ class _QrCodePageState extends State<QrCodePage> {
         );
       });
     });
-    super.initState();
   }
 
   @override
@@ -41,8 +51,8 @@ class _QrCodePageState extends State<QrCodePage> {
         foregroundColor: Colors.black,
         centerTitle: true,
         title: const Text(
-          'My QR  Code',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          'My QR Code',
+          style: _QrTextStyles.appBarTitle,
         ),
       ),
       body: _qrPayloadVO == null

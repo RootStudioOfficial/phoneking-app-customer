@@ -14,6 +14,64 @@ class PaymentDetailsPage extends StatefulWidget {
   State<PaymentDetailsPage> createState() => _PaymentDetailsPageState();
 }
 
+// ========== Typography helper ==========
+
+class _PaymentTextStyles {
+  static const appBarTitle = TextStyle(
+    color: Colors.black,
+    fontSize: 18,
+    fontWeight: FontWeight.w800,
+  );
+
+  static const storeName = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const storeSubtitle = TextStyle(
+    fontSize: 13,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const detailLabel = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const detailValue = TextStyle(
+    fontSize: 15,
+    color: Colors.black,
+    fontWeight: FontWeight.w600,
+  );
+
+  static const detailValueStrong = TextStyle(
+    fontSize: 16,
+    color: Colors.black,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const buttonTextPrimary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  static const buttonTextSecondary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+
+  static const errorText = TextStyle(
+    color: Color(0xFFB00020),
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
+}
+
 class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
   final _pointModel = PhoneKingPointModelImpl();
 
@@ -55,8 +113,6 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
 
   // --- Safe getters mapping (adjust keys to your actual ScanPaymentVO fields) ---
   String get storeName {
-    // Prefer your real fields here:
-    // return _data.store?.name ?? _data.merchantName ?? '—';
     try {
       return (_data.store?.name as String?) ??
           (_data.merchantName as String?) ??
@@ -85,7 +141,6 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
   }
 
   int get pointsToUse {
-    // Many systems return “points to spend” as positive; we show negative.
     try {
       final raw =
           (_data.pointsToUse as num?) ?? (_data.spendPoints as num?) ?? 0;
@@ -105,12 +160,10 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
   }
 
   int get balanceAfter {
-    // If API already returns a final/remaining balance, prefer that:
     try {
       final provided = (_data.balanceAfter as num?);
       if (provided != null) return provided.toInt();
     } catch (_) {}
-    // Otherwise compute: current + pointsToUse (pointsToUse is negative in UI)
     return currentBalance + pointsToUse;
   }
 
@@ -121,15 +174,15 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
         : _error != null
         ? _ErrorBody(message: _error!, onRetry: _load)
         : _SuccessBody(
-            storeName: storeName,
-            transactionId: transactionId,
-            invoiceNo: invoiceNo,
-            pointsToUse: pointsToUse,
-            currentBalance: currentBalance,
-            balanceAfter: balanceAfter,
-            onProceed: () => _proceedToPayment(context),
-            onRefresh: _load,
-          );
+      storeName: storeName,
+      transactionId: transactionId,
+      invoiceNo: invoiceNo,
+      pointsToUse: pointsToUse,
+      currentBalance: currentBalance,
+      balanceAfter: balanceAfter,
+      onProceed: () => _proceedToPayment(context),
+      onRefresh: _load,
+    );
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -142,11 +195,7 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
         ),
         title: const Text(
           'Payment Details',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          style: _PaymentTextStyles.appBarTitle,
         ),
       ),
       body: body,
@@ -239,19 +288,13 @@ class _SuccessBody extends StatelessWidget {
                                       storeName,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      ),
+                                      style: _PaymentTextStyles.storeName,
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       'Transaction #$transactionId',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey[600],
-                                      ),
+                                      style:
+                                      _PaymentTextStyles.storeSubtitle,
                                     ),
                                   ],
                                 ),
@@ -276,7 +319,6 @@ class _SuccessBody extends StatelessWidget {
                               _buildDetailRow(
                                 label: 'Points to Use',
                                 value: pointsToUse.toString(),
-                                // already negative
                                 valueColor: Colors.deepOrange,
                               ),
                               const SizedBox(height: 16),
@@ -290,7 +332,7 @@ class _SuccessBody extends StatelessWidget {
                                 label: 'Balance After',
                                 value: _formatNumber(balanceAfter),
                                 valueColor: Colors.black,
-                                valueWeight: FontWeight.w600,
+                                strong: true,
                               ),
                             ],
                           ),
@@ -334,11 +376,7 @@ class _SuccessBody extends StatelessWidget {
                     ),
                     child: const Text(
                       'Cancel',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                      style: _PaymentTextStyles.buttonTextSecondary,
                     ),
                   ),
                 ),
@@ -357,11 +395,7 @@ class _SuccessBody extends StatelessWidget {
                     ),
                     child: const Text(
                       'Proceed to Payment',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                      style: _PaymentTextStyles.buttonTextPrimary,
                     ),
                   ),
                 ),
@@ -377,19 +411,18 @@ class _SuccessBody extends StatelessWidget {
     required String label,
     required String value,
     required Color valueColor,
-    FontWeight? valueWeight,
+    bool strong = false,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(fontSize: 15, color: Colors.grey[600])),
+        Text(label, style: _PaymentTextStyles.detailLabel),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: valueWeight ?? FontWeight.w500,
-            color: valueColor,
-          ),
+          style: (strong
+              ? _PaymentTextStyles.detailValueStrong
+              : _PaymentTextStyles.detailValue)
+              .copyWith(color: valueColor),
         ),
       ],
     );
@@ -398,7 +431,7 @@ class _SuccessBody extends StatelessWidget {
   String _formatNumber(int number) {
     return number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m[1]},',
+          (Match m) => '${m[1]},',
     );
   }
 }
@@ -443,7 +476,7 @@ class _ErrorBody extends StatelessWidget {
             ),
             child: Text(
               message,
-              style: const TextStyle(color: Color(0xFFB00020)),
+              style: _PaymentTextStyles.errorText,
             ),
           ),
           const SizedBox(height: 16),

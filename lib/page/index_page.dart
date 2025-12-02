@@ -26,21 +26,28 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   void initState() {
-    _currentIndex = widget.desireIndex;
-    _pages = [
-      HomePage(),
-      RewardsPage(desireRewardIndex: widget.desireRewardIndex),
-      ProfilePage(),
-    ];
     super.initState();
+    _currentIndex = widget.desireIndex;
+    _pages = <Widget>[
+      const HomePage(),
+      RewardsPage(desireRewardIndex: widget.desireRewardIndex),
+      const ProfilePage(),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor left to children (Home/Rewards/Profile)
       body: Stack(
         children: [
-          IndexedStack(index: _currentIndex, children: _pages),
+          // Keep tab state alive
+          IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
+
+          // Glass bottom nav
           Align(
             alignment: Alignment.bottomCenter,
             child: CustomBottomNavBar(
@@ -71,6 +78,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: ClipRRect(
@@ -85,9 +93,9 @@ class CustomBottomNavBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black,
+                    color: Colors.black.withValues(alpha: 0.12),
                     blurRadius: 20,
-                    offset: Offset(0, 6),
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -97,7 +105,6 @@ class CustomBottomNavBar extends StatelessWidget {
                     index: 0,
                     isSelected: currentIndex == 0,
                     label: 'Home',
-                    // <- tint-able mono asset recommended
                     iconAsset: AssetImageUtils.homeIcon,
                     onTap: onTap,
                   ),
@@ -157,71 +164,66 @@ class _NavItem extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: isSelected
                   ? const LinearGradient(
-                      colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
+                colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
                   : null,
               color: isSelected ? null : Colors.transparent,
               borderRadius: BorderRadius.circular(28),
               boxShadow: isSelected
                   ? const [
-                      BoxShadow(
-                        color: Color(0x33FF6A3A),
-                        blurRadius: 18,
-                        offset: Offset(0, 8),
-                      ),
-                    ]
+                BoxShadow(
+                  color: Color(0x33FF6A3A),
+                  blurRadius: 18,
+                  offset: Offset(0, 8),
+                ),
+              ]
                   : null,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  child:
-                      // Icon (tinted)
-                      AnimatedScale(
-                        duration: const Duration(milliseconds: 220),
-                        scale: isSelected ? 1.05 : 1.0,
-                        curve: Curves.easeOut,
-                        child: Image.asset(
-                          iconAsset,
-                          width: 22,
-                          height: 22,
-                          color: isSelected
-                              ? Colors.white
-                              : const Color(0xFF7C7E8C),
-                        ),
-                      ),
-                ),
-                // Spacing + animated label reveal
-                Flexible(
-                  flex: 4,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 220),
-                    switchInCurve: Curves.easeOut,
-                    switchOutCurve: Curves.easeIn,
-                    transitionBuilder: (child, anim) => SizeTransition(
-                      sizeFactor: anim,
-                      axis: Axis.horizontal,
-                      child: FadeTransition(opacity: anim, child: child),
-                    ),
-                    child: isSelected
-                        ? Padding(
-                            key: const ValueKey('label'),
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              label,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                letterSpacing: 0.2,
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(key: ValueKey('nolabel')),
+                // Icon
+                AnimatedScale(
+                  duration: const Duration(milliseconds: 220),
+                  scale: isSelected ? 1.05 : 1.0,
+                  curve: Curves.easeOut,
+                  child: Image.asset(
+                    iconAsset,
+                    width: 22,
+                    height: 22,
+                    color: isSelected
+                        ? Colors.white
+                        : const Color(0xFF7C7E8C),
                   ),
+                ),
+
+                // Label
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, anim) => SizeTransition(
+                    sizeFactor: anim,
+                    axis: Axis.horizontal,
+                    child: FadeTransition(opacity: anim, child: child),
+                  ),
+                  child: isSelected
+                      ? Padding(
+                    key: const ValueKey('label'),
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  )
+                      : const SizedBox.shrink(key: ValueKey('nolabel')),
                 ),
               ],
             ),

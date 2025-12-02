@@ -6,6 +6,80 @@ import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart'; // for context.showErrorSnackBar
 
+// ======= Typography helpers =======
+
+class _ActivityTextStyles {
+  // AppBar title
+  static const appBarTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 18,
+    color: Color(0xFF0F172A),
+  );
+
+  // Section titles like "Filter by Date", "Recent Transactions"
+  static const sectionTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 16,
+    color: Color(0xFF111827),
+  );
+
+  // Small label (e.g. "From", "To")
+  static const labelSmall = TextStyle(
+    fontSize: 12,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w600,
+  );
+
+  // Error text
+  static const errorText = TextStyle(
+    color: Color(0xFFEF4444),
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+
+  // Info / hint / muted text
+  static const muted = TextStyle(
+    color: Color(0xFF6B7280),
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+  );
+
+  // Summary card label
+  static const summaryLabel = TextStyle(
+    fontSize: 12,
+    color: Colors.white70,
+    fontWeight: FontWeight.w500,
+  );
+
+  // Summary card value
+  static const summaryValue = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    color: Colors.white,
+  );
+
+  // Transaction title
+  static const txnTitle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w800,
+    color: Color(0xFF0F172A),
+  );
+
+  // Transaction description
+  static const txnDesc = TextStyle(
+    color: Color(0xFF6B7280),
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+  );
+
+  // Transaction date
+  static const txnDate = TextStyle(
+    fontSize: 11,
+    color: Color(0xFF9CA3AF),
+    fontWeight: FontWeight.w600,
+  );
+}
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
 
@@ -227,7 +301,7 @@ class _ActivityPageState extends State<ActivityPage> {
         centerTitle: true,
         title: const Text(
           'History',
-          style: TextStyle(fontWeight: FontWeight.w800),
+          style: _ActivityTextStyles.appBarTitle,
         ),
       ),
       body: RefreshIndicator(
@@ -279,11 +353,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 children: [
                   const Text(
                     'Filter by Date',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                      color: Color(0xFF111827),
-                    ),
+                    style: _ActivityTextStyles.sectionTitle,
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -323,13 +393,13 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                         child: _loading
                             ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                             : const Text('Apply'),
                       ),
                       const SizedBox(width: 10),
@@ -354,11 +424,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     const SizedBox(height: 8),
                     Text(
                       _rangeError!,
-                      style: const TextStyle(
-                        color: Color(0xFFEF4444),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: _ActivityTextStyles.errorText,
                     ),
                   ],
                 ],
@@ -368,11 +434,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
             const Text(
               'Recent Transactions',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
-                color: Color(0xFF111827),
-              ),
+              style: _ActivityTextStyles.sectionTitle,
             ),
             const SizedBox(height: 12),
 
@@ -392,29 +454,33 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
                 child: Text(
                   _error!,
-                  style: const TextStyle(color: Color(0xFFB91C1C)),
+                  style: const TextStyle(
+                    color: Color(0xFFB91C1C),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               )
             else if (txns.isEmpty)
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF3F4F6),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: const Text(
+                    'No transactions found for the selected range.',
+                    style: _ActivityTextStyles.muted,
+                  ),
+                )
+              else
+                ...txns.map(
+                      (t) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _TxnCard(txn: t),
+                  ),
                 ),
-                child: const Text(
-                  'No transactions found for the selected range.',
-                  style: TextStyle(color: Color(0xFF6B7280)),
-                ),
-              )
-            else
-              ...txns.map(
-                (t) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _TxnCard(txn: t),
-                ),
-              ),
           ],
         ),
       ),
@@ -442,11 +508,7 @@ class _DateField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF6B7280),
-            fontWeight: FontWeight.w600,
-          ),
+          style: _ActivityTextStyles.labelSmall,
         ),
         const SizedBox(height: 6),
         TextField(
@@ -455,6 +517,7 @@ class _DateField extends StatelessWidget {
           onTap: onTap,
           decoration: InputDecoration(
             hintText: 'Select date',
+            hintStyle: _ActivityTextStyles.muted.copyWith(fontSize: 12),
             filled: true,
             fillColor: Colors.white,
             suffixIcon: const Icon(Icons.date_range),
@@ -517,12 +580,12 @@ class _SummaryCard extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 13, color: Colors.white70),
+              style: _ActivityTextStyles.summaryLabel,
             ),
             const SizedBox(height: 6),
             Text(
               value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              style: _ActivityTextStyles.summaryValue,
             ),
           ],
         ),
@@ -609,11 +672,7 @@ class _TxnCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         txn.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF0F172A),
-                        ),
+                        style: _ActivityTextStyles.txnTitle,
                       ),
                     ),
                     Text(
@@ -621,6 +680,7 @@ class _TxnCard extends StatelessWidget {
                       style: TextStyle(
                         color: color,
                         fontWeight: FontWeight.w800,
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -628,16 +688,12 @@ class _TxnCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   txn.desc,
-                  style: const TextStyle(color: Color(0xFF6B7280)),
+                  style: _ActivityTextStyles.txnDesc,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   _fmtDate(txn.date),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF9CA3AF),
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: _ActivityTextStyles.txnDate,
                 ),
               ],
             ),

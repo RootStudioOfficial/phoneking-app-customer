@@ -16,6 +16,59 @@ class StoreViewAllPage extends StatefulWidget {
   State<StoreViewAllPage> createState() => _StoreViewAllPageState();
 }
 
+// ========= Typography helper =========
+
+class _StoreViewAllTextStyles {
+  static const storeHeaderName = TextStyle(
+    color: Colors.white,
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    shadows: [
+      Shadow(
+        color: Colors.black54,
+        blurRadius: 6,
+        offset: Offset(0, 1),
+      ),
+    ],
+  );
+
+  static const dropdownItem = TextStyle(
+    fontSize: 14,
+    color: Colors.black87,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const errorText = TextStyle(
+    fontSize: 14,
+    color: Color(0xFFB00020),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const retryButton = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  static const emptyText = TextStyle(
+    fontSize: 14,
+    color: Color(0xFF6B7280),
+    fontWeight: FontWeight.w500,
+  );
+
+  static const productName = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.black87,
+  );
+
+  static const productPoints = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: Color(0xFFFF5722),
+  );
+}
+
 class _StoreViewAllPageState extends State<StoreViewAllPage> {
   final _rewardModel = PhoneKingRewardModelImpl();
 
@@ -149,18 +202,7 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
                             padding: const EdgeInsets.all(16),
                             child: Text(
                               selected?.name ?? "",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black54,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 1),
-                                  ),
-                                ],
-                              ),
+                              style: _StoreViewAllTextStyles.storeHeaderName,
                             ),
                           ),
                         ),
@@ -225,51 +267,66 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
                   ),
                   child: Column(
                     children: [
-                      Text('Error: $_error', textAlign: TextAlign.center),
+                      Text(
+                        'Error: $_error',
+                        textAlign: TextAlign.center,
+                        style: _StoreViewAllTextStyles.errorText,
+                      ),
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: _fetchRewards,
-                        child: const Text('Retry'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFED5B23),
+                        ),
+                        child: const Text(
+                          'Retry',
+                          style: _StoreViewAllTextStyles.retryButton,
+                        ),
                       ),
                     ],
                   ),
                 ),
               )
             else if (_rewards.isEmpty)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: Center(child: Text('No rewards found')),
-                ),
-              )
-            else
-              // Product grid bound to API rewards
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                  ),
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final r = _rewards[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.navigateToNextPage(
-                          RewardDetailsPage(rewardID: r.id ?? ''),
-                        );
-                      },
-                      child: _buildProductCard(
-                        name: r.name ?? '',
-                        imageUrl: r.imageUrl ?? '',
-                        points: '${r.requiredPoints} pts',
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                    child: Center(
+                      child: Text(
+                        'No rewards found',
+                        style: _StoreViewAllTextStyles.emptyText,
                       ),
-                    );
-                  }, childCount: _rewards.length),
+                    ),
+                  ),
+                )
+              else
+              // Product grid bound to API rewards
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.75,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final r = _rewards[index];
+                      return GestureDetector(
+                        onTap: () {
+                          context.navigateToNextPage(
+                            RewardDetailsPage(rewardID: r.id ?? ''),
+                          );
+                        },
+                        child: _buildProductCard(
+                          name: r.name ?? '',
+                          imageUrl: r.imageUrl ?? '',
+                          points: '${r.requiredPoints} pts',
+                        ),
+                      );
+                    }, childCount: _rewards.length),
+                  ),
                 ),
-              ),
 
             // Bottom padding
             const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
@@ -288,9 +345,8 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
   }) {
     // Keep current value if present; else fall back to first item (if any)
     final hasValue = items.any((e) => e.key == value);
-    final safeValue = hasValue
-        ? value
-        : (items.isNotEmpty ? items.first.key : '');
+    final safeValue =
+    hasValue ? value : (items.isNotEmpty ? items.first.key : '');
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -316,7 +372,7 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
               value: e.key, // storeId (unique even if names duplicate)
               child: Text(
                 e.value, // store name for display
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: _StoreViewAllTextStyles.dropdownItem,
               ),
             );
           }).toList(),
@@ -358,7 +414,7 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
               value: item,
               child: Text(
                 item,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: _StoreViewAllTextStyles.dropdownItem,
               ),
             );
           }).toList(),
@@ -396,12 +452,19 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
               ),
               child: imageUrl.isEmpty
                   ? Container(
-                      color: Colors.grey.shade200,
-                      child: const Center(
-                        child: Icon(Icons.image, size: 50, color: Colors.grey),
-                      ),
-                    )
-                  : CacheNetworkImageWidget(url: imageUrl, fit: BoxFit.cover),
+                color: Colors.grey.shade200,
+                child: const Center(
+                  child: Icon(
+                    Icons.image,
+                    size: 50,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+                  : CacheNetworkImageWidget(
+                url: imageUrl,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           // Product info
@@ -414,20 +477,12 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
                   name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
+                  style: _StoreViewAllTextStyles.productName,
                 ),
                 const SizedBox(height: 6),
                 Text(
                   points,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFF5722),
-                  ),
+                  style: _StoreViewAllTextStyles.productPoints,
                 ),
               ],
             ),

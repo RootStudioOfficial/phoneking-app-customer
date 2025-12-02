@@ -17,27 +17,62 @@ class PaymentEnterPinPage extends StatefulWidget {
   State<PaymentEnterPinPage> createState() => _PaymentEnterPinPageState();
 }
 
+// ========= Typography helper =========
+
+class _PinTextStyles {
+  static const appBarTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 18,
+    color: Colors.black,
+  );
+
+  static const title = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w800,
+    color: Color(0xFF111827),
+  );
+
+  static const subtitle = TextStyle(
+    fontSize: 13,
+    color: Color(0xFF9E9E9E),
+    fontWeight: FontWeight.w400,
+  );
+
+  static const buttonSecondary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
+
+  static const buttonPrimary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  static const pinText = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+  );
+}
+
 class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
     with SingleTickerProviderStateMixin {
-
   final _pointModel = PhoneKingPointModelImpl();
 
   // UI state
   bool _submitting = false;
+  String _pin = "";
 
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
-
-  String  _pin="";
 
   Future<void> _confirm() async {
     if (_pin.length != 6) {
@@ -76,7 +111,7 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
         appBar: AppBar(
           title: const Text(
             'Payment Details',
-            style: TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+            style: _PinTextStyles.appBarTitle,
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -96,17 +131,14 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                     const Center(
                       child: Text(
                         'Enter Your 6 digit Pin',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: _PinTextStyles.title,
                       ),
                     ),
                     const SizedBox(height: 6),
                     const Center(
                       child: Text(
                         'Please enter your pin to confirm the transaction',
-                        style: TextStyle(color: Color(0xFF9E9E9E)),
+                        style: _PinTextStyles.subtitle,
                       ),
                     ),
                     const SizedBox(height: 22),
@@ -151,8 +183,10 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                         Expanded(
                           child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              side: const BorderSide(color: Color(0xFFE0E0E0)),
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 14),
+                              side: const BorderSide(
+                                  color: Color(0xFFE0E0E0)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -163,7 +197,7 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                                 : () => context.navigateBack(),
                             child: const Text(
                               'Cancel',
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                              style: _PinTextStyles.buttonSecondary,
                             ),
                           ),
                         ),
@@ -173,7 +207,8 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                             style: ElevatedButton.styleFrom(
                               backgroundColor: orange,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -182,19 +217,17 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                             onPressed: _submitting ? null : _confirm,
                             child: _submitting
                                 ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  )
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
                                 : const Text(
-                                    'Confirm',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              'Confirm',
+                              style: _PinTextStyles.buttonPrimary,
+                            ),
                           ),
                         ),
                       ],
@@ -225,7 +258,7 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
   }
 }
 
-// A single PIN box (one character)
+// A single PIN box (one character) — currently unused but styled to match
 class _PinBox extends StatelessWidget {
   const _PinBox({
     required this.controller,
@@ -259,7 +292,7 @@ class _PinBox extends StatelessWidget {
           controller: controller,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          style: _PinTextStyles.pinText,
           obscureText: true,
           obscuringCharacter: '•',
           inputFormatters: [
