@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
 import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
@@ -14,9 +15,11 @@ import 'package:phone_king_customer/page/home/notification/notification_page.dar
 import 'package:phone_king_customer/page/home/scan_to_pay/payment_qr_scan_page.dart';
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
+import 'package:phone_king_customer/persistent/language_persistent.dart';
 import 'package:phone_king_customer/persistent/login_persistent.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 import 'package:phone_king_customer/widgets/session_time_out_dialog_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -27,8 +30,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
-// ========= Typography helper =========
 
 class _HomeTextStyles {
   static const balanceLabel = TextStyle(
@@ -170,6 +171,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
+    final l10n = LocalizationString.of(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
@@ -186,7 +188,9 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _showLanguageSelectBottomSheet(context);
+            },
             icon: Image.asset(
               AssetImageUtils.translateIcon,
               width: 24,
@@ -226,11 +230,11 @@ class _HomePageState extends State<HomePage> {
                   gradient: const LinearGradient(
                     colors: [
                       Color(0xFFED5B23),
-                      Color(0xFFED5B23),
-                      Color(0xFFED5B23),
+                      Color(0xFFFFA86B),
+                      Color(0xFFB85C32),
                     ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -247,15 +251,15 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Point Balance",
+                            Text(
+                              l10n.homePointBalance,
+                              // "Point Balance"
                               style: _HomeTextStyles.balanceLabel,
                             ),
                             Text(
                               _formatPoints(
                                   _balance?.totalBalance ?? 0),
-                              style:
-                              _HomeTextStyles.balanceValue,
+                              style: _HomeTextStyles.balanceValue,
                             ),
                           ],
                         ),
@@ -277,8 +281,9 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius:
                                 BorderRadius.circular(10),
                               ),
-                              child: const Text(
-                                "Activity",
+                              child: Text(
+                                l10n.homeActivity,
+                                // "Activity"
                                 style:
                                 _HomeTextStyles.activityButton,
                               ),
@@ -295,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         _actionButton(
                           AssetImageUtils.qrIcon,
-                          "QR Code",
+                          l10n.homeQrCode, // "QR Code"
                               () {
                             context.navigateToNextPage(
                               const QrCodePage(),
@@ -305,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(width: 12),
                         _actionButton(
                           AssetImageUtils.scanQrIcon,
-                          "Scan to Pay",
+                          l10n.homeScanToPay, // "Scan to Pay"
                               () {
                             context.navigateToNextPage(
                               const PaymentQrScanPage(),
@@ -397,11 +402,15 @@ class _HomePageState extends State<HomePage> {
               else
                 ..._stores
                     .map(
-                      (s) => _storeSection(s, () {
-                    context.navigateToNextPage(
-                      StoreViewAllPage(stores: _stores),
-                    );
-                  }),
+                      (s) => _storeSection(
+                    context,
+                    s,
+                        () {
+                      context.navigateToNextPage(
+                        StoreViewAllPage(stores: _stores),
+                      );
+                    },
+                  ),
                 )
                     .expand((w) => [w, const SizedBox(height: 16)]),
 
@@ -415,7 +424,11 @@ class _HomePageState extends State<HomePage> {
 
   // ---------- Sections ----------
 
-  Widget _storeSection(StoreVO store, Function onTapViewAll) {
+  Widget _storeSection(
+      BuildContext context,
+      StoreVO store,
+      Function onTapViewAll,
+      ) {
     final rewards = store.rewards ?? const <RewardVO>[];
 
     return Container(
@@ -429,7 +442,7 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _storeHeader(store, onTapViewAll),
+          _storeHeader(context, store, onTapViewAll),
           const SizedBox(height: 12),
           _rewardGrid(rewards),
         ],
@@ -439,7 +452,13 @@ class _HomePageState extends State<HomePage> {
 
   // ---------- UI helpers ----------
 
-  Widget _storeHeader(StoreVO store, Function onTapViewAll) {
+  Widget _storeHeader(
+      BuildContext context,
+      StoreVO store,
+      Function onTapViewAll,
+      ) {
+    final l10n = LocalizationString.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -477,8 +496,9 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               onTapViewAll();
             },
-            child: const Text(
-              "View All →",
+            child: Text(
+              '${l10n.homeViewAll} →',
+              // "View All →"
               style: _HomeTextStyles.viewAll,
             ),
           ),
@@ -492,10 +512,7 @@ class _HomePageState extends State<HomePage> {
       return const SizedBox(
         height: 120,
         child: Center(
-          child: Text(
-            "No rewards available",
-            style: _HomeTextStyles.noData,
-          ),
+          child: Text("No rewards available", style: _HomeTextStyles.noData),
         ),
       );
     }
@@ -557,7 +574,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Text(
                       r.name ?? '',
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: _HomeTextStyles.rewardName,
                     ),
@@ -598,10 +615,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
         ),
         icon: Image.asset(iconPath, width: 20, height: 20),
-        label: Text(
-          label,
-          style: _HomeTextStyles.actionLabel,
-        ),
+        label: Text(label, style: _HomeTextStyles.actionLabel),
       ),
     );
   }
@@ -653,8 +667,7 @@ class _ErrorViewState extends State<_ErrorView> {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding:
-        const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -669,10 +682,7 @@ class _ErrorViewState extends State<_ErrorView> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFED5B23),
               ),
-              child: const Text(
-                "Retry",
-                style: _HomeTextStyles.errorButton,
-              ),
+              child: const Text("Retry", style: _HomeTextStyles.errorButton),
             ),
           ],
         ),
@@ -692,4 +702,105 @@ class _ErrorViewState extends State<_ErrorView> {
       onRestart();
     });
   }
+}
+
+class LanguageOption {
+  final Locale locale;
+  final String title;
+  final String subtitle;
+  final String flag;
+
+  const LanguageOption({
+    required this.locale,
+    required this.title,
+    required this.subtitle,
+    required this.flag,
+  });
+}
+
+Future<void> _showLanguageSelectBottomSheet(BuildContext context) async {
+  final currentLocale = context.locale;
+  final languageService = LanguagePersistent();
+
+  const options = <LanguageOption>[
+    LanguageOption(
+      locale: Locale('en'),
+      title: 'English',
+      subtitle: 'English',
+      flag: '🇺🇸',
+    ),
+    LanguageOption(
+      locale: Locale('my'),
+      title: 'Burmese',
+      subtitle: 'မြန်မာ',
+      flag: '🇲🇲',
+    ),
+  ];
+
+  await showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (ctx) {
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 4),
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Select Language',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            const Divider(height: 1),
+
+            ListView.separated(
+              shrinkWrap: true,
+              itemCount: options.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final option = options[index];
+                final isSelected =
+                    option.locale.languageCode == currentLocale.languageCode;
+
+                return ListTile(
+                  leading: Text(
+                    option.flag,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  title: Text(option.title),
+                  subtitle: Text(option.subtitle),
+                  trailing: isSelected
+                      ? const Icon(Icons.check, color: Colors.blue)
+                      : null,
+                  onTap: () async {
+                    await context.setLocale(option.locale);
+
+                    await languageService.setLocale(option.locale);
+
+                    if (context.mounted) {
+                      context.navigateBack();
+                    }
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      );
+    },
+  );
 }

@@ -6,6 +6,7 @@ import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart'
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 
 import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:pinput/pinput.dart';
 
 class PaymentEnterPinPage extends StatefulWidget {
@@ -48,11 +49,6 @@ class _PinTextStyles {
     fontSize: 15,
     fontWeight: FontWeight.w700,
     color: Colors.white,
-  );
-
-  static const pinText = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w700,
   );
 }
 
@@ -104,13 +100,14 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
   @override
   Widget build(BuildContext context) {
     const orange = Color(0xFFE85B2A);
+    final l10n = LocalizationString.of(context);
 
     return WillPopScope(
       onWillPop: () async => !_submitting,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Payment Details',
+          title: Text(
+            l10n.paymentDetailsPaymentDetails, // "Payment Details"
             style: _PinTextStyles.appBarTitle,
           ),
           centerTitle: true,
@@ -258,67 +255,3 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
   }
 }
 
-// A single PIN box (one character) — currently unused but styled to match
-class _PinBox extends StatelessWidget {
-  const _PinBox({
-    required this.controller,
-    required this.focusNode,
-    required this.onChanged,
-    required this.onBackspace,
-  });
-
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onBackspace;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 48,
-      height: 48,
-      child: Focus(
-        focusNode: focusNode,
-        onKeyEvent: (node, event) {
-          if (event is KeyDownEvent &&
-              event.logicalKey == LogicalKeyboardKey.backspace &&
-              controller.text.isEmpty) {
-            onBackspace();
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
-        },
-        child: TextField(
-          controller: controller,
-          textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
-          style: _PinTextStyles.pinText,
-          obscureText: true,
-          obscuringCharacter: '•',
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(1),
-          ],
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: const Color(0xFFF7F7F7),
-            contentPadding: EdgeInsets.zero,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE6E6E6)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE6E6E6)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
-            ),
-          ),
-          onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-}

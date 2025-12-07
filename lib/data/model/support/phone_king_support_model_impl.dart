@@ -1,4 +1,5 @@
 import 'package:phone_king_customer/data/model/support/phone_king_support_model.dart';
+import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
 import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
 import 'package:phone_king_customer/data/vos/contact_us_vo/contact_us_vo.dart';
 import 'package:phone_king_customer/data/vos/faq_vo/faq_vo.dart';
@@ -28,5 +29,10 @@ class PhoneKingSupportModelImpl implements PhoneKingSupportModel {
   Future<BaseResponse<List<TermsAndConditionVO>>>
   getSupportTermsAndConditions() {
     return _api.getSupportTermsAndConditions();
+  }
+
+  @override
+  Future<BaseResponse<AppUpdateConfigVO>> checkVersion(String platform, int currentVersionCode) {
+    return  _api.checkVersion(platform, currentVersionCode);
   }
 }

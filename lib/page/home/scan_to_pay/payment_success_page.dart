@@ -3,6 +3,7 @@ import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_
 import 'package:phone_king_customer/page/index_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   final PaymentSuccessVO paymentData;
@@ -11,6 +12,8 @@ class PaymentSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -44,8 +47,9 @@ class PaymentSuccessPage extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   // Success Message
-                  const Text(
-                    'Payment Completed Successfully.',
+                  Text(
+                    '${l10n.paymentSuccessPaymentCompletedSuccessfully}.',
+                    // "Payment Completed Successfully."
                     style: _PaymentSuccessTextStyles.successTitle,
                     textAlign: TextAlign.center,
                   ),
@@ -63,8 +67,8 @@ class PaymentSuccessPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Card Header
-                        Padding(
-                          padding: const EdgeInsets.all(16),
+                        const Padding(
+                          padding: EdgeInsets.all(16),
                           child: Text(
                             'Payment Preview',
                             style: _PaymentSuccessTextStyles.cardTitle,
@@ -80,24 +84,28 @@ class PaymentSuccessPage extends StatelessWidget {
                           child: Column(
                             children: [
                               _buildDetailRow(
-                                label: 'Payment at',
+                                label: l10n.paymentSuccessPaymentAt,
+                                // "Payment At"
                                 value: paymentData.processByName,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Payment Date',
+                                label: l10n.paymentSuccessPaymentDate,
+                                // "Payment Date"
                                 value: paymentData.paymentDate,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Used Points',
+                                label: l10n.paymentSuccessUsedPoints,
+                                // "Used Points"
                                 value: paymentData.pointAmount.toString(),
                                 valueColor: Colors.deepOrange,
                                 highlight: true,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Invoice No',
+                                label: l10n.paymentSuccessInvoiceNo,
+                                // "Invoice No"
                                 value: paymentData.invoiceNo,
                               ),
                             ],

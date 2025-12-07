@@ -1,0 +1,73 @@
+{
+  "home_activity": "Activity",
+  "home_point_balance": "Point Balance",
+  "home_qr_code": "QR Code",
+  "home_scan_to_pay": "Scan to Pay",
+  "home_view_all": "View All",
+  "home_pts": "pts",
+
+  "reward_reward_store": "Reward Store",
+  "reward_redeemed": "Redeemed",
+  "reward_used": "Used",
+  "reward_view_all": "View All",
+
+  "reward_details_points_required_in_reward_details": "Points Required (In reward details)",
+  "reward_details_your_balance": "Your Balance",
+  "reward_details_category": "Category",
+  "reward_details_brand": "Brand",
+  "reward_details_availality": "Availality",
+  "reward_details_scan_to_claim": "Scan to Claim",
+  "reward_details_redeem": "Redeem",
+  "reward_details_are_you_sure_want_to_redeem_this_reward": "Are you sure want to redeem this reward?",
+
+  "redeem_claim_success_reward_claim_successfully": "Reward claim successfully",
+  "redeem_claim_success_reward_preview": "Reward preview",
+  "redeem_claim_success_redeem_at": "Redeem at",
+  "redeem_claim_success_claim_date": "Claim Date",
+
+  "payment_details_payment_details": "Payment Details",
+  "payment_details_invoice_no": "Invoice No",
+  "payment_details_points_to_use": "Points to use",
+  "payment_details_current_balance": "Current Balance",
+  "payment_details_balance_after": "Balance After",
+
+  "payment_success_payment_completed_successfully": "Payment Completed Successfully",
+  "payment_success_transaction_id": "Transaction Id",
+  "payment_success_payment_at": "Payment At",
+  "payment_success_payment_date": "Payment Date",
+  "payment_success_used_points": "Used Points",
+  "payment_success_invoice_no": "Invoice No",
+
+  "qr_scan_scanning_tips": "Scanning Tips",
+  "qr_scan_hold_your_phone_steady_and_ensure_good_lighting": "Hold your phone steady and ensure good lighting",
+  "qr_scan_keep_the_qr_code_within_scanning_frame": "Keep the QR code within scanning frame",
+
+  "profile_member": "Member",
+  "profile_points": "Points",
+  "profile_rewards": "Rewards",
+  "profile_general": "General",
+
+  "profile_change_pin": "Change Pin",
+  "profile_update_your_security_pin_for_account_acces": "Update your security PIN for account acces",
+  "profile_current_pin": "Current PIN",
+  "profile_new_pin": "New PIN",
+  "profile_confirm_new_pin": "Confirm New Pin",
+
+  "profile_share_app": "Share App",
+  "profile_invite_friends": "Invite Friends",
+  "profile_invite_your_friends_to_join_phone_king_and_earn_1_000_pts_per_person": "Invite your friends to join Phone King and earn 1,000 Pts per person",
+
+  "profile_help_and_support": "Help & Support",
+  "profile_contact_us": "Contact Us",
+  "profile_call_us": "Call Us",
+  "profile_email_us": "Email Us",
+  "profile_frequently_asked_questions": "Frequently Asked Questions",
+  "profile_contact_branches": "Contact Branches",
+  "profile_our_branches": "Our Branches",
+  "profile_terms_and_conditions": "Terms & Conditions",
+  "profile_sign_out": "Sign Out",
+
+  "notification_notification": "Notification",
+  "notification_unread_notification": "unread notification",
+  "notification_mark_as_all_read": "mark as all read"
+}

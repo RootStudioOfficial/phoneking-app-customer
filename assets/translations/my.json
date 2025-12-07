@@ -1,0 +1,73 @@
+{
+  "home_activity": "လုပ်ငန်းစဉ်",
+  "home_point_balance": "ပွိုင့်ပမာဏ",
+  "home_qr_code": "QR Code",
+  "home_scan_to_pay": "Scan to Pay",
+  "home_view_all": "ကြည့်ရန်",
+  "home_pts": "ပွိုင့်",
+
+  "reward_reward_store": "ဆိုင်များ",
+  "reward_redeemed": "ရယူပြီးပါပြီ",
+  "reward_used": "အသုံးပြုပြီးပါပြီ",
+  "reward_view_all": "ကြည့်ရန်",
+
+  "reward_details_points_required_in_reward_details": "လိုအပ်သောပွိုင့်ပမာဏ",
+  "reward_details_your_balance": "သင့်လက်ကျန်ပမာဏ",
+  "reward_details_category": "အမျိုးအစား",
+  "reward_details_brand": "အမှတ်တံဆိပ်",
+  "reward_details_availality": "လက်ကျန်",
+  "reward_details_scan_to_claim": "လဲလှယ်ရန် scan",
+  "reward_details_redeem": "ရယူရန်",
+  "reward_details_are_you_sure_want_to_redeem_this_reward": "ဒီလက်ဆောင်ကို ရယူရန်သေချာပါသလား",
+
+  "redeem_claim_success_reward_claim_successfully": "လက်ဆောင်ရယူခြင်းအောင်မြင်ပါသည်",
+  "redeem_claim_success_reward_preview": "လက်ဆောင် preview",
+  "redeem_claim_success_redeem_at": "လဲလှယ်သည့်နေရာ",
+  "redeem_claim_success_claim_date": "လဲလှယ်သည့်အချိန်",
+
+  "payment_details_payment_details": "ပေးချေမှုမှတ်တမ်း",
+  "payment_details_invoice_no": "ပြေစာနံပါတ်",
+  "payment_details_points_to_use": "အသုံးပြုမည့်ပမာဏ",
+  "payment_details_current_balance": "လက်ကျန်ပမာဏ",
+  "payment_details_balance_after": "နှုတ်ယူပြီးပမာဏ",
+
+  "payment_success_payment_completed_successfully": "ပေးချေမှုအောင်မြင်သည်",
+  "payment_success_transaction_id": "လုပ်ဆောင်မှုအမှတ်",
+  "payment_success_payment_at": "လုပ်ဆောင်သည့်နေရာ",
+  "payment_success_payment_date": "လုပ်‍ဆောင်သည့်နေ့ရက်",
+  "payment_success_used_points": "အသုံးပြုသည့်ပွိုင့်ပမာဏ",
+  "payment_success_invoice_no": "ပြေစာနံပါတ်",
+
+  "qr_scan_scanning_tips": "scan  ဖတ်ခြင်းလမ်းညန်န်",
+  "qr_scan_hold_your_phone_steady_and_ensure_good_lighting": "သင့်ဖုန်းအားအလင်းရောင်ကောင်းကောင်းရသည့် နေရာတွင်ကိုင်ထားပါ",
+  "qr_scan_keep_the_qr_code_within_scanning_frame": "scan ဖတ်မည့်အကွက်အတွင်းသို့ QR အားဝင်အောင်ချိန်ပါ",
+
+  "profile_member": "အဖွဲ့ဝင်",
+  "profile_points": "ပွိုင့်",
+  "profile_rewards": "လက်ဆောင်",
+  "profile_general": "အထွေထွေ",
+
+  "profile_change_pin": "Pin  ပြောင်းမည်",
+  "profile_update_your_security_pin_for_account_acces": "အကောင့်ဝင်ရောက်ခွင့်အတွက် သင့်လုံခြုံရေး PIN ကို အပ်ဒိတ်လုပ်ပါ",
+  "profile_current_pin": "လက်ရှိ Pin",
+  "profile_new_pin": "Pin အသစ်",
+  "profile_confirm_new_pin": "Pin အသစ်အတည်ပြုရန်",
+
+  "profile_share_app": "မျှဝေမည်",
+  "profile_invite_friends": "သူငယ်ချင်းများအား ဖိတ်ခေါ်မည်",
+  "profile_invite_your_friends_to_join_phone_king_and_earn_1_000_pts_per_person": "သင့်သူငယ်ချင်းများကို Phone King တွင် ပါဝင်ရန် ဖိတ်ခေါ်ပြီး တစ်ဦးလျှင် 1,000 Pts ရယူလိုက်ပါ။",
+
+  "profile_help_and_support": "အကူအညီ",
+  "profile_contact_us": "ဆက်သွယ်ရန်",
+  "profile_call_us": "ခေါ်ဆိုရန်",
+  "profile_email_us": "mail ပို့ရန်",
+  "profile_frequently_asked_questions": "အမေးများသောမေးခွန်းများ",
+  "profile_contact_branches": "ဆက်သွယ်ရန်ဆိုင်ခွဲများ",
+  "profile_our_branches": "ကျွန်ုပ်တို့၏ဆိုင်ခွဲများ",
+  "profile_terms_and_conditions": "စည်းမျဉ်းစည်းကမ်းများ",
+  "profile_sign_out": "အကောင့်ထွက်ရန်",
+
+  "notification_notification": "အသိပေးချက်",
+  "notification_unread_notification": "မဖတ်ရသေး",
+  "notification_mark_as_all_read": "ဖတ်ပြီးပါပြီ"
+}

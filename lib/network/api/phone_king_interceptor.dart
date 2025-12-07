@@ -82,7 +82,7 @@ class PhoneKingInterceptor extends Interceptor {
       try {
         final parsed = ErrorResponse.fromJson(res!.data);
 
-        if (parsed.errorCode == 'AUTH_0001') {
+        if (parsed.errorCode == 'ERR_AUTH001') {
           throw Exception("session time out");
         }
       } catch (_) {}

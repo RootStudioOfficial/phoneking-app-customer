@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
 import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
 import 'package:phone_king_customer/data/vos/contact_us_vo/contact_us_vo.dart';
@@ -519,6 +520,25 @@ class PhoneKingCustomerAPI {
       );
 
       return BaseResponse.fromJson(response.data, (_) => {});
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
+  Future<BaseResponse<AppUpdateConfigVO>> checkVersion(
+    String platform,
+    int currentVersionCode,
+  ) async {
+    try {
+      final response = await _dio.post(
+        PhoneKingCustomerApi.checkVersion,
+        data: {"platform": platform, "currentVersionCode": currentVersionCode},
+      );
+
+      return BaseResponse.fromJson(
+        response.data,
+        (json) => AppUpdateConfigVO.fromJson(json as Map<String, dynamic>),
+      );
     } catch (e, stack) {
       throw Exception(_throwException(e, stack));
     }

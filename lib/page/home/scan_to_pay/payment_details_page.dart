@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:phone_king_customer/page/home/scan_to_pay/payment_enter_pin_page.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-
 import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class PaymentDetailsPage extends StatefulWidget {
   const PaymentDetailsPage({super.key, required this.keyQR});
@@ -169,6 +169,8 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     final body = _loading
         ? const _LoadingBody()
         : _error != null
@@ -193,8 +195,8 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Payment Details',
+        title: Text(
+          l10n.paymentDetailsPaymentDetails, // "Payment Details"
           style: _PaymentTextStyles.appBarTitle,
         ),
       ),
@@ -231,6 +233,8 @@ class _SuccessBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Column(
       children: [
         Expanded(
@@ -293,8 +297,7 @@ class _SuccessBody extends StatelessWidget {
                                     const SizedBox(height: 4),
                                     Text(
                                       'Transaction #$transactionId',
-                                      style:
-                                      _PaymentTextStyles.storeSubtitle,
+                                      style: _PaymentTextStyles.storeSubtitle,
                                     ),
                                   ],
                                 ),
@@ -311,25 +314,29 @@ class _SuccessBody extends StatelessWidget {
                           child: Column(
                             children: [
                               _buildDetailRow(
-                                label: 'Invoice No',
+                                label: l10n.paymentDetailsInvoiceNo,
+                                // "Invoice No"
                                 value: invoiceNo,
                                 valueColor: Colors.black,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Points to Use',
+                                label: l10n.paymentDetailsPointsToUse,
+                                // "Points to use"
                                 value: pointsToUse.toString(),
                                 valueColor: Colors.deepOrange,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Current Balance',
+                                label: l10n.paymentDetailsCurrentBalance,
+                                // "Current Balance"
                                 value: _formatNumber(currentBalance),
                                 valueColor: Colors.black,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
-                                label: 'Balance After',
+                                label: l10n.paymentDetailsBalanceAfter,
+                                // "Balance After"
                                 value: _formatNumber(balanceAfter),
                                 valueColor: Colors.black,
                                 strong: true,

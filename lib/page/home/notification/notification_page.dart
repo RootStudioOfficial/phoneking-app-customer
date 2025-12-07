@@ -7,6 +7,8 @@ import 'package:phone_king_customer/utils/asset_image_utils.dart';
 
 import 'dart:async';
 
+import 'package:phone_king_customer/utils/localization_strings.dart';
+
 // ========= Typography helpers =========
 
 class _NotificationTextStyles {
@@ -227,8 +229,10 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final unreadText =
-        '$_unreadCount unread notification${_unreadCount == 1 ? '' : 's'}';
+    final l10n = LocalizationString.of(context);
+
+    // "3 unread notification"
+    final unreadText = '$_unreadCount ${l10n.notificationUnreadNotification}';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -236,8 +240,8 @@ class _NotificationPageState extends State<NotificationPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: const Text(
-          'Notifications',
+        title: Text(
+          l10n.notificationNotification,
           style: _NotificationTextStyles.appBarTitle,
         ),
         centerTitle: true,
@@ -268,7 +272,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 GestureDetector(
                   onTap: _unreadCount == 0 ? null : _markAllAsRead,
                   child: Text(
-                    'Mark all as read',
+                    l10n.notificationMarkAsAllRead,
                     style: _NotificationTextStyles.headerAction.copyWith(
                       color: _unreadCount == 0
                           ? Colors.grey
@@ -310,7 +314,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 itemCount:
                 _items.length + (_loadingMore || _hasNext ? 1 : 0),
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                separatorBuilder: (_, __) =>
+                const SizedBox(height: 12),
                 itemBuilder: (context, i) {
                   if (i >= _items.length) {
                     // Infinite loader trigger

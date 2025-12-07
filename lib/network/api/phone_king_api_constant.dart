@@ -31,7 +31,7 @@ class PhoneKingCustomerApi {
   static String rewardRedeem(String rewardID) =>
       '$baseUrl/user/reward/$rewardID/redeem';
 
-  static String claimReward(String redemptionId,String paymentKey) =>
+  static String claimReward(String redemptionId, String paymentKey) =>
       '$baseUrl/user/reward/claim/$redemptionId/$paymentKey';
 
   static const String getProfile = '$baseUrl/user/profile';
@@ -59,4 +59,7 @@ class PhoneKingCustomerApi {
   static String readNotification(String notificationID) =>
       '$baseUrl/notifications/$notificationID/read';
   static const String readAllNotification = '$baseUrl/notifications/read-all';
+
+  ///Check Version
+  static const String checkVersion = '$baseUrl/app/version/check';
 }

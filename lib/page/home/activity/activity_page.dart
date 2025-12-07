@@ -4,7 +4,8 @@ import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl
 import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
 import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart'; // for context.showErrorSnackBar
+import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart'; // for context.showErrorSnackBar
 
 // ======= Typography helpers =======
 
@@ -299,10 +300,7 @@ class _ActivityPageState extends State<ActivityPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: const Text(
-          'History',
-          style: _ActivityTextStyles.appBarTitle,
-        ),
+        title: const Text('History', style: _ActivityTextStyles.appBarTitle),
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
@@ -318,7 +316,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     label: 'Points Spent',
                     value: _summary == null
                         ? '—'
-                        : '${_fmtPoints(_summary!.pointSpend)} pts',
+                        : '${_fmtPoints(_summary!.pointSpend)} ${LocalizationString.of(context).homePts}',
                     bg: const Color(0xFFED5B23),
                     bg2: const Color(0xFF2450FF),
                     textColor: Colors.white,
@@ -330,7 +328,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     label: 'Points Earned',
                     value: _summary == null
                         ? '—'
-                        : '${_fmtPoints(_summary!.pointEarned)} pts',
+                        : '${_fmtPoints(_summary!.pointEarned)} ${LocalizationString.of(context).homePts}',
                     bg: const Color(0xFF1FB251),
                     bg2: const Color(0xFF21C06A),
                     textColor: Colors.white,
@@ -393,13 +391,13 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                         child: _loading
                             ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
                             : const Text('Apply'),
                       ),
                       const SizedBox(width: 10),
@@ -422,10 +420,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   ),
                   if (_rangeError != null) ...[
                     const SizedBox(height: 8),
-                    Text(
-                      _rangeError!,
-                      style: _ActivityTextStyles.errorText,
-                    ),
+                    Text(_rangeError!, style: _ActivityTextStyles.errorText),
                   ],
                 ],
               ),
@@ -462,25 +457,25 @@ class _ActivityPageState extends State<ActivityPage> {
                 ),
               )
             else if (txns.isEmpty)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF3F4F6),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
-                  ),
-                  child: const Text(
-                    'No transactions found for the selected range.',
-                    style: _ActivityTextStyles.muted,
-                  ),
-                )
-              else
-                ...txns.map(
-                      (t) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _TxnCard(txn: t),
-                  ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
+                child: const Text(
+                  'No transactions found for the selected range.',
+                  style: _ActivityTextStyles.muted,
+                ),
+              )
+            else
+              ...txns.map(
+                (t) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _TxnCard(txn: t),
+                ),
+              ),
           ],
         ),
       ),
@@ -506,10 +501,7 @@ class _DateField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: _ActivityTextStyles.labelSmall,
-        ),
+        Text(label, style: _ActivityTextStyles.labelSmall),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
@@ -578,15 +570,9 @@ class _SummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              label,
-              style: _ActivityTextStyles.summaryLabel,
-            ),
+            Text(label, style: _ActivityTextStyles.summaryLabel),
             const SizedBox(height: 6),
-            Text(
-              value,
-              style: _ActivityTextStyles.summaryValue,
-            ),
+            Text(value, style: _ActivityTextStyles.summaryValue),
           ],
         ),
       ),
@@ -627,7 +613,6 @@ class _TxnCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: const [
           BoxShadow(
             blurRadius: 8,
@@ -676,7 +661,7 @@ class _TxnCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '$sign ${_fmtPoints(txn.points.abs())} pts',
+                      '$sign ${_fmtPoints(txn.points.abs())} ${LocalizationString.of(context).homePts}',
                       style: TextStyle(
                         color: color,
                         fontWeight: FontWeight.w800,
@@ -686,15 +671,9 @@ class _TxnCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  txn.desc,
-                  style: _ActivityTextStyles.txnDesc,
-                ),
+                Text(txn.desc, style: _ActivityTextStyles.txnDesc),
                 const SizedBox(height: 8),
-                Text(
-                  _fmtDate(txn.date),
-                  style: _ActivityTextStyles.txnDate,
-                ),
+                Text(_fmtDate(txn.date), style: _ActivityTextStyles.txnDate),
               ],
             ),
           ),

@@ -34,7 +34,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   _Sheet _sheet = _Sheet.none;
 
   bool _busy = false;
-  String? _phone; // normalized (+95xxxxxxxxx)
+  String? _phone;
   String? _pin;
 
   final PhoneKingAuthModel _auth = PhoneKingAuthModelImpl();
@@ -107,7 +107,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   }
 
   Future<void> _handleSendOtp(String fullPhone) async {
-    // fullPhone is already +95xxxxxxxxx from _PhoneFormCard
     _setBusy(true);
     try {
       await _auth.sendRegisterVerification(phoneNumber: fullPhone);
@@ -177,7 +176,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
   // ---- Login flow handler ----
   Future<void> _handleLogin(String fullPhone, String password) async {
-    // fullPhone is already normalized (+95…) from _LoginFormCard
     _setBusy(true);
     try {
       final loginRes = await _auth.login(
@@ -200,41 +198,23 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _AppColors.primary,
       body: SafeArea(
         bottom: false,
         child: Stack(
           children: [
             // Gradient background
-            const Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      _AppColors.deepBlue,
-                      _AppColors.brand,
-                      _AppColors.brand,
-                    ],
-                  ),
-                ),
-              ),
+            Positioned.fill(
+              child: Image.asset(AssetImageUtils.onboardingBgImage),
             ),
 
             // Content
-            Positioned.fill(
-              child: Column(
-                children: [
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: Image.asset(AssetImageUtils.onboardingBgImage),
-                  ),
-                  if (_sheet == _Sheet.none)
-                    _BottomCard(
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: (_sheet == _Sheet.none)
+                  ? _BottomCard(
                       title: "PhoneKing",
                       subtitle:
-                      "Your gateway to exclusive rewards,\namazing deals and premium services",
+                          "Your gateway to exclusive rewards,\namazing deals and premium services",
                       buttonText: "Get Started",
                       onPressed: _busy ? null : _openPhone,
                       secondary: TextButton(
@@ -247,9 +227,8 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                           ),
                         ),
                       ),
-                    ),
-                ],
-              ),
+                    )
+                  : const SizedBox.shrink(),
             ),
 
             // Scrim + animated sheet
@@ -331,7 +310,6 @@ class _OnBoardingPageState extends State<OnBoardingPage>
 
 class _PhoneFormCard extends StatefulWidget {
   final bool enabled;
-  /// returns phone with +95 prefix
   final ValueChanged<String> onConfirm;
   final VoidCallback onTapLogin;
 
@@ -368,14 +346,8 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
     if (form?.validate() != true) return;
 
     final raw = _phoneCtrl.text.trim();
-    // Normalise to +95... — adjust if BE expects different pattern
-    final normalized = raw.startsWith('+95')
-        ? raw
-        : raw.startsWith('0')
-        ? '+95${raw.substring(1)}'
-        : '+95$raw';
 
-    widget.onConfirm(normalized);
+    widget.onConfirm(raw);
   }
 
   @override
@@ -514,14 +486,13 @@ class _OtpFormCardState extends State<_OtpFormCard> {
                     enabled: widget.enabled,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    buildCounter: (
-                        _,
-                        {
+                    buildCounter:
+                        (
+                          _, {
                           int? currentLength,
                           bool? isFocused,
                           int? maxLength,
-                        }) =>
-                    const SizedBox.shrink(),
+                        }) => const SizedBox.shrink(),
                     validator: (v) => _validateOtp(v ?? ''),
                     decoration: _Decorations.inputRoundedAll(
                       hint: "e.g. 123456",
@@ -666,7 +637,7 @@ class _PinFormCardState extends State<_PinFormCard> {
         validator: validator,
         buildCounter:
             (_, {int? currentLength, bool? isFocused, int? maxLength}) =>
-        const SizedBox(),
+                const SizedBox(),
         decoration: _Decorations.inputRoundedAll(
           hint: "must be 6 digits",
           suffix: IconButton(
@@ -686,17 +657,15 @@ class _PinFormCardState extends State<_PinFormCard> {
 class _PersonalInfoFormCard extends StatefulWidget {
   final bool enabled;
   final Future<void> Function({
-  required String name,
-  required String day,
-  required String month,
-  required String year,
-  required String referralCode,
-  }) onConfirm;
+    required String name,
+    required String day,
+    required String month,
+    required String year,
+    required String referralCode,
+  })
+  onConfirm;
 
-  const _PersonalInfoFormCard({
-    required this.onConfirm,
-    required this.enabled,
-  });
+  const _PersonalInfoFormCard({required this.onConfirm, required this.enabled});
 
   @override
   State<_PersonalInfoFormCard> createState() => _PersonalInfoFormCardState();
@@ -873,7 +842,6 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
 
 class _LoginFormCard extends StatefulWidget {
   final bool enabled;
-  /// returns normalized phone with +95 prefix
   final Future<void> Function(String phone, String password) onConfirm;
   final VoidCallback onTapRegister;
 
@@ -919,14 +887,8 @@ class _LoginFormCardState extends State<_LoginFormCard> {
     if (form?.validate() != true) return;
 
     final raw = _phoneCtrl.text.trim();
-    // Same normalization as register
-    final full = raw.startsWith('+95')
-        ? raw
-        : raw.startsWith('0')
-        ? '+95${raw.substring(1)}'
-        : '+95$raw';
 
-    widget.onConfirm(full, _pwdCtrl.text);
+    widget.onConfirm(raw, _pwdCtrl.text);
   }
 
   @override
@@ -1154,8 +1116,6 @@ class _Gaps {
 }
 
 class _AppColors {
-  static const primary = Color(0xFF0C34FF);
-  static const deepBlue = Color(0xFF0C1B4D);
   static const brand = Color(0xFFED5B23);
   static const fill = Color(0xFFF7F8FB);
   static const stroke = Color(0xFFE6E8F0);
