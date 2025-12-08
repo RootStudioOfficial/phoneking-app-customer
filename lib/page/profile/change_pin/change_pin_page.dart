@@ -4,6 +4,7 @@ import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/data/model/profile/phone_king_profile_model_impl.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class ChangePinPage extends StatefulWidget {
   const ChangePinPage({super.key});
@@ -78,6 +79,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
   }
 
   Future<void> _updatePin() async {
+    final l10n = LocalizationString.of(context);
+
     // Hide keyboard
     FocusScope.of(context).unfocus();
 
@@ -87,16 +90,16 @@ class _ChangePinPageState extends State<ChangePinPage> {
     final confirmPin = _confirmPinController.text.trim();
 
     if (currentPin.isEmpty) {
-      context.showErrorSnackBar('Please enter your current PIN');
+      context.showErrorSnackBar(l10n.changePinErrorEnterCurrentPin);
       return;
     }
-    // UPDATED: at least 8 digits for new PIN
+    // At least 8 digits for new PIN
     if (newPin.length < 8) {
-      context.showErrorSnackBar('New PIN must be at least 8 digits');
+      context.showErrorSnackBar(l10n.changePinErrorNewPinLength);
       return;
     }
     if (newPin != confirmPin) {
-      context.showErrorSnackBar('New PIN and Confirm PIN do not match');
+      context.showErrorSnackBar(l10n.changePinErrorPinNotMatch);
       return;
     }
     if (_submitting) return;
@@ -107,8 +110,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
       await _profileModel.changePassword(newPin, currentPin);
 
       if (!mounted) return;
-      context.showSuccessSnackBar("PIN updated successfully");
-      context.navigateToNextPageWithRemoveUntil(OnBoardingPage());
+      context.showSuccessSnackBar(l10n.changePinSuccessUpdated);
+      context.navigateToNextPageWithRemoveUntil(const OnBoardingPage());
     } catch (e) {
       if (!mounted) return;
       context.showErrorSnackBar(e.toString());
@@ -122,6 +125,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
     const borderGrey = Color(0xFFE0E0E0);
     const deepOrange = Colors.deepOrange;
 
+    final l10n = LocalizationString.of(context);
+
     return Stack(
       children: [
         Scaffold(
@@ -133,8 +138,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
               icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: _submitting ? null : () => Navigator.pop(context),
             ),
-            title: const Text(
-              'Change PIN',
+            title: Text(
+              l10n.profileChangePin,
               style: _ChangePinTextStyles.appBarTitle,
             ),
           ),
@@ -151,20 +156,20 @@ class _ChangePinPageState extends State<ChangePinPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Change PIN',
+                        Text(
+                          l10n.profileChangePin,
                           style: _ChangePinTextStyles.pageTitle,
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Update your security PIN for account access',
+                        Text(
+                          l10n.profileUpdateYourSecurityPinForAccountAcces,
                           style: _ChangePinTextStyles.subtitle,
                         ),
                         const SizedBox(height: 32),
 
                         // Current PIN
-                        const Text(
-                          'Current PIN',
+                        Text(
+                          l10n.profileCurrentPin,
                           style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
@@ -177,7 +182,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'enter current PIN',
+                            hintText: l10n.changePinHintCurrent,
                             hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
                             fillColor: Colors.grey[50],
@@ -213,8 +218,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                         const SizedBox(height: 24),
 
                         // New PIN
-                        const Text(
-                          'New PIN',
+                        Text(
+                          l10n.profileNewPin,
                           style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
@@ -222,13 +227,13 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _newPinController,
                           obscureText: _obscureNewPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 8, // UPDATED: 8 digits
+                          maxLength: 8, // 8 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'must be at least 8 digits',
-                            helperText: 'PIN must be 8 digits',
+                            hintText: l10n.changePinHintAtLeast8Digits,
+                            helperText: l10n.changePinHelper8Digits,
                             helperStyle: _ChangePinTextStyles.helper,
                             hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
@@ -280,8 +285,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                         const SizedBox(height: 24),
 
                         // Confirm PIN
-                        const Text(
-                          'Confirm New PIN',
+                        Text(
+                          l10n.profileConfirmNewPin,
                           style: _ChangePinTextStyles.fieldLabel,
                         ),
                         const SizedBox(height: 12),
@@ -289,13 +294,13 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _confirmPinController,
                           obscureText: _obscureConfirmPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 8, // UPDATED: 8 digits
+                          maxLength: 8, // 8 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: 'must be at least 8 digits',
-                            helperText: 'PIN must be 8 digits',
+                            hintText: l10n.changePinHintAtLeast8Digits,
+                            helperText: l10n.changePinHelper8Digits,
                             helperStyle: _ChangePinTextStyles.helper,
                             hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
@@ -374,8 +379,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                         color: Colors.white,
                       ),
                     )
-                        : const Text(
-                      'Update PIN',
+                        : Text(
+                      l10n.changePinUpdatePinButton,
                       style: _ChangePinTextStyles.buttonText,
                     ),
                   ),

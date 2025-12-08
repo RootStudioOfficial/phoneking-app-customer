@@ -69,5 +69,34 @@
 
   "notification_notification": "အသိပေးချက်",
   "notification_unread_notification": "မဖတ်ရသေး",
-  "notification_mark_as_all_read": "ဖတ်ပြီးပါပြီ"
+  "notification_mark_as_all_read": "ဖတ်ပြီးပါပြီ",
+
+  "profile_title": "ပရိုဖိုင်",
+  "profile_support": "အကူအညီ",
+
+  "snackbar_profile_updated": "ပရိုဖိုင်ကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ",
+  "snackbar_logout_success": "အကောင့်မှ ထွက်ပြီးပါပြီ",
+
+  "error_full_name_required": "အမည်အပြည့်အစုံ ထည့်ပေးပါ",
+
+  "edit_profile_title": "ပရိုဖိုင်ပြင်ဆင်ရန်",
+  "edit_profile_full_name": "အမည်အပြည့်အစုံ",
+  "edit_profile_full_name_hint": "John Doe",
+  "edit_profile_phone_number": "ဖုန်းနံပါတ်",
+  "edit_profile_phone_number_cannot_be_changed": "ဖုန်းနံပါတ်ကို မပြောင်းလဲနိုင်ပါ",
+  "edit_profile_save_changes": "ပြောင်းလဲမှုများ သိမ်းမည်",
+
+  "logout_dialog_title": "အကောင့်ထွက်ရန် သေချာပါသလား?",
+  "logout_cancel": "ပယ်ဖျက်မည်",
+  "logout_confirm": "အကောင့်ထွက်မည်",
+
+  "change_pin_hint_current": "လက်ရှိ PIN ကို ထည့်ပါ",
+  "change_pin_hint_at_least_8_digits": "အနည်းဆုံး ဂဏန်း ၈ လုံး ထည့်ရပါမည်",
+  "change_pin_helper_8_digits": "PIN သည် ဂဏန်း ၈ လုံး ဖြစ်ရပါမည်",
+  "change_pin_update_pin": "PIN ပြောင်းမည်",
+
+  "change_pin_error_enter_current_pin": "လက်ရှိ PIN ကို ထည့်ပေးပါ",
+  "change_pin_error_new_pin_length": "PIN အသစ်သည် အနည်းဆုံး ဂဏန်း ၈ လုံး ရှိရပါမည်",
+  "change_pin_error_pin_not_match": "PIN အသစ်နှင့် အတည်ပြု PIN မတူပါ",
+  "change_pin_success_updated": "PIN ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ"
 }

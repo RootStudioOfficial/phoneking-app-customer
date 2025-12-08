@@ -69,5 +69,34 @@
 
   "notification_notification": "Notification",
   "notification_unread_notification": "unread notification",
-  "notification_mark_as_all_read": "mark as all read"
+  "notification_mark_as_all_read": "mark as all read",
+
+  "profile_title": "Profile",
+  "profile_support": "Support",
+
+  "snackbar_profile_updated": "Profile updated",
+  "snackbar_logout_success": "Logout Success.",
+
+  "error_full_name_required": "Please enter your full name",
+
+  "edit_profile_title": "Edit Profile",
+  "edit_profile_full_name": "Full Name",
+  "edit_profile_full_name_hint": "John Doe",
+  "edit_profile_phone_number": "Phone Number",
+  "edit_profile_phone_number_cannot_be_changed": "Phone number cannot be changed",
+  "edit_profile_save_changes": "Save Changes",
+
+  "logout_dialog_title": "Are you sure you want to log out?",
+  "logout_cancel": "Cancel",
+  "logout_confirm": "Logout",
+
+  "change_pin_hint_current": "Enter current PIN",
+  "change_pin_hint_at_least_8_digits": "Must be at least 8 digits",
+  "change_pin_helper_8_digits": "PIN must be 8 digits",
+  "change_pin_update_pin": "Update PIN",
+
+  "change_pin_error_enter_current_pin": "Please enter your current PIN",
+  "change_pin_error_new_pin_length": "New PIN must be at least 8 digits",
+  "change_pin_error_pin_not_match": "New PIN and Confirm PIN do not match",
+  "change_pin_success_updated": "PIN updated successfully"
 }

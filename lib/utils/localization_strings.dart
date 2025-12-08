@@ -177,7 +177,8 @@ class LocalizationString {
       'profile_invite_friends'.tr();
 
   /// Invite your friends to join Phone King and earn 1,000 Pts per person
-  String get profileInviteYourFriendsToJoinPhoneKingAndEarn1000PtsPerPerson =>
+  String
+  get profileInviteYourFriendsToJoinPhoneKingAndEarn1000PtsPerPerson =>
       'profile_invite_your_friends_to_join_phone_king_and_earn_1_000_pts_per_person'
           .tr();
 
@@ -224,4 +225,89 @@ class LocalizationString {
   /// mark as all read
   String get notificationMarkAsAllRead =>
       'notification_mark_as_all_read'.tr();
+
+  // ================== NEW KEYS FOR CUSTOMER PROFILE PAGE ==================
+
+  /// Profile (title)
+  String get profileTitle => 'profile_title'.tr();
+
+  /// Support section title
+  String get profileSupport => 'profile_support'.tr();
+
+  /// Snackbar: profile updated
+  String get snackbarProfileUpdated =>
+      'snackbar_profile_updated'.tr();
+
+  /// Snackbar: logout success
+  String get snackbarLogoutSuccess =>
+      'snackbar_logout_success'.tr();
+
+  /// Error: full name required
+  String get errorFullNameRequired =>
+      'error_full_name_required'.tr();
+
+  /// Edit Profile (dialog title)
+  String get editProfileTitle => 'edit_profile_title'.tr();
+
+  /// Full Name label
+  String get editProfileFullName => 'edit_profile_full_name'.tr();
+
+  /// Full Name hint
+  String get editProfileFullNameHint =>
+      'edit_profile_full_name_hint'.tr();
+
+  /// Phone Number label
+  String get editProfilePhoneNumber =>
+      'edit_profile_phone_number'.tr();
+
+  /// Phone number cannot be changed text
+  String get editProfilePhoneNumberCannotBeChanged =>
+      'edit_profile_phone_number_cannot_be_changed'.tr();
+
+  /// Save Changes button
+  String get editProfileSaveChanges =>
+      'edit_profile_save_changes'.tr();
+
+  /// Logout dialog title
+  String get logoutDialogTitle => 'logout_dialog_title'.tr();
+
+  /// Logout Cancel button
+  String get logoutCancel => 'logout_cancel'.tr();
+
+  /// Logout Confirm button
+  String get logoutConfirm => 'logout_confirm'.tr();
+
+  // ================== CHANGE PIN PAGE ==================
+
+  /// Hint: enter current PIN
+  String get changePinHintCurrent => 'change_pin_hint_current'.tr();
+
+  /// Hint: must be at least 8 digits
+  String get changePinHintAtLeast8Digits =>
+      'change_pin_hint_at_least_8_digits'.tr();
+
+  /// Helper: PIN must be 8 digits
+  String get changePinHelper8Digits =>
+      'change_pin_helper_8_digits'.tr();
+
+  /// Button: Update PIN
+  String get changePinUpdatePinButton =>
+      'change_pin_update_pin'.tr();
+
+  /// Error: please enter your current PIN
+  String get changePinErrorEnterCurrentPin =>
+      'change_pin_error_enter_current_pin'.tr();
+
+  /// Error: new PIN must be at least 8 digits
+  String get changePinErrorNewPinLength =>
+      'change_pin_error_new_pin_length'.tr();
+
+  /// Error: new PIN and confirm PIN do not match
+  String get changePinErrorPinNotMatch =>
+      'change_pin_error_pin_not_match'.tr();
+
+  /// Success: PIN updated successfully
+  String get changePinSuccessUpdated =>
+      'change_pin_success_updated'.tr();
+
 }

@@ -28,23 +28,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Locale>(
-      stream: languageService.localeStream,
-      initialData: languageService.currentLocale,
-      builder: (context, snapshot) {
-        final locale = snapshot.data ?? context.locale;
-        return MaterialApp(
-          title: 'Phone King',
-          debugShowCheckedModeBanner: false,
-          locale: locale,
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-          home: SplashPage(),
-        );
-      },
+    return MaterialApp(
+      title: 'Phone King',
+      debugShowCheckedModeBanner: false,
+      locale: context.locale,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      home: SplashPage(),
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:phone_king_customer/page/profile/terms_and_condition/terms_and_c
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -67,11 +68,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _openEdit() async {
     if (_user == null) return;
 
+    final l10n = LocalizationString.of(context);
+
     final result = await openEditProfile(
       context,
       _user!.displayName ?? _user!.username,
       _user!.phoneNumber ?? '',
-      null, // you can pass profile image URL later
+      null, // profile image URL (if needed later)
     );
 
     if (result == null) return;
@@ -81,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (newName.isEmpty) {
       if (mounted) {
-        context.showErrorSnackBar('Name cannot be empty');
+        context.showErrorSnackBar(l10n.errorFullNameRequired);
       }
       return;
     }
@@ -106,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await _loadAll();
 
       if (!mounted) return;
-      context.showSuccessSnackBar('Profile updated');
+      context.showSuccessSnackBar(l10n.snackbarProfileUpdated);
     } catch (e) {
       if (!mounted) return;
       context.showErrorSnackBar(e.toString());
@@ -117,14 +120,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     final name = _user?.displayName ?? _user?.username ?? '—';
     final phone = _user?.phoneNumber ?? '—';
     final memberLabel = _tier?.tier.name ?? '—';
     final memberColor =
         _safeColor(_tier?.tier.colorCode) ?? const Color(0xFFEEB60A);
-    final points = _formatPoints(
-      _tier?.currentBalance,
-    ); // show balance as points
+    final points = _formatPoints(_tier?.currentBalance);
     final totalRewards = (_tier?.totalClaimRewards ?? 0).toString();
 
     return Stack(
@@ -135,9 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
             elevation: 0,
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
-            title: const Text(
-              'Profile',
-              style: TextStyle(fontWeight: FontWeight.w800),
+            title: Text(
+              l10n.profileTitle,
+              style: const TextStyle(fontWeight: FontWeight.w800),
             ),
             centerTitle: false,
             actions: [
@@ -244,17 +247,20 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Expanded(
                           child: _StatTile(
-                            label: 'Member',
+                            label: l10n.profileMember,
                             value: '🥇$memberLabel',
                             valueColor: memberColor,
                           ),
                         ),
                         Expanded(
-                          child: _StatTile(label: 'Points', value: points),
+                          child: _StatTile(
+                            label: l10n.profilePoints,
+                            value: points,
+                          ),
                         ),
                         Expanded(
                           child: _StatTile(
-                            label: 'Rewards',
+                            label: l10n.profileRewards,
                             value: totalRewards,
                           ),
                         ),
@@ -265,19 +271,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               const SizedBox(height: 22),
-              _sectionTitle('General'),
+              _sectionTitle(l10n.profileGeneral),
               _cardList(
                 children: [
                   _SettingTile(
                     asset: AssetImageUtils.changePinIcon,
-                    label: 'Change Pin',
+                    label: l10n.profileChangePin,
                     onTap: () =>
                         context.navigateToNextPage(const ChangePinPage()),
                   ),
                   const _DividerTile(),
                   _SettingTile(
                     asset: AssetImageUtils.shareAppIcon,
-                    label: 'Share App',
+                    label: l10n.profileShareApp,
                     onTap: () {
                       context.navigateToNextPage(const ShareAppPage());
                     },
@@ -286,26 +292,28 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               const SizedBox(height: 18),
-              _sectionTitle('Support'),
+              _sectionTitle(l10n.profileSupport),
               _cardList(
                 children: [
                   _SettingTile(
                     asset: AssetImageUtils.helpAndSupportIcon,
-                    label: 'Help & Support',
-                    onTap: () =>
-                        context.navigateToNextPage(const HelpAndSupportPage()),
+                    label: l10n.profileHelpAndSupport,
+                    onTap: () => context.navigateToNextPage(
+                      const HelpAndSupportPage(),
+                    ),
                   ),
                   const _DividerTile(),
                   _SettingTile(
                     asset: AssetImageUtils.contactBranchesIcon,
-                    label: 'Contact Branches',
-                    onTap: () =>
-                        context.navigateToNextPage(const ContactBranchesPage()),
+                    label: l10n.profileContactBranches,
+                    onTap: () => context.navigateToNextPage(
+                      const ContactBranchesPage(),
+                    ),
                   ),
                   const _DividerTile(),
                   _SettingTile(
                     asset: AssetImageUtils.termsAndConditionIcon,
-                    label: 'Terms & Conditions',
+                    label: l10n.profileTermsAndConditions,
                     onTap: () => context.navigateToNextPage(
                       const TermsAndConditionPage(),
                     ),
@@ -324,7 +332,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 child: _SettingTile(
                   asset: AssetImageUtils.signOutIcon,
-                  label: 'Sign Out',
+                  label: l10n.profileSignOut,
                   labelColor: const Color(0xFFEF4444),
                   onTap: _loading || _updating
                       ? null
@@ -336,14 +344,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           .then((_) {
                         if (context.mounted) {
                           context.showSuccessSnackBar(
-                            "Logout Success.",
+                            l10n.snackbarLogoutSuccess,
                           );
                           context.navigateToNextPageWithRemoveUntil(
                             const OnBoardingPage(),
                           );
                         }
-                      })
-                          .catchError((error) {
+                      }).catchError((error) {
                         if (context.mounted) {
                           context.showErrorSnackBar(error.toString());
                         }
@@ -576,10 +583,12 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   }
 
   void _saveChanges() {
+    final l10n = LocalizationString.of(context);
+
     final name = _nameController.text.trim();
 
     if (name.isEmpty) {
-      context.showErrorSnackBar('Please enter your full name');
+      context.showErrorSnackBar(l10n.errorFullNameRequired);
       return;
     }
 
@@ -591,6 +600,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
@@ -605,9 +616,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 24),
-                  const Text(
-                    'Edit Profile',
-                    style: TextStyle(
+                  Text(
+                    l10n.editProfileTitle,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -679,11 +690,11 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               const SizedBox(height: 12),
 
               // Full name
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Full Name',
-                  style: TextStyle(
+                  l10n.editProfileFullName,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
@@ -694,7 +705,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  hintText: 'John Doe',
+                  hintText: l10n.editProfileFullNameHint,
                   hintStyle: TextStyle(color: Colors.grey[400]),
                   filled: true,
                   fillColor: Colors.grey[100],
@@ -711,11 +722,11 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               const SizedBox(height: 20),
 
               // phone (read-only)
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Phone Number',
-                  style: TextStyle(
+                  l10n.editProfilePhoneNumber,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
@@ -745,7 +756,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Phone number cannot be changed',
+                  l10n.editProfilePhoneNumberCannotBeChanged,
                   style: TextStyle(fontSize: 13, color: Colors.grey[500]),
                 ),
               ),
@@ -759,14 +770,15 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        side: BorderSide(color: Colors.grey[300]!, width: 1.5),
+                        side:
+                        BorderSide(color: Colors.grey[300]!, width: 1.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.logoutCancel, // reuse "Cancel"
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -786,9 +798,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'Save Changes',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.editProfileSaveChanges,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -842,6 +854,8 @@ Future<Map<String, dynamic>?> openEditProfile(
 }
 
 Future<bool?> showLogoutDialog(BuildContext ctx) {
+  final l10n = LocalizationString.of(ctx);
+
   return showDialog<bool>(
     context: ctx,
     barrierDismissible: false,
@@ -863,10 +877,10 @@ Future<bool?> showLogoutDialog(BuildContext ctx) {
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Are you sure you want to\nlog out?',
+                Text(
+                  l10n.logoutDialogTitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     height: 1.3,
                     fontWeight: FontWeight.w700,
@@ -880,15 +894,17 @@ Future<bool?> showLogoutDialog(BuildContext ctx) {
                       child: OutlinedButton(
                         onPressed: () => ctx.navigateBack(false),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          side: BorderSide(color: Colors.grey.shade300),
+                          padding:
+                          const EdgeInsets.symmetric(vertical: 14),
+                          side:
+                          BorderSide(color: Colors.grey.shade300),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.logoutCancel,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.black,
@@ -902,15 +918,16 @@ Future<bool?> showLogoutDialog(BuildContext ctx) {
                         onPressed: () => ctx.navigateBack(true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding:
+                          const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Logout',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.logoutConfirm,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
