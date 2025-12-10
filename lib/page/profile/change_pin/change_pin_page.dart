@@ -93,8 +93,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
       context.showErrorSnackBar(l10n.changePinErrorEnterCurrentPin);
       return;
     }
-    // At least 8 digits for new PIN
-    if (newPin.length < 8) {
+    // At least 6 digits for new PIN
+    if (newPin.length < 6) {
       context.showErrorSnackBar(l10n.changePinErrorNewPinLength);
       return;
     }
@@ -227,7 +227,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _newPinController,
                           obscureText: _obscureNewPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 8, // 8 digits
+                          maxLength: 6, // 6 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
@@ -294,7 +294,7 @@ class _ChangePinPageState extends State<ChangePinPage> {
                           controller: _confirmPinController,
                           obscureText: _obscureConfirmPin,
                           keyboardType: TextInputType.number,
-                          maxLength: 8, // 8 digits
+                          maxLength: 6, // 6 digits
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],

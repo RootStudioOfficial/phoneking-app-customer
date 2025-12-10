@@ -65,6 +65,7 @@ class _IndexPageState extends State<IndexPage> {
   }
 }
 
+
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     super.key,
@@ -86,10 +87,10 @@ class CustomBottomNavBar extends StatelessWidget {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
             child: Container(
-              height: 72,
+              height: 100,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.85),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: [
                   BoxShadow(
@@ -150,86 +151,86 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Center(
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => onTap(index),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 280),
-            curve: Curves.easeOutCubic,
-            padding: EdgeInsets.symmetric(
-              horizontal: isSelected ? 18 : 0,
-              vertical: 12,
-            ),
-            decoration: BoxDecoration(
-              gradient: isSelected
-                  ? const LinearGradient(
-                colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-                  : null,
-              color: isSelected ? null : Colors.transparent,
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: isSelected
-                  ? const [
-                BoxShadow(
-                  color: Color(0x33FF6A3A),
-                  blurRadius: 18,
-                  offset: Offset(0, 8),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onTap(index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          padding: EdgeInsets.symmetric(
+            horizontal: isSelected ? 18 : 0,
+            vertical: 12,
+          ),
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? const LinearGradient(
+              colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            )
+                : null,
+            color: isSelected ? null : Colors.transparent,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: isSelected
+                ? const [
+              BoxShadow(
+                color: Color(0x33FF6A3A),
+                blurRadius: 18,
+                offset: Offset(0, 8),
+              ),
+            ]
+                : null,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Icon
+              AnimatedScale(
+                duration: const Duration(milliseconds: 220),
+                scale: isSelected ? 1.05 : 1.0,
+                curve: Curves.easeOut,
+                child: Image.asset(
+                  iconAsset,
+                  width: 22,
+                  height: 22,
+                  color: isSelected
+                      ? Colors.white
+                      : const Color(0xFF7C7E8C),
                 ),
-              ]
-                  : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon
-                AnimatedScale(
-                  duration: const Duration(milliseconds: 220),
-                  scale: isSelected ? 1.05 : 1.0,
-                  curve: Curves.easeOut,
-                  child: Image.asset(
-                    iconAsset,
-                    width: 22,
-                    height: 22,
-                    color: isSelected
-                        ? Colors.white
-                        : const Color(0xFF7C7E8C),
-                  ),
-                ),
+              ),
 
-                // Label
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 220),
-                  switchInCurve: Curves.easeOut,
-                  switchOutCurve: Curves.easeIn,
-                  transitionBuilder: (child, anim) => SizeTransition(
-                    sizeFactor: anim,
-                    axis: Axis.horizontal,
-                    child: FadeTransition(opacity: anim, child: child),
-                  ),
-                  child: isSelected
-                      ? Padding(
-                    key: const ValueKey('label'),
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      label,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  )
-                      : const SizedBox.shrink(key: ValueKey('nolabel')),
+              // Label (only when selected)
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                transitionBuilder: (child, anim) => SizeTransition(
+                  sizeFactor: anim,
+                  axis: Axis.horizontal,
+                  child: FadeTransition(opacity: anim, child: child),
                 ),
-              ],
-            ),
+                child: isSelected
+                    ? Padding(
+                  key: const ValueKey('label'),
+                  padding: const EdgeInsets.only(left: 10),
+                  child:  DefaultTextStyle(
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                    ),
+                    child: Text(label),
+                  ),
+                )
+                    : const SizedBox.shrink(key: ValueKey('nolabel')),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
