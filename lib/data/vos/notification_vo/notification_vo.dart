@@ -30,8 +30,7 @@ class NotificationVO {
     required this.empty,
   });
 
-  factory NotificationVO.fromJson(Map<String, dynamic> json) =>
-      _$NotificationVOFromJson(json);
+  factory NotificationVO.fromJson(Map<String, dynamic> json) => _$NotificationVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotificationVOToJson(this);
 }
@@ -56,10 +55,29 @@ class NotificationContentVO {
     required this.read,
   });
 
-  factory NotificationContentVO.fromJson(Map<String, dynamic> json) =>
-      _$NotificationContentVOFromJson(json);
+  factory NotificationContentVO.fromJson(Map<String, dynamic> json) => _$NotificationContentVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotificationContentVOToJson(this);
+
+  NotificationContentVO copyWith({
+    String? id,
+    String? title,
+    String? body,
+    String? routeId,
+    String? notificationType,
+    String? localDateTime,
+    bool? read,
+  }) {
+    return NotificationContentVO(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      routeId: routeId ?? this.routeId,
+      notificationType: notificationType ?? this.notificationType,
+      localDateTime: localDateTime ?? this.localDateTime,
+      read: read ?? this.read,
+    );
+  }
 }
 
 @JsonSerializable()
@@ -80,8 +98,7 @@ class PageableVO {
     required this.paged,
   });
 
-  factory PageableVO.fromJson(Map<String, dynamic> json) =>
-      _$PageableVOFromJson(json);
+  factory PageableVO.fromJson(Map<String, dynamic> json) => _$PageableVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$PageableVOToJson(this);
 }
@@ -92,11 +109,7 @@ class SortVO {
   final bool sorted;
   final bool empty;
 
-  SortVO({
-    required this.unsorted,
-    required this.sorted,
-    required this.empty,
-  });
+  SortVO({required this.unsorted, required this.sorted, required this.empty});
 
   factory SortVO.fromJson(Map<String, dynamic> json) => _$SortVOFromJson(json);
 

@@ -31,8 +31,8 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
   String _pin = "";
 
   Future<void> _confirm() async {
-    if (_pin.length != 8) {
-      context.showErrorSnackBar('Please enter your 8 digit PIN');
+    if (_pin.length != 6) {
+      context.showErrorSnackBar('Please enter your 6 digit PIN');
       return;
     }
     if (_submitting) return;
@@ -94,7 +94,7 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                   children: [
                     const Center(
                       child: Text(
-                        'Enter Your 8 digit PIN',
+                        'Enter Your 6 digit PIN',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
@@ -129,7 +129,7 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                         ],
                       ),
                       child: Pinput(
-                        length: 8,
+                        length: 6,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,

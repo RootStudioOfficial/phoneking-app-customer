@@ -43,45 +43,25 @@ Download the app from the store and enter this code during signup.
 
   void _copyReferral(BuildContext context) {
     if (!_hasReferral) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Referral link not available yet'),
-          duration: Duration(seconds: 1),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Referral link not available yet'), duration: Duration(seconds: 1)));
       return;
     }
 
     Clipboard.setData(ClipboardData(text: _referralCode!));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Referral link copied'),
-        duration: Duration(seconds: 1),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Referral link copied'), duration: Duration(seconds: 1)));
   }
 
   // Later you can plug this into share_plus:
   // Share.share(_shareMessage);
   void _shareTo(BuildContext context, String channel) {
     if (!_hasReferral) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Referral link not available yet'),
-          duration: Duration(seconds: 1),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Referral link not available yet'), duration: Duration(seconds: 1)));
       return;
     }
 
     // For now just copy and show toast.
     Clipboard.setData(ClipboardData(text: _shareMessage));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Referral message copied for $channel'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Referral message copied for $channel'), duration: const Duration(seconds: 1)));
   }
 
   @override
@@ -93,18 +73,10 @@ Download the app from the store and enter this code during signup.
         centerTitle: false,
         titleSpacing: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          color: Colors.black87,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new), color: Colors.black87, onPressed: () => Navigator.of(context).pop()),
         title: const Text(
           'Share App',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
         ),
       ),
       body: SingleChildScrollView(
@@ -113,7 +85,7 @@ Download the app from the store and enter this code during signup.
           children: [
             _inviteCard(context),
             const SizedBox(height: 24),
-            _shareViaCard(context),
+            //  _shareViaCard(context),
           ],
         ),
       ),
@@ -128,24 +100,15 @@ Download the app from the store and enter this code during signup.
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), offset: const Offset(0, 8), blurRadius: 18)],
       ),
       child: Column(
         children: [
-          const Text(
-            'Invite Friends',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
+          const Text('Invite Friends', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           const Text(
             'Invite your friends to join Phone King\n'
-                'and earn 1,000 Pts per person.',
+            'and earn 1,000 Pts per person.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: Colors.black54, height: 1.4),
           ),
@@ -153,46 +116,27 @@ Download the app from the store and enter this code during signup.
 
           // Gradient container
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 14.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFA86B), Color(0xFFB85C32)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
+              gradient: const LinearGradient(colors: [Color(0xFFFFA86B), Color(0xFFB85C32)], begin: Alignment.centerLeft, end: Alignment.centerRight),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Your referral link',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
+                const Text('Your referral link', style: TextStyle(color: Colors.white, fontSize: 12)),
                 const SizedBox(height: 10),
 
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                         child: Text(
                           _referralCode ?? '',
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.black87,
-                          ),
+                          style: const TextStyle(fontSize: 13, color: Colors.black87),
                         ),
                       ),
                     ),
@@ -205,19 +149,11 @@ Download the app from the store and enter this code during signup.
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black87,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
                         onPressed: () => _copyReferral(context),
                         icon: const Icon(Icons.copy, size: 18),
-                        label: const Text(
-                          'Copy',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        label: const Text('Copy', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ),
                     ),
                   ],
@@ -238,41 +174,20 @@ Download the app from the store and enter this code during signup.
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            offset: const Offset(0, 8),
-            blurRadius: 18,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), offset: const Offset(0, 8), blurRadius: 18)],
       ),
       child: Column(
         children: [
-          const Text(
-            'Share Via',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-          ),
+          const Text('Share Via', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
           const SizedBox(height: 18),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _SocialIconButton(
-                assetPath: AssetImageUtils.facebookIcon,
-                onTap: () => _shareTo(context, 'Facebook'),
-              ),
-              _SocialIconButton(
-                assetPath: AssetImageUtils.instagramIcon,
-                onTap: () => _shareTo(context, 'Instagram'),
-              ),
-              _SocialIconButton(
-                assetPath: AssetImageUtils.viberIcon,
-                onTap: () => _shareTo(context, 'Viber'),
-              ),
-              _SocialIconButton(
-                assetPath: AssetImageUtils.telegramIcon,
-                onTap: () => _shareTo(context, 'Telegram'),
-              ),
+              _SocialIconButton(assetPath: AssetImageUtils.facebookIcon, onTap: () => _shareTo(context, 'Facebook')),
+              _SocialIconButton(assetPath: AssetImageUtils.instagramIcon, onTap: () => _shareTo(context, 'Instagram')),
+              _SocialIconButton(assetPath: AssetImageUtils.viberIcon, onTap: () => _shareTo(context, 'Viber')),
+              _SocialIconButton(assetPath: AssetImageUtils.telegramIcon, onTap: () => _shareTo(context, 'Telegram')),
             ],
           ),
         ],
@@ -298,10 +213,7 @@ class _SocialIconButton extends StatelessWidget {
       child: Container(
         width: 54,
         height: 54,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-        ),
+        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
         padding: const EdgeInsets.all(12),
         child: Image.asset(assetPath, fit: BoxFit.contain),
       ),

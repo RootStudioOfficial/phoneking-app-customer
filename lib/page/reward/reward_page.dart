@@ -20,8 +20,7 @@ class RewardsPage extends StatefulWidget {
   State<RewardsPage> createState() => _RewardsPageState();
 }
 
-class _RewardsPageState extends State<RewardsPage>
-    with SingleTickerProviderStateMixin {
+class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStateMixin {
   late final TabController _tab = TabController(length: 3, vsync: this);
 
   @override
@@ -44,10 +43,7 @@ class _RewardsPageState extends State<RewardsPage>
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: const Text(
-          'Rewards',
-          style: TextStyle(fontWeight: FontWeight.w800),
-        ),
+        title: const Text('Rewards', style: TextStyle(fontWeight: FontWeight.w800)),
         centerTitle: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
@@ -58,14 +54,7 @@ class _RewardsPageState extends State<RewardsPage>
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tab,
-        children: const [
-          _RewardStoreTab(),
-          _RedeemedTab(),
-          _UsedTab(),
-        ],
-      ),
+      body: TabBarView(controller: _tab, children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()]),
     );
   }
 }
@@ -78,27 +67,18 @@ class _SegmentedTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const selected = Color(0xFFEF4444);
+    const selected = Color(0xFFED5B23);
     const bg = Color(0xFFF0F1F6);
 
     return Container(
       height: 44,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(22),
-      ),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(22)),
       child: TabBar(
         controller: controller,
         indicator: BoxDecoration(
           color: selected,
           borderRadius: BorderRadius.circular(22),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x260C34FF),
-              blurRadius: 8,
-              offset: Offset(0, 4),
-            ),
-          ],
+          boxShadow: const [BoxShadow(color: Color(0x260C34FF), blurRadius: 8, offset: Offset(0, 4))],
         ),
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF5B667A),
@@ -194,15 +174,10 @@ class _RewardStoreTabState extends State<_RewardStoreTab> {
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
         itemBuilder: (_, i) {
           if (i <= _stores.length - 1) {
-            return _storeSection(
-              _stores[i],
-                  () {
-                // Pass all stores so StoreViewAllPage can switch between them
-                context.navigateToNextPage(
-                  StoreViewAllPage(stores: _stores),
-                );
-              },
-            );
+            return _storeSection(_stores[i], () {
+              // Pass all stores so StoreViewAllPage can switch between them
+              context.navigateToNextPage(StoreViewAllPage(stores: _stores));
+            });
           }
           return const SizedBox(height: 100);
         },
@@ -306,12 +281,7 @@ class _RedeemedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.navigateToNextPage(
-          RewardDetailsPage(
-            rewardID: item.id ?? "",
-            isRedeem: false,
-          ),
-        );
+        context.navigateToNextPage(RewardDetailsPage(rewardID: item.id ?? "", isRedeem: false));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -331,19 +301,10 @@ class _RedeemedCard extends StatelessWidget {
                 height: 64,
                 child: (item.imageUrl ?? '').isEmpty
                     ? Container(
-                  color: Colors.grey.shade200,
-                  child: const Center(
-                    child: Icon(
-                      Icons.image,
-                      size: 28,
-                      color: Colors.grey,
-                    ),
-                  ),
-                )
-                    : CacheNetworkImageWidget(
-                  url: item.imageUrl!,
-                  fit: BoxFit.cover,
-                ),
+                        color: Colors.grey.shade200,
+                        child: const Center(child: Icon(Icons.image, size: 28, color: Colors.grey)),
+                      )
+                    : CacheNetworkImageWidget(url: item.imageUrl!, fit: BoxFit.cover),
               ),
             ),
             const SizedBox(width: 12),
@@ -356,40 +317,22 @@ class _RedeemedCard extends StatelessWidget {
                   // Title
                   Text(
                     item.name ?? '',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
-                      color: Color(0xFF0F172A),
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF0F172A)),
                   ),
                   const SizedBox(height: 6),
 
                   // Description
-                  if ((item.description ?? '').isNotEmpty)
-                    Text(
-                      item.description!,
-                      style: const TextStyle(
-                        color: Color(0xFF6B7280),
-                        height: 1.35,
-                      ),
-                    ),
+                  if ((item.description ?? '').isNotEmpty) Text(item.description!, style: const TextStyle(color: Color(0xFF6B7280), height: 1.35)),
                   const SizedBox(height: 8),
 
                   // Points row with star
                   Row(
                     children: [
-                      const Icon(
-                        Icons.star,
-                        size: 20,
-                        color: Color(0xFFFFC107),
-                      ),
+                      const Icon(Icons.star, size: 20, color: Color(0xFFFFC107)),
                       const SizedBox(width: 6),
                       Text(
                         '${item.requiredPoints} pts',
-                        style: const TextStyle(
-                          color: Color(0xFFEF4444),
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: const TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -515,33 +458,21 @@ class _UsedCard extends StatelessWidget {
                 children: [
                   (item.imageUrl ?? '').isEmpty
                       ? Container(
-                    color: Colors.grey.shade200,
-                    child: const Center(
-                      child: Icon(
-                        Icons.image,
-                        size: 28,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  )
+                          color: Colors.grey.shade200,
+                          child: const Center(child: Icon(Icons.image, size: 28, color: Colors.grey)),
+                        )
                       : ColorFiltered(
-                    colorFilter: const ColorFilter.mode(
-                      Colors.black26, // dim
-                      BlendMode.darken,
-                    ),
-                    child: CacheNetworkImageWidget(
-                      url: item.imageUrl!,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                          colorFilter: const ColorFilter.mode(
+                            Colors.black26, // dim
+                            BlendMode.darken,
+                          ),
+                          child: CacheNetworkImageWidget(url: item.imageUrl!, fit: BoxFit.cover),
+                        ),
                   const Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Used',
-                      style: TextStyle(
-                        color: Color(0xFFEF4444),
-                        fontWeight: FontWeight.w800,
-                      ),
+                      style: TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
                     ),
                   ),
                 ],
@@ -557,38 +488,19 @@ class _UsedCard extends StatelessWidget {
               children: [
                 Text(
                   item.name ?? '',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                    color: Color(0xFF0F172A),
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF0F172A)),
                 ),
                 const SizedBox(height: 6),
-                if ((item.description ?? '').isNotEmpty)
-                  Text(
-                    item.description!,
-                    style: const TextStyle(
-                      color: Color(0xFF6B7280),
-                      height: 1.35,
-                    ),
-                  ),
+                if ((item.description ?? '').isNotEmpty) Text(item.description!, style: const TextStyle(color: Color(0xFF6B7280), height: 1.35)),
                 const SizedBox(height: 8),
                 Row(
                   children: const [
-                    Icon(
-                      Icons.check_circle_outline,
-                      size: 16,
-                      color: Color(0xFF98A2B3),
-                    ),
+                    Icon(Icons.check_circle_outline, size: 16, color: Color(0xFF98A2B3)),
                     SizedBox(width: 6),
                     Text(
                       'Redeemed',
                       // API doesn’t provide date in RewardVO; label only
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF98A2B3),
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF98A2B3), fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -598,10 +510,7 @@ class _UsedCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Text(
                       '${item.requiredPoints} pts',
-                      style: const TextStyle(
-                        color: Color(0xFFEF4444),
-                        fontWeight: FontWeight.w800,
-                      ),
+                      style: const TextStyle(color: Color(0xFFEF4444), fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),
@@ -629,11 +538,7 @@ Widget _storeSection(StoreVO store, VoidCallback onTapViewAll) {
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _storeHeader(store, onTapViewAll),
-        const SizedBox(height: 12),
-        _rewardGrid(rewards),
-      ],
+      children: [_storeHeader(store, onTapViewAll), const SizedBox(height: 12), _rewardGrid(rewards)],
     ),
   );
 }
@@ -656,10 +561,7 @@ Widget _storeHeader(StoreVO store, VoidCallback onTapViewAll) {
                   height: 36,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: CacheNetworkImageWidget(
-                      url: store.logoUrl!,
-                      fit: BoxFit.cover,
-                    ),
+                    child: CacheNetworkImageWidget(url: store.logoUrl!, fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -669,10 +571,7 @@ Widget _storeHeader(StoreVO store, VoidCallback onTapViewAll) {
                 store.name ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
               ),
             ),
           ],
@@ -681,10 +580,7 @@ Widget _storeHeader(StoreVO store, VoidCallback onTapViewAll) {
           onTap: onTapViewAll,
           child: const Text(
             "View All →",
-            style: TextStyle(
-              color: Color(0xFF0C34FF),
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -694,10 +590,7 @@ Widget _storeHeader(StoreVO store, VoidCallback onTapViewAll) {
 
 Widget _rewardGrid(List<RewardVO> rewards) {
   if (rewards.isEmpty) {
-    return const SizedBox(
-      height: 120,
-      child: Center(child: Text("No rewards available")),
-    );
+    return const SizedBox(height: 120, child: Center(child: Text("No rewards available")));
   }
 
   return SizedBox(
@@ -718,9 +611,7 @@ Widget _rewardGrid(List<RewardVO> rewards) {
           ),
           child: InkWell(
             onTap: () {
-              context.navigateToNextPage(
-                RewardDetailsPage(rewardID: r.id ?? ''),
-              );
+              context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? ''));
             },
             borderRadius: BorderRadius.circular(16),
             child: Column(
@@ -728,36 +619,28 @@ Widget _rewardGrid(List<RewardVO> rewards) {
               children: [
                 // image
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   child: SizedBox(
                     height: 130,
                     child: (r.imageUrl ?? '').isEmpty
                         ? const Center(child: Text("Image"))
-                        : Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: CacheNetworkImageWidget(
-                        url: r.imageUrl!,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                        : AspectRatio(
+                            aspectRatio: 3 / 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: CacheNetworkImageWidget(url: r.imageUrl!, fit: BoxFit.contain),
+                            ),
+                          ),
                   ),
                 ),
                 // name
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Text(
                     r.name ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
                 // points
@@ -765,11 +648,7 @@ Widget _rewardGrid(List<RewardVO> rewards) {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
                     "${r.requiredPoints} pts",
-                    style: const TextStyle(
-                      color: Color(0xFF0C34FF),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
+                    style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                 ),
                 const SizedBox(height: 8),

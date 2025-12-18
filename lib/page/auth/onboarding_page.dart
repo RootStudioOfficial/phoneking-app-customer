@@ -16,16 +16,9 @@ class OnBoardingPage extends StatefulWidget {
   State<OnBoardingPage> createState() => _OnBoardingPageState();
 }
 
-class _OnBoardingPageState extends State<OnBoardingPage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ac = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 480),
-  );
-  late final Animation<double> _scale = CurvedAnimation(
-    parent: _ac,
-    curve: Curves.easeOutBack,
-  );
+class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProviderStateMixin {
+  late final AnimationController _ac = AnimationController(vsync: this, duration: const Duration(milliseconds: 480));
+  late final Animation<double> _scale = CurvedAnimation(parent: _ac, curve: Curves.easeOutBack);
   late final Animation<Offset> _slide = Tween<Offset>(
     begin: const Offset(0, .25),
     end: Offset.zero,
@@ -153,18 +146,11 @@ class _OnBoardingPageState extends State<OnBoardingPage>
       _snack('Something went wrong. Please try again.', isError: true);
       return;
     }
-    final birthday =
-        '${year.padLeft(4, '0')}-${month.padLeft(2, '0')}-${day.padLeft(2, '0')}';
+    final birthday = '${year.padLeft(4, '0')}-${month.padLeft(2, '0')}-${day.padLeft(2, '0')}';
 
     _setBusy(true);
     try {
-      await _auth.register(
-        displayName: name,
-        password: _pin!,
-        phoneNumber: _phone!,
-        birthday: birthday,
-        referralCode: referralCode,
-      );
+      await _auth.register(displayName: name, password: _pin!, phoneNumber: _phone!, birthday: birthday, referralCode: referralCode);
       _snack('Registration successful');
       await _finishFlow(false);
     } catch (e) {
@@ -178,10 +164,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   Future<void> _handleLogin(String fullPhone, String password) async {
     _setBusy(true);
     try {
-      final loginRes = await _auth.login(
-        username: fullPhone,
-        password: password,
-      );
+      final loginRes = await _auth.login(username: fullPhone, password: password);
       if (loginRes.data != null) {
         _snack('Login success');
         await _finishFlow(false);
@@ -198,14 +181,13 @@ class _OnBoardingPageState extends State<OnBoardingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         bottom: false,
         child: Stack(
           children: [
             // Gradient background
-            Positioned.fill(
-              child: Image.asset(AssetImageUtils.onboardingBgImage),
-            ),
+            Positioned.fill(child: Image.asset(AssetImageUtils.onboardingBgImage)),
 
             // Content
             Align(
@@ -213,18 +195,14 @@ class _OnBoardingPageState extends State<OnBoardingPage>
               child: (_sheet == _Sheet.none)
                   ? _BottomCard(
                       title: "PhoneKing",
-                      subtitle:
-                          "Your gateway to exclusive rewards,\namazing deals and premium services",
+                      subtitle: "Your gateway to exclusive rewards,\namazing deals and premium services",
                       buttonText: "Get Started",
                       onPressed: _busy ? null : _openPhone,
                       secondary: TextButton(
                         onPressed: _busy ? null : _openLogin,
                         child: const Text(
                           "Already have an account? Log in",
-                          style: TextStyle(
-                            color: _AppColors.brand,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: TextStyle(color: _AppColors.brand, fontWeight: FontWeight.w700),
                         ),
                       ),
                     )
@@ -238,9 +216,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                   onTap: _busy ? null : _closeAny,
                   child: AnimatedBuilder(
                     animation: _ac,
-                    builder: (_, __) => ColoredBox(
-                      color: Colors.black.withValues(alpha: .35 * _ac.value),
-                    ),
+                    builder: (_, __) => ColoredBox(color: Colors.black.withValues(alpha: .35 * _ac.value)),
                   ),
                 ),
               ),
@@ -254,11 +230,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 560),
                       child: switch (_sheet) {
-                        _Sheet.phone => _PhoneFormCard(
-                          enabled: !_busy,
-                          onConfirm: _handleSendOtp,
-                          onTapLogin: _openLogin,
-                        ),
+                        _Sheet.phone => _PhoneFormCard(enabled: !_busy, onConfirm: _handleSendOtp, onTapLogin: _openLogin),
                         _Sheet.otp => _OtpFormCard(
                           enabled: !_busy,
                           onConfirm: _handleVerifyOtp,
@@ -266,19 +238,9 @@ class _OnBoardingPageState extends State<OnBoardingPage>
                             if (_phone != null) _handleSendOtp(_phone!);
                           },
                         ),
-                        _Sheet.pin => _PinFormCard(
-                          enabled: !_busy,
-                          onConfirm: _handleSetPin,
-                        ),
-                        _Sheet.personal => _PersonalInfoFormCard(
-                          enabled: !_busy,
-                          onConfirm: _handleRegister,
-                        ),
-                        _Sheet.login => _LoginFormCard(
-                          enabled: !_busy,
-                          onConfirm: _handleLogin,
-                          onTapRegister: _openPhone,
-                        ),
+                        _Sheet.pin => _PinFormCard(enabled: !_busy, onConfirm: _handleSetPin),
+                        _Sheet.personal => _PersonalInfoFormCard(enabled: !_busy, onConfirm: _handleRegister),
+                        _Sheet.login => _LoginFormCard(enabled: !_busy, onConfirm: _handleLogin, onTapRegister: _openPhone),
                         _ => const SizedBox.shrink(),
                       },
                     ),
@@ -292,9 +254,7 @@ class _OnBoardingPageState extends State<OnBoardingPage>
               const Positioned.fill(
                 child: ColoredBox(
                   color: Color(0x33000000),
-                  child: Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
+                  child: Center(child: CircularProgressIndicator(color: Colors.white)),
                 ),
               ),
           ],
@@ -313,11 +273,7 @@ class _PhoneFormCard extends StatefulWidget {
   final ValueChanged<String> onConfirm;
   final VoidCallback onTapLogin;
 
-  const _PhoneFormCard({
-    required this.onConfirm,
-    required this.enabled,
-    required this.onTapLogin,
-  });
+  const _PhoneFormCard({required this.onConfirm, required this.enabled, required this.onTapLogin});
 
   @override
   State<_PhoneFormCard> createState() => _PhoneFormCardState();
@@ -383,26 +339,18 @@ class _PhoneFormCardState extends State<_PhoneFormCard> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _submit(),
                     validator: (v) => _validateMmPhone(v ?? ''),
-                    decoration: _Decorations.inputRoundedAll(
-                      hint: "type your phone number",
-                    ),
+                    decoration: _Decorations.inputRoundedAll(hint: "type your phone number"),
                   ),
                 ),
 
                 _Gaps.v18,
-                _PrimaryButton(
-                  text: "Send OTP",
-                  onPressed: widget.enabled ? _submit : null,
-                ),
+                _PrimaryButton(text: "Send OTP", onPressed: widget.enabled ? _submit : null),
                 _Gaps.v8,
                 TextButton(
                   onPressed: widget.enabled ? widget.onTapLogin : null,
                   child: const Text(
                     "Already have an account? Log in",
-                    style: TextStyle(
-                      color: _AppColors.brand,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(color: _AppColors.brand, fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -423,11 +371,7 @@ class _OtpFormCard extends StatefulWidget {
   final ValueChanged<String> onConfirm; // returns otp
   final VoidCallback onResend;
 
-  const _OtpFormCard({
-    required this.enabled,
-    required this.onConfirm,
-    required this.onResend,
-  });
+  const _OtpFormCard({required this.enabled, required this.onConfirm, required this.onResend});
 
   @override
   State<_OtpFormCard> createState() => _OtpFormCardState();
@@ -486,30 +430,16 @@ class _OtpFormCardState extends State<_OtpFormCard> {
                     enabled: widget.enabled,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    buildCounter:
-                        (
-                          _, {
-                          int? currentLength,
-                          bool? isFocused,
-                          int? maxLength,
-                        }) => const SizedBox.shrink(),
+                    buildCounter: (_, {int? currentLength, bool? isFocused, int? maxLength}) => const SizedBox.shrink(),
                     validator: (v) => _validateOtp(v ?? ''),
-                    decoration: _Decorations.inputRoundedAll(
-                      hint: "e.g. 123456",
-                    ),
+                    decoration: _Decorations.inputRoundedAll(hint: "e.g. 123456"),
                   ),
                 ),
 
                 _Gaps.v18,
-                _PrimaryButton(
-                  text: "Verify",
-                  onPressed: widget.enabled ? _submit : null,
-                ),
+                _PrimaryButton(text: "Verify", onPressed: widget.enabled ? _submit : null),
                 _Gaps.v8,
-                TextButton(
-                  onPressed: widget.enabled ? widget.onResend : null,
-                  child: const Text("Resend OTP"),
-                ),
+                TextButton(onPressed: widget.enabled ? widget.onResend : null, child: const Text("Resend OTP")),
               ],
             ),
           ),
@@ -556,9 +486,7 @@ class _PinFormCardState extends State<_PinFormCard> {
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
     if (_pin1.text != _pin2.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("PINs do not match")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("PINs do not match")));
       return;
     }
     widget.onConfirm(_pin1.text);
@@ -607,10 +535,7 @@ class _PinFormCardState extends State<_PinFormCard> {
                 ),
 
                 _Gaps.v18,
-                _PrimaryButton(
-                  text: "Create",
-                  onPressed: widget.enabled ? _submit : null,
-                ),
+                _PrimaryButton(text: "Create", onPressed: widget.enabled ? _submit : null),
               ],
             ),
           ),
@@ -635,15 +560,10 @@ class _PinFormCardState extends State<_PinFormCard> {
         keyboardType: TextInputType.number,
         maxLength: 6,
         validator: validator,
-        buildCounter:
-            (_, {int? currentLength, bool? isFocused, int? maxLength}) =>
-                const SizedBox(),
+        buildCounter: (_, {int? currentLength, bool? isFocused, int? maxLength}) => const SizedBox(),
         decoration: _Decorations.inputRoundedAll(
           hint: "must be 6 digits",
-          suffix: IconButton(
-            onPressed: onToggle,
-            icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
-          ),
+          suffix: IconButton(onPressed: onToggle, icon: Icon(obscure ? Icons.visibility : Icons.visibility_off)),
         ),
       ),
     );
@@ -656,13 +576,7 @@ class _PinFormCardState extends State<_PinFormCard> {
 
 class _PersonalInfoFormCard extends StatefulWidget {
   final bool enabled;
-  final Future<void> Function({
-    required String name,
-    required String day,
-    required String month,
-    required String year,
-    required String referralCode,
-  })
+  final Future<void> Function({required String name, required String day, required String month, required String year, required String referralCode})
   onConfirm;
 
   const _PersonalInfoFormCard({required this.onConfirm, required this.enabled});
@@ -700,18 +614,10 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
     final form = _formKey.currentState;
     if (form?.validate() != true) return;
     if (_day == null || _month == null || _year == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
       return;
     }
-    await widget.onConfirm(
-      name: _nameCtrl.text.trim(),
-      day: _day!,
-      month: _month!,
-      year: _year!,
-      referralCode: _referralCodeCtrl.text.trim(),
-    );
+    await widget.onConfirm(name: _nameCtrl.text.trim(), day: _day!, month: _month!, year: _year!, referralCode: _referralCodeCtrl.text.trim());
   }
 
   @override
@@ -742,9 +648,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                   enabled: widget.enabled,
                   textInputAction: TextInputAction.done,
                   validator: (v) => _validateName(v ?? ''),
-                  decoration: _Decorations.inputRoundedAll(
-                    hint: "Enter Your Name",
-                  ),
+                  decoration: _Decorations.inputRoundedAll(hint: "Enter Your Name"),
                 ),
 
                 _Gaps.v18,
@@ -755,9 +659,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                   enabled: widget.enabled,
                   textInputAction: TextInputAction.done,
                   validator: (v) => _validateReferralCode(v ?? ''),
-                  decoration: _Decorations.inputRoundedAll(
-                    hint: "Enter Your ReferralCode",
-                  ),
+                  decoration: _Decorations.inputRoundedAll(hint: "Enter Your ReferralCode"),
                 ),
 
                 _Gaps.v18,
@@ -801,10 +703,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                 ),
 
                 _Gaps.v24,
-                _PrimaryButton(
-                  text: "Confirm",
-                  onPressed: widget.enabled ? _submit : null,
-                ),
+                _PrimaryButton(text: "Confirm", onPressed: widget.enabled ? _submit : null),
               ],
             ),
           ),
@@ -827,9 +726,7 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
       isExpanded: true,
       decoration: _Decorations.inputRoundedAll(),
       hint: Text(hint),
-      items: items
-          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-          .toList(),
+      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
       onChanged: enabled ? onChanged : null,
       validator: (v) => (v == null) ? 'Required' : null,
     );
@@ -845,11 +742,7 @@ class _LoginFormCard extends StatefulWidget {
   final Future<void> Function(String phone, String password) onConfirm;
   final VoidCallback onTapRegister;
 
-  const _LoginFormCard({
-    required this.enabled,
-    required this.onConfirm,
-    required this.onTapRegister,
-  });
+  const _LoginFormCard({required this.enabled, required this.onConfirm, required this.onTapRegister});
 
   @override
   State<_LoginFormCard> createState() => _LoginFormCardState();
@@ -920,9 +813,7 @@ class _LoginFormCardState extends State<_LoginFormCard> {
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   validator: (v) => _validateMmPhone(v ?? ''),
-                  decoration: _Decorations.inputRoundedAll(
-                    hint: "type your phone number",
-                  ),
+                  decoration: _Decorations.inputRoundedAll(hint: "type your phone number"),
                 ),
 
                 _Gaps.v18,
@@ -941,28 +832,20 @@ class _LoginFormCardState extends State<_LoginFormCard> {
                       hint: "your password",
                       suffix: IconButton(
                         onPressed: () => setState(() => _obscure = !_obscure),
-                        icon: Icon(
-                          _obscure ? Icons.visibility : Icons.visibility_off,
-                        ),
+                        icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
                       ),
                     ),
                   ),
                 ),
 
                 _Gaps.v18,
-                _PrimaryButton(
-                  text: "Log in",
-                  onPressed: widget.enabled ? _submit : null,
-                ),
+                _PrimaryButton(text: "Log in", onPressed: widget.enabled ? _submit : null),
                 _Gaps.v8,
                 TextButton(
                   onPressed: widget.enabled ? widget.onTapRegister : null,
                   child: const Text(
                     "New here? Create account",
-                    style: TextStyle(
-                      color: _AppColors.brand,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(color: _AppColors.brand, fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -983,13 +866,7 @@ class _BottomCard extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget? secondary;
 
-  const _BottomCard({
-    required this.title,
-    required this.subtitle,
-    required this.buttonText,
-    required this.onPressed,
-    this.secondary,
-  });
+  const _BottomCard({required this.title, required this.subtitle, required this.buttonText, required this.onPressed, this.secondary});
 
   @override
   Widget build(BuildContext context) {
@@ -1009,11 +886,7 @@ class _BottomCard extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              height: 1.5,
-              color: _AppColors.text,
-            ),
+            style: const TextStyle(fontSize: 16, height: 1.5, color: _AppColors.text),
           ),
           _Gaps.v28,
           _PrimaryButton(text: buttonText, onPressed: onPressed),
@@ -1040,15 +913,10 @@ class _PrimaryButton extends StatelessWidget {
           backgroundColor: _AppColors.brand,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
-        child: Text(
-          text,
-          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
-        ),
+        child: Text(text, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
       ),
     );
   }
@@ -1056,20 +924,14 @@ class _PrimaryButton extends StatelessWidget {
 
 Widget _label(String t) => Align(
   alignment: Alignment.centerLeft,
-  child: Text(
-    t,
-    style: TextStyle(color: Colors.blueGrey.shade600, fontSize: 13),
-  ),
+  child: Text(t, style: TextStyle(color: Colors.blueGrey.shade600, fontSize: 13)),
 );
 
 Widget _grabber() => Container(
   width: 56,
   height: 5,
   margin: const EdgeInsets.only(bottom: 12),
-  decoration: BoxDecoration(
-    color: _AppColors.stroke,
-    borderRadius: BorderRadius.circular(12),
-  ),
+  decoration: BoxDecoration(color: _AppColors.stroke, borderRadius: BorderRadius.circular(12)),
 );
 
 class _Decorations {
@@ -1097,13 +959,8 @@ class _Decorations {
 }
 
 class _Styles {
-  static const BorderRadius sheetRadius = BorderRadius.vertical(
-    top: Radius.circular(32),
-  );
-  static const TextStyle h1 = TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.w800,
-  );
+  static const BorderRadius sheetRadius = BorderRadius.vertical(top: Radius.circular(32));
+  static const TextStyle h1 = TextStyle(fontSize: 24, fontWeight: FontWeight.w800);
 }
 
 class _Gaps {

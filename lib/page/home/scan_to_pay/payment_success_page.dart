@@ -32,10 +32,10 @@ class PaymentSuccessPage extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 8),
 
                   // Success Icon
                   Image.asset(
@@ -44,7 +44,7 @@ class PaymentSuccessPage extends StatelessWidget {
                     height: 180,
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 20),
 
                   // Success Message
                   Text(
@@ -54,7 +54,7 @@ class PaymentSuccessPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 20),
 
                   // Payment Preview Card
                   Container(

@@ -34,45 +34,42 @@ class _BannerPageState extends State<BannerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: CacheNetworkImageWidget(
-              url: widget.bannerImageUrl,
-              fit: BoxFit.cover,
+      body: SafeArea(
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 3 / 1,
+              child: CacheNetworkImageWidget(url: widget.bannerImageUrl, fit: BoxFit.cover),
             ),
-          ),
-          SafeArea(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8, right: 8),
-                child: GestureDetector(
-                  onTap: () {
-                    context.navigateToNextPageWithRemoveUntil(IndexPage());
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.45),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      "Skip in $_left${_left == 1 ? 's' : 's'}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+
+            // optional: rest of the screen
+            Expanded(
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8, right: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          context.navigateToNextPageWithRemoveUntil(IndexPage());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(18)),
+                          child: Text(
+                            "Skip in $_left${_left == 1 ? 's' : 's'}",
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

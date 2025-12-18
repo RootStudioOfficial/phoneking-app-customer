@@ -300,7 +300,7 @@ class _ActivityPageState extends State<ActivityPage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: const Text('History', style: _ActivityTextStyles.appBarTitle),
+        title: const Text('Activity', style: _ActivityTextStyles.appBarTitle),
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,

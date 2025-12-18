@@ -9,47 +9,19 @@ import 'package:phone_king_customer/utils/localization_strings.dart';
 // ========== Typography helper ==========
 
 class _PaymentTextStyles {
-  static const appBarTitle = TextStyle(
-    color: Colors.black,
-    fontSize: 18,
-    fontWeight: FontWeight.w800,
-  );
+  static const appBarTitle = TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w800);
 
-  static const storeName = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    color: Colors.black,
-  );
+  static const storeName = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black);
 
-  static const storeSubtitle = TextStyle(
-    fontSize: 13,
-    color: Color(0xFF6B7280),
-    fontWeight: FontWeight.w500,
-  );
+  static const storeSubtitle = TextStyle(fontSize: 13, color: Color(0xFF6B7280), fontWeight: FontWeight.w500);
 
-  static const detailLabel = TextStyle(
-    fontSize: 14,
-    color: Color(0xFF6B7280),
-    fontWeight: FontWeight.w500,
-  );
+  static const detailLabel = TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w500);
 
-  static const detailValue = TextStyle(
-    fontSize: 15,
-    color: Colors.black,
-    fontWeight: FontWeight.w600,
-  );
+  static const detailValue = TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600);
 
-  static const detailValueStrong = TextStyle(
-    fontSize: 16,
-    color: Colors.black,
-    fontWeight: FontWeight.w700,
-  );
+  static const detailValueStrong = TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w700);
 
-  static const errorText = TextStyle(
-    color: Color(0xFFB00020),
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-  );
+  static const errorText = TextStyle(color: Color(0xFFB00020), fontSize: 13, fontWeight: FontWeight.w500);
 }
 
 class PaymentDetailsPage extends StatefulWidget {
@@ -105,11 +77,7 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
         ? const _LoadingBody()
         : _error != null
         ? _ErrorBody(message: _error!, onRetry: _load)
-        : _SuccessBody(
-            data: _data!,
-            onProceed: () => _proceedToPayment(context),
-            onRefresh: _load,
-          );
+        : _SuccessBody(data: _data!, onProceed: () => _proceedToPayment(context), onRefresh: _load);
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -120,10 +88,7 @@ class _PaymentDetailsPageState extends State<PaymentDetailsPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          l10n.paymentDetailsPaymentDetails,
-          style: _PaymentTextStyles.appBarTitle,
-        ),
+        title: Text(l10n.paymentDetailsPaymentDetails, style: _PaymentTextStyles.appBarTitle),
       ),
       body: body,
     );
@@ -141,13 +106,7 @@ class _LoadingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: SizedBox(
-        height: 36,
-        width: 36,
-        child: CircularProgressIndicator(strokeWidth: 2.6),
-      ),
-    );
+    return const Center(child: SizedBox(height: 36, width: 36, child: CircularProgressIndicator(strokeWidth: 2.6)));
   }
 }
 
@@ -183,11 +142,7 @@ class _ErrorBody extends StatelessWidget {
 }
 
 class _SuccessBody extends StatelessWidget {
-  const _SuccessBody({
-    required this.data,
-    required this.onProceed,
-    required this.onRefresh,
-  });
+  const _SuccessBody({required this.data, required this.onProceed, required this.onRefresh});
 
   final ScanPaymentVO data;
   final VoidCallback onProceed;
@@ -213,13 +168,7 @@ class _SuccessBody extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withValues(alpha: 0.08),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                      boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 2))],
                     ),
                     child: Column(
                       children: [
@@ -231,31 +180,17 @@ class _SuccessBody extends StatelessWidget {
                               Container(
                                 width: 48,
                                 height: 48,
-                                decoration: BoxDecoration(
-                                  color: Colors.deepOrange.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Icon(
-                                  Icons.shopping_bag_outlined,
-                                  color: Colors.deepOrange,
-                                ),
+                                decoration: BoxDecoration(color: Colors.deepOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
+                                child: const Icon(Icons.shopping_bag_outlined, color: Colors.deepOrange),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      data.processByName,
-                                      style: _PaymentTextStyles.storeName,
-                                    ),
+                                    Text(data.processByName, style: _PaymentTextStyles.storeName),
                                     const SizedBox(height: 4),
-                                    Text(
-                                      "Invoice #${data.invoiceNo}",
-                                      style: _PaymentTextStyles.storeSubtitle,
-                                    ),
+                                    Text("Invoice #${data.invoiceNo}", style: _PaymentTextStyles.storeSubtitle),
                                   ],
                                 ),
                               ),
@@ -270,27 +205,15 @@ class _SuccessBody extends StatelessWidget {
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             children: [
-                              _buildRow(
-                                l10n.paymentDetailsInvoiceNo,
-                                data.invoiceNo,
-                              ),
-                              const SizedBox(height: 16),
-                              _buildRow(
-                                l10n.paymentDetailsPointsToUse,
-                                "-${data.pointAmount}",
-                                color: Colors.deepOrange,
-                              ),
-                              const SizedBox(height: 16),
-                              _buildRow(
-                                l10n.paymentDetailsCurrentBalance,
-                                _format(data.currentBalance),
-                              ),
-                              const SizedBox(height: 16),
-                              _buildRow(
-                                l10n.paymentDetailsBalanceAfter,
-                                _format(balanceAfter),
-                                strong: true,
-                              ),
+                              _buildRow(l10n.paymentDetailsCurrentBalance, _format(data.currentBalance)),
+
+                              const SizedBox(height: 12),
+
+                              Divider(height: 1, thickness: 1, color: Colors.grey[300]),
+
+                              const SizedBox(height: 12),
+
+                              _buildRow(l10n.paymentDetailsBalanceAfter, _format(balanceAfter), strong: true),
                             ],
                           ),
                         ),
@@ -316,9 +239,7 @@ class _SuccessBody extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       side: BorderSide(color: Colors.grey[300]!),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: const Text('Cancel'),
                   ),
@@ -330,11 +251,9 @@ class _SuccessBody extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrange,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Proceed to Payment'),
+                    child: const Text('Proceed to Payment', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
@@ -345,32 +264,17 @@ class _SuccessBody extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(
-    String label,
-    String value, {
-    Color color = Colors.black,
-    bool strong = false,
-  }) {
+  Widget _buildRow(String label, String value, {Color color = Colors.black, bool strong = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: _PaymentTextStyles.detailLabel),
-        Text(
-          value,
-          style:
-              (strong
-                      ? _PaymentTextStyles.detailValueStrong
-                      : _PaymentTextStyles.detailValue)
-                  .copyWith(color: color),
-        ),
+        Text(value, style: (strong ? _PaymentTextStyles.detailValueStrong : _PaymentTextStyles.detailValue).copyWith(color: color)),
       ],
     );
   }
 
   String _format(int number) {
-    return number.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (m) => '${m[1]},',
-    );
+    return number.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},');
   }
 }
