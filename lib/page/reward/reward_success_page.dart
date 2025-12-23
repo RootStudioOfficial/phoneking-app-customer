@@ -3,14 +3,17 @@ import 'package:phone_king_customer/data/vos/reward_vo/reward_claim_success_vo/r
 import 'package:phone_king_customer/page/index_page.dart';
 import 'package:phone_king_customer/utils/asset_image_utils.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class RewardSuccessPage extends StatelessWidget {
-  final RewardClaimSuccessVO rewardData;
-
   const RewardSuccessPage({super.key, required this.rewardData});
+
+  final RewardClaimSuccessVO rewardData;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     final redeemDate = rewardData.redeemDate;
     final collectedDate = rewardData.collectedDate;
     final rewardName = rewardData.rewardName;
@@ -26,15 +29,14 @@ class RewardSuccessPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => context.navigateBack(),
         ),
-        title: const Text(
-          'Reward Details',
-          style: TextStyle(
+        title: Text(
+          l10n.rewardSuccessTitle,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
-        centerTitle: false,
       ),
       body: SafeArea(
         child: Column(
@@ -51,14 +53,13 @@ class RewardSuccessPage extends StatelessWidget {
                       AssetImageUtils.rewardSuccessfulIcon,
                       width: 180,
                       height: 180,
-                      fit: BoxFit.contain,
                     ),
 
                     const SizedBox(height: 24),
 
-                    const Text(
-                      'Reward Claimed Successfully.',
-                      style: TextStyle(
+                    Text(
+                      l10n.rewardSuccessCompleted,
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -69,7 +70,7 @@ class RewardSuccessPage extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     Text(
-                      'Show this reward to the staff or follow the store instructions to enjoy your benefits.',
+                      l10n.rewardSuccessHint,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -80,13 +81,13 @@ class RewardSuccessPage extends StatelessWidget {
 
                     const SizedBox(height: 32),
 
-                    // Reward Preview Card
+                    // Preview Card
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey[200]!, width: 1),
+                        border: Border.all(color: Colors.grey[200]!),
                         boxShadow: const [
                           BoxShadow(
                             color: Color(0x0F000000),
@@ -98,72 +99,44 @@ class RewardSuccessPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Card Header
-                          const Padding(
-                            padding: EdgeInsets.all(16),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
                             child: Text(
-                              'Reward Preview',
-                              style: TextStyle(
+                              l10n.rewardSuccessPreview,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
                               ),
                             ),
                           ),
 
-                          // Divider
                           Divider(height: 1, color: Colors.grey[200]),
 
                           Padding(
                             padding: const EdgeInsets.all(16),
                             child: Column(
                               children: [
-                                // Reward Info Row
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Reward Image
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: imageUrl.isEmpty
-                                          ? Container(
-                                              width: 100,
-                                              height: 100,
-                                              color: Colors.grey[200],
-                                              child: Icon(
-                                                Icons.image,
-                                                color: Colors.grey[400],
-                                                size: 40,
-                                              ),
-                                            )
+                                          ? _imagePlaceholder()
                                           : Image.network(
-                                              imageUrl,
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                    return Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      color: Colors.grey[200],
-                                                      child: Icon(
-                                                        Icons.image,
-                                                        color: Colors.grey[400],
-                                                        size: 40,
-                                                      ),
-                                                    );
-                                                  },
-                                            ),
+                                        imageUrl,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) =>
+                                            _imagePlaceholder(),
+                                      ),
                                     ),
-
                                     const SizedBox(width: 16),
-
-                                    // Reward Details
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             rewardName,
@@ -172,19 +145,19 @@ class RewardSuccessPage extends StatelessWidget {
                                             style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black,
                                             ),
                                           ),
-                                          const SizedBox(height: 6),
-                                          if (description.isNotEmpty)
+                                          if (description.isNotEmpty) ...[
+                                            const SizedBox(height: 6),
                                             Text(
                                               description,
                                               style: TextStyle(
                                                 fontSize: 14,
-                                                color: Colors.grey[600],
                                                 height: 1.4,
+                                                color: Colors.grey[600],
                                               ),
                                             ),
+                                          ],
                                         ],
                                       ),
                                     ),
@@ -193,18 +166,14 @@ class RewardSuccessPage extends StatelessWidget {
 
                                 const SizedBox(height: 24),
 
-                                // Redeemed at
-                                _buildInfoRow(
-                                  label: 'Redeemed at',
-                                  value: redeemDate,
+                                _infoRow(
+                                  l10n.rewardSuccessRedeemedAt,
+                                  redeemDate,
                                 ),
-
                                 const SizedBox(height: 16),
-
-                                // Claim Date
-                                _buildInfoRow(
-                                  label: 'Claim Date',
-                                  value: collectedDate,
+                                _infoRow(
+                                  l10n.rewardSuccessClaimDate,
+                                  collectedDate,
                                 ),
                               ],
                             ),
@@ -217,16 +186,17 @@ class RewardSuccessPage extends StatelessWidget {
               ),
             ),
 
-            // Go Back Home Button
             Padding(
               padding: const EdgeInsets.all(24),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Go back to Rewards tab → Redeemed list
                     context.navigateToNextPageWithRemoveUntil(
-                      const IndexPage(desireIndex: 1, desireRewardIndex: 1),
+                      const IndexPage(
+                        desireIndex: 1,
+                        desireRewardIndex: 1,
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -235,11 +205,10 @@ class RewardSuccessPage extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    elevation: 0,
                   ),
-                  child: const Text(
-                    'Go Back Home',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.rewardSuccessGoHome,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -254,11 +223,9 @@ class RewardSuccessPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow({required String label, required String value}) {
-    final safeValue = value.isEmpty ? '-' : value;
-
+  Widget _infoRow(String label, String value) {
+    final safe = value.isEmpty ? '-' : value;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 4,
@@ -267,20 +234,27 @@ class RewardSuccessPage extends StatelessWidget {
             style: TextStyle(fontSize: 15, color: Colors.grey[600]),
           ),
         ),
-        const SizedBox(width: 16),
         Expanded(
           flex: 6,
           child: Text(
-            safeValue,
+            safe,
+            textAlign: TextAlign.right,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
             ),
-            textAlign: TextAlign.right,
           ),
         ),
       ],
+    );
+  }
+
+  Widget _imagePlaceholder() {
+    return Container(
+      width: 100,
+      height: 100,
+      color: Colors.grey[200],
+      child: Icon(Icons.image, size: 40, color: Colors.grey[400]),
     );
   }
 }

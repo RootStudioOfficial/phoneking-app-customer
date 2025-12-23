@@ -98,5 +98,87 @@
   "change_pin_error_enter_current_pin": "လက်ရှိ PIN ကို ထည့်ပေးပါ",
   "change_pin_error_new_pin_length": "PIN အသစ်သည် အနည်းဆုံး ဂဏန်း ၈ လုံး ရှိရပါမည်",
   "change_pin_error_pin_not_match": "PIN အသစ်နှင့် အတည်ပြု PIN မတူပါ",
-  "change_pin_success_updated": "PIN ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ"
+  "change_pin_success_updated": "PIN ကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ",
+
+  "activity_title": "လုပ်ဆောင်ချက်များ",
+
+  "activity_points_spent": "အသုံးပြုခဲ့သော ပွိုင့်",
+  "activity_points_earned": "ရရှိသော ပွိုင့်",
+
+  "activity_filter_by_date": "နေ့ရက်ဖြင့် စစ်ထုတ်ရန်",
+  "activity_from": "မှ",
+  "activity_to": "ထိ",
+  "activity_select_date": "နေ့ရက်ရွေးပါ",
+  "activity_apply": "အသုံးချမည်",
+  "activity_clear": "ရှင်းလင်းမည်",
+
+  "activity_error_select_both_dates": "From နှင့် To နေ့ရက် နှစ်ခုလုံးကို ရွေးချယ်ပါ။",
+  "activity_error_start_after_end": "အစနေ့ရက်သည် အဆုံးနေ့ရက်ထက် နောက်မကျရပါ။",
+
+  "activity_recent_transactions": "မကြာသေးမီ လုပ်ဆောင်ချက်များ",
+  "activity_no_transactions": "ရွေးချယ်ထားသော အချိန်အတွင်း လုပ်ဆောင်ချက် မရှိပါ။",
+
+  "activity_txn_points_earned": "ပွိုင့်ရရှိခဲ့သည်",
+  "activity_txn_points_spent": "ပွိုင့်အသုံးပြုခဲ့သည်",
+
+  "payment_enter_pin_title": "ဂဏန်း ၆ လုံးပါ PIN ကို ထည့်ပါ",
+  "payment_enter_pin_subtitle": "ငွေပေးချေမှုကို အတည်ပြုရန် PIN ကို ထည့်ပါ",
+  "payment_enter_pin_error": "ဂဏန်း ၆ လုံးပါ PIN ကို ထည့်ပါ",
+  "common_cancel": "မလုပ်တော့ပါ",
+  "common_confirm": "အတည်ပြုမည်",
+
+  "payment_success_title": "ပေးချေမှု အောင်မြင်ပါသည်",
+  "payment_success_preview": "ပေးချေမှု အချက်အလက်",
+  "payment_success_go_home": "မူလစာမျက်နှာသို့ ပြန်သွားမည်",
+
+  "home_banner_placeholder": "ကြော်ငြာ မရှိသေးပါ",
+  "home_no_stores": "ဆိုင် မရှိသေးပါ",
+  "home_no_rewards": "ဆု မရှိသေးပါ",
+  "common_retry": "ပြန်ကြိုးစားမည်",
+  "language_select_title": "ဘာသာစကား ရွေးချယ်ပါ",
+
+  "store_view_retry": "ပြန်ကြိုးစားမည်",
+  "store_view_no_rewards": "ဆု မရှိသေးပါ",
+  "store_view_error_prefix": "အမှား",
+
+  "reward_details_title": "လက်ဆောင်အသေးစိတ်",
+  "reward_details_points_required": "လိုအပ်သော ပွိုင့်",
+
+  "reward_details_cannot_redeem": "ဒီလက်ဆောင်ကို မလဲလှယ်နိုင်ပါ",
+  "reward_details_redeem_success": "လက်ဆောင်ကို အောင်မြင်စွာ လဲလှယ်ပြီးပါပြီ",
+
+  "reward_details_confirm_title": "လဲလှယ်ရန် အတည်ပြုပါ",
+  "reward_details_confirm_message": "ဒီလက်ဆောင်ကို လဲလှယ်ရန် သေချာပါသလား",
+  "common_yes": "ဟုတ်ပါတယ်",
+  "common_no": "မဟုတ်ပါ",
+
+  "reward_pin_title": "လဲလှယ်ရန် အတည်ပြုခြင်း",
+  "reward_pin_enter_title": "၆ လုံး PIN ထည့်ပါ",
+  "reward_pin_enter_desc": "လုပ်ဆောင်မှုကို အတည်ပြုရန် PIN ထည့်ပါ",
+  "reward_pin_invalid": "၆ လုံး PIN ကို ထည့်ပါ",
+  "reward_pin_success": "လက်ဆောင်ကို အောင်မြင်စွာ ရယူပြီးပါပြီ",
+
+  "rewards_title": "လက်ဆောင်များ",
+  "rewards_store": "လက်ဆောင်ဆိုင်",
+  "rewards_redeemed": "လဲလှယ်ပြီး",
+  "rewards_used": "အသုံးပြုပြီး",
+
+  "rewards_view_all": "အားလုံးကြည့်ရန် →",
+
+  "rewards_no_stores": "ဆိုင်မရှိပါ",
+  "rewards_no_redeemed": "လဲလှယ်ပြီးသော လက်ဆောင်မရှိပါ",
+  "rewards_no_used": "အသုံးပြုပြီးသော လက်ဆောင်မရှိပါ",
+
+
+  "reward_success_title": "လက်ဆောင်အသေးစိတ်",
+  "reward_success_completed": "လက်ဆောင်ကို အောင်မြင်စွာ ရယူပြီးပါပြီ",
+  "reward_success_hint": "ဝန်ထမ်းများအား ပြသပါ သို့မဟုတ် ဆိုင်ညွှန်ကြားချက်များကို လိုက်နာပါ",
+  "reward_success_preview": "လက်ဆောင်အကြမ်းဖျဉ်း",
+  "reward_success_redeemed_at": "လဲလှယ်သည့်နေ့",
+  "reward_success_claim_date": "ရယူသည့်နေ့",
+  "reward_success_go_home": "အိမ်သို့ ပြန်ရန်",
+
+  "bottom_nav_home": "မူလ",
+  "bottom_nav_rewards": "ဆုလာဘ်",
+  "bottom_nav_profile": "ပရိုဖိုင်း"
 }

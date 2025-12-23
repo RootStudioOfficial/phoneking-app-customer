@@ -21,6 +21,7 @@ class RewardCardWidget extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE6E8F0)),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image (3:2)
@@ -38,13 +39,15 @@ class RewardCardWidget extends StatelessWidget {
             ),
 
             // Name
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
-              child: Text(
-                name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                child: Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
+                ),
               ),
             ),
 

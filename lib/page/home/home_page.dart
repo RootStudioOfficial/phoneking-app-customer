@@ -6,12 +6,11 @@ import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl
 import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
 import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
 import 'package:phone_king_customer/page/auth/onboarding_page.dart';
 import 'package:phone_king_customer/page/home/activity/activity_page.dart';
-import 'package:phone_king_customer/page/home/qr_code/qrcode_page.dart';
 import 'package:phone_king_customer/page/home/notification/notification_page.dart';
+import 'package:phone_king_customer/page/home/qr_code/qrcode_page.dart';
 import 'package:phone_king_customer/page/home/scan_to_pay/payment_qr_scan_page.dart';
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
@@ -32,31 +31,22 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+// ================= TEXT STYLES =================
+
 class _HomeTextStyles {
   static const balanceLabel = TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500);
-
   static const balanceValue = TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w800);
-
   static const activityButton = TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF111827));
-
   static const actionLabel = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black);
-
   static const bannerPlaceholder = TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w500);
-
   static const storeName = TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827));
-
   static const viewAll = TextStyle(color: Color(0xFFED5B23), fontWeight: FontWeight.w600, fontSize: 13);
-
-  static const rewardName = TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827));
-
-  static const rewardPoints = TextStyle(color: Color(0xFFED5B23), fontWeight: FontWeight.w700, fontSize: 13);
-
   static const noData = TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w500);
-
   static const errorMessage = TextStyle(fontSize: 14, color: Color(0xFFB00020), fontWeight: FontWeight.w500);
-
   static const errorButton = TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white);
 }
+
+// ================= STATE =================
 
 class _HomePageState extends State<HomePage> {
   final _pointModel = PhoneKingPointModelImpl();
@@ -72,7 +62,7 @@ class _HomePageState extends State<HomePage> {
 
   int _bannerActiveIndex = 0;
 
-  static const String _bannerTypeAnnouncement = 'ANNOUNCEMENT';
+  static const _bannerTypeAnnouncement = 'ANNOUNCEMENT';
 
   @override
   void initState() {
@@ -93,8 +83,8 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
       setState(() {
         _balance = resBalance.data;
-        _banners = resBanners.data ?? const [];
-        _stores = resStores.data ?? const [];
+        _banners = resBanners.data ?? [];
+        _stores = resStores.data ?? [];
         _loading = false;
       });
     } catch (e) {
@@ -110,28 +100,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Build HomePage========>");
+    final l10n = LocalizationString.of(context);
     final w = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 0,
-        title: Row(children: [const SizedBox(width: 16), Image.asset(AssetImageUtils.appLogo, width: 150), const SizedBox(width: 10)]),
+        title: Row(children: [const SizedBox(width: 16), Image.asset(AssetImageUtils.appLogo, width: 150)]),
         actions: [
           IconButton(
-            onPressed: () {
-              _showLanguageSelectBottomSheet(context);
-            },
-            icon: Image.asset(AssetImageUtils.translateIcon, width: 24, height: 24),
+            onPressed: () => _showLanguageSelectBottomSheet(context),
+            icon: Image.asset(AssetImageUtils.translateIcon, width: 24),
           ),
-          const SizedBox(width: 8),
           IconButton(
             onPressed: () => context.navigateToNextPage(const NotificationPage()),
-            icon: Image.asset(AssetImageUtils.notificationIcon, width: 24, height: 24),
+            icon: Image.asset(AssetImageUtils.notificationIcon, width: 24),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
         ],
       ),
       body: RefreshIndicator(
@@ -141,109 +129,99 @@ class _HomePageState extends State<HomePage> {
             : _error != null
             ? _ErrorView(message: _error!, onRetry: _loadAll)
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // ===== Points Balance =====
-                    _GreetingCard(balance: _balance?.totalBalance ?? 0),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            children: [
+              _GreetingCard(balance: _balance?.totalBalance ?? 0),
+              const SizedBox(height: 16),
 
-                    const SizedBox(height: 16),
-
-                    // ===== Banners =====
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          height: w * 0.5,
-                          child: _banners.isEmpty
-                              ? Container(
-                                  color: Colors.black12,
-                                  child: const Center(child: Text("Banner Placeholder", style: _HomeTextStyles.bannerPlaceholder)),
-                                )
-                              : PageView.builder(
-                                  onPageChanged: (index) {
-                                    if (mounted) {
-                                      setState(() {
-                                        _bannerActiveIndex = index;
-                                      });
-                                    }
-                                  },
-                                  itemCount: _banners.length,
-                                  itemBuilder: (context, i) {
-                                    final b = _banners[i];
-                                    final img = b.imageUrl;
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
-                                        child: CacheNetworkImageWidget(url: img, fit: BoxFit.cover),
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
-                        const SizedBox(height: 10),
-                        if (_banners.isEmpty)
-                          const SizedBox.shrink()
-                        else
-                          AnimatedSmoothIndicator(
-                            activeIndex: _bannerActiveIndex,
-                            count: _banners.length,
-                            effect: const WormEffect(dotWidth: 10, dotHeight: 10, activeDotColor: Color(0xFFED5B23)),
-                          ),
-                      ],
+              /// BANNERS
+              SizedBox(
+                height: w * 0.5,
+                child: _banners.isEmpty
+                    ? Center(child: Text(l10n.homeBannerPlaceholder, style: _HomeTextStyles.bannerPlaceholder))
+                    : PageView.builder(
+                  onPageChanged: (i) => setState(() => _bannerActiveIndex = i),
+                  itemCount: _banners.length,
+                  itemBuilder: (_, i) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: CacheNetworkImageWidget(
+                        url: _banners[i].imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-
-                    const SizedBox(height: 24),
-
-                    // ===== Stores (each with its Reward list) =====
-                    if (_stores.isEmpty)
-                      const SizedBox(
-                        height: 120,
-                        child: Center(child: Text("No stores available", style: _HomeTextStyles.noData)),
-                      )
-                    else
-                      ..._stores
-                          .map(
-                            (s) => _storeSection(context, s, () {
-                              context.navigateToNextPage(StoreViewAllPage(stores: _stores));
-                            }),
-                          )
-                          .expand((w) => [w, const SizedBox(height: 16)]),
-
-                    const SizedBox(height: 150),
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(height: 10),
+              if (_banners.isNotEmpty)
+                AnimatedSmoothIndicator(
+                  activeIndex: _bannerActiveIndex,
+                  count: _banners.length,
+                  effect: const WormEffect(dotWidth: 10, dotHeight: 10, activeDotColor: Color(0xFFED5B23)),
+                ),
+
+              const SizedBox(height: 24),
+
+              if (_stores.isEmpty)
+                SizedBox(
+                  height: 120,
+                  child: Center(child: Text(l10n.homeNoStores, style: _HomeTextStyles.noData)),
+                )
+              else
+                ..._stores.map((s) => _storeSection(context, s)).toList(),
+
+              const SizedBox(height: 150),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  // ---------- Sections ----------
-
-  Widget _storeSection(BuildContext context, StoreVO store, Function onTapViewAll) {
-    final rewards = store.rewards ?? const <RewardVO>[];
+  Widget _storeSection(BuildContext context, StoreVO store) {
+    final l10n = LocalizationString.of(context);
+    final rewards = store.rewards ?? [];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE6E8F0)),
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_storeHeader(context, store, onTapViewAll), const SizedBox(height: 12), _rewardGrid(rewards)],
+        children: [
+          _storeHeader(context, store),
+          const SizedBox(height: 12),
+          rewards.isEmpty
+              ? SizedBox(
+            height: 120,
+            child: Center(child: Text(l10n.homeNoRewards, style: _HomeTextStyles.noData)),
+          )
+              : GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemCount: rewards.length,
+            itemBuilder: (_, i) {
+              final r = rewards[i];
+              return RewardCardWidget(
+                name: r.name ?? '',
+                imageUrl: r.imageUrl ?? '',
+                points: '${r.requiredPoints} pts',
+                onTap: () => context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? '')),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 
-  // ---------- UI helpers ----------
-
-  Widget _storeHeader(BuildContext context, StoreVO store, Function onTapViewAll) {
+  Widget _storeHeader(BuildContext context, StoreVO store) {
     final l10n = LocalizationString.of(context);
 
     return Padding(
@@ -251,82 +229,25 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              if ((store.logoUrl ?? '').isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: SizedBox(
-                    width: 36,
-                    height: 36,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CacheNetworkImageWidget(url: store.logoUrl!, fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 180),
-                child: Text(store.name ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: _HomeTextStyles.storeName),
-              ),
-            ],
-          ),
+          Text(store.name ?? '', style: _HomeTextStyles.storeName),
           GestureDetector(
-            onTap: () {
-              onTapViewAll();
-            },
-            child: Text(
-              '${l10n.homeViewAll} →',
-              // "View All →"
-              style: _HomeTextStyles.viewAll,
-            ),
+            onTap: () => context.navigateToNextPage(StoreViewAllPage(stores: _stores)),
+            child: Text('${l10n.homeViewAll} →', style: _HomeTextStyles.viewAll),
           ),
         ],
       ),
     );
   }
-
-  Widget _rewardGrid(List<RewardVO> rewards) {
-    if (rewards.isEmpty) {
-      return const SizedBox(
-        height: 120,
-        child: Center(child: Text("No rewards available", style: _HomeTextStyles.noData)),
-      );
-    }
-
-    return SizedBox(
-      height: 220, // ✅ reduced
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: rewards.length,
-        itemBuilder: (context, i) {
-          final r = rewards[i];
-          return RewardCardWidget(
-            name: r.name ?? '',
-            imageUrl: r.imageUrl ?? '',
-            points: '${r.requiredPoints} pts',
-            onTap: () {
-              context.navigateToNextPage(
-                RewardDetailsPage(rewardID: r.id ?? ''),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
 }
 
-// ===== Small helpers for UX parity =====
+// ================= OTHER WIDGETS =================
+
 class _HomeSkeleton extends StatelessWidget {
   const _HomeSkeleton();
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(padding: EdgeInsets.only(top: 60), child: CircularProgressIndicator()),
-    );
+    return const Center(child: Padding(padding: EdgeInsets.only(top: 60), child: CircularProgressIndicator()));
   }
 }
 
@@ -343,47 +264,42 @@ class _ErrorView extends StatefulWidget {
 class _ErrorViewState extends State<_ErrorView> {
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.message == 'session time out') {
-        _showSessionTimeoutDialog(
-          context,
-          onRestart: () {
-            LoginPersistent().clearLoginData();
-            context.navigateToNextPageWithRemoveUntil(OnBoardingPage());
-          },
-        );
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const SessionTimeoutDialog(),
+        ).then((_) {
+          LoginPersistent().clearLoginData();
+          context.navigateToNextPageWithRemoveUntil(const OnBoardingPage());
+        });
       }
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(widget.message, textAlign: TextAlign.center, style: _HomeTextStyles.errorMessage),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: widget.onRetry,
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFED5B23)),
-              child: const Text("Retry", style: _HomeTextStyles.errorButton),
-            ),
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(widget.message, style: _HomeTextStyles.errorMessage),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: widget.onRetry,
+            child: Text(l10n.commonRetry, style: _HomeTextStyles.errorButton),
+          ),
+        ],
       ),
     );
   }
-
-  void _showSessionTimeoutDialog(BuildContext context, {required VoidCallback onRestart}) {
-    showDialog(context: context, barrierDismissible: false, builder: (_) => const SessionTimeoutDialog()).then((_) {
-      onRestart();
-    });
-  }
 }
+
+
 
 class LanguageOption {
   final Locale locale;

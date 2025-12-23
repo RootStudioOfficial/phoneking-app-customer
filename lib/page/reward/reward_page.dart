@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
 import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
-
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
 import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
 
 import 'package:phone_king_customer/page/home/store_view_all_page.dart';
 import 'package:phone_king_customer/page/reward/reward_details_page.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
 class RewardsPage extends StatefulWidget {
@@ -20,13 +21,15 @@ class RewardsPage extends StatefulWidget {
   State<RewardsPage> createState() => _RewardsPageState();
 }
 
-class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStateMixin {
-  late final TabController _tab = TabController(length: 3, vsync: this);
+class _RewardsPageState extends State<RewardsPage>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tab;
 
   @override
   void initState() {
-    _tab.index = widget.desireRewardIndex;
     super.initState();
+    _tab = TabController(length: 3, vsync: this);
+    _tab.index = widget.desireRewardIndex;
   }
 
   @override
@@ -37,63 +40,75 @@ class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: const Text('Rewards', style: TextStyle(fontWeight: FontWeight.w800)),
-        centerTitle: false,
+        title: Text(
+          l10n.rewardsTitle,
+          style: const TextStyle(fontWeight: FontWeight.w800),
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
-          child: Container(
-            color: Colors.white,
+          child: Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
             child: _SegmentedTabBar(controller: _tab),
           ),
         ),
       ),
-      body: TabBarView(controller: _tab, children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()]),
-    );
-  }
-}
-
-/// ----- iOS-like segmented control look (no packages) -----
-class _SegmentedTabBar extends StatelessWidget {
-  final TabController controller;
-
-  const _SegmentedTabBar({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    const selected = Color(0xFFED5B23);
-    const bg = Color(0xFFF0F1F6);
-
-    return Container(
-      height: 44,
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(22)),
-      child: TabBar(
-        controller: controller,
-        indicator: BoxDecoration(
-          color: selected,
-          borderRadius: BorderRadius.circular(22),
-          boxShadow: const [BoxShadow(color: Color(0x260C34FF), blurRadius: 8, offset: Offset(0, 4))],
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: const Color(0xFF5B667A),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w700),
-        dividerColor: Colors.transparent,
-        indicatorSize: TabBarIndicatorSize.tab,
-        tabs: const [
-          Tab(text: "Reward Store"),
-          Tab(text: "Redeemed"),
-          Tab(text: "Used"),
+      body: TabBarView(
+        controller: _tab,
+        children: const [
+          _RewardStoreTab(),
+          _RedeemedTab(),
+          _UsedTab(),
         ],
       ),
     );
   }
 }
+
+/// ---------- Segmented Tab ----------
+class _SegmentedTabBar extends StatelessWidget {
+  const _SegmentedTabBar({required this.controller});
+
+  final TabController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
+    return Container(
+      height: 44,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF0F1F6),
+        borderRadius: BorderRadius.circular(22),
+      ),
+      child: TabBar(
+        controller: controller,
+        indicator: BoxDecoration(
+          color: const Color(0xFFED5B23),
+          borderRadius: BorderRadius.circular(22),
+        ),
+        labelColor: Colors.white,
+        unselectedLabelColor: const Color(0xFF5B667A),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+        indicatorSize: TabBarIndicatorSize.tab,
+        dividerColor: Colors.transparent,
+        tabs: [
+          Tab(text: l10n.rewardsStore),
+          Tab(text: l10n.rewardsRedeemed),
+          Tab(text: l10n.rewardsUsed),
+        ],
+      ),
+    );
+  }
+}
+
 
 // -------------------------------------------------------------
 // Reward Store tab  -> getStores()

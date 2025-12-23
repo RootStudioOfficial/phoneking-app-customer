@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
 import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
 import 'package:phone_king_customer/page/home/scan_to_pay/payment_success_page.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-
-import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
 import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:pinput/pinput.dart';
 
@@ -52,43 +50,35 @@ class _PinTextStyles {
   );
 }
 
-class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
-    with SingleTickerProviderStateMixin {
+class _PaymentEnterPinPageState extends State<PaymentEnterPinPage> {
   final _pointModel = PhoneKingPointModelImpl();
 
-  // UI state
   bool _submitting = false;
-  String _pin = "";
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  String _pin = '';
 
   Future<void> _confirm() async {
+    final l10n = LocalizationString.of(context);
+
     if (_pin.length != 6) {
-      context.showErrorSnackBar('Please enter your 6 digit PIN');
+      context.showErrorSnackBar(l10n.paymentEnterPinError);
       return;
     }
     if (_submitting) return;
 
     setState(() => _submitting = true);
+
     try {
       final res = await _pointModel.makePayment(widget.keyQR, _pin);
 
       if (!mounted) return;
-
       if (res.data == null) {
-        throw Exception('Payment failed: empty response.');
+        throw Exception('Payment failed');
       }
 
       final PaymentSuccessVO data = res.data!;
-      context.navigateToNextPage(PaymentSuccessPage(paymentData: data));
+      context.navigateToNextPage(
+        PaymentSuccessPage(paymentData: data),
+      );
     } catch (e) {
       if (!mounted) return;
       context.showErrorSnackBar(e.toString());
@@ -105,42 +95,39 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
     return WillPopScope(
       onWillPop: () async => !_submitting,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(
-            l10n.paymentDetailsPaymentDetails, // "Payment Details"
+            l10n.paymentEnterPinTitle,
             style: _PinTextStyles.appBarTitle,
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0,
+          leading: _submitting ? null : const BackButton(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
-            // ==== Main content ====
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
               child: AbsorbPointer(
-                absorbing: _submitting, // Block taps while loading
+                absorbing: _submitting,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Center(
-                      child: Text(
-                        'Enter Your 6 digit Pin',
-                        style: _PinTextStyles.title,
-                      ),
+                    Text(
+                      l10n.paymentEnterPinTitle,
+                      style: _PinTextStyles.title,
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
-                    const Center(
-                      child: Text(
-                        'Please enter your pin to confirm the transaction',
-                        style: _PinTextStyles.subtitle,
-                      ),
+                    Text(
+                      l10n.paymentEnterPinSubtitle,
+                      style: _PinTextStyles.subtitle,
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 22),
 
-                    // PIN boxes container
                     Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 30,
@@ -160,17 +147,11 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                       ),
                       child: Pinput(
                         length: 6,
-                        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                        obscureText: true,
                         showCursor: true,
                         closeKeyboardWhenCompleted: true,
-                        obscureText: true,
-                        onCompleted: (pin) {
-                          if (mounted) {
-                            setState(() {
-                              _pin = pin;
-                            });
-                          }
-                        },
+                        onChanged: (pin) => _pin = pin,
+                        onCompleted: (pin) => _pin = pin,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -179,6 +160,8 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                       children: [
                         Expanded(
                           child: OutlinedButton(
+                            onPressed:
+                            _submitting ? null : () => context.navigateBack(),
                             style: OutlinedButton.styleFrom(
                               padding:
                               const EdgeInsets.symmetric(vertical: 14),
@@ -187,13 +170,9 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              foregroundColor: Colors.black,
                             ),
-                            onPressed: _submitting
-                                ? null
-                                : () => context.navigateBack(),
-                            child: const Text(
-                              'Cancel',
+                            child: Text(
+                              l10n.commonCancel,
                               style: _PinTextStyles.buttonSecondary,
                             ),
                           ),
@@ -201,9 +180,9 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                         const SizedBox(width: 14),
                         Expanded(
                           child: ElevatedButton(
+                            onPressed: _submitting ? null : _confirm,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: orange,
-                              foregroundColor: Colors.white,
                               padding:
                               const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
@@ -211,7 +190,6 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                               ),
                               elevation: 0,
                             ),
-                            onPressed: _submitting ? null : _confirm,
                             child: _submitting
                                 ? const SizedBox(
                               height: 20,
@@ -221,8 +199,8 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
                                 color: Colors.white,
                               ),
                             )
-                                : const Text(
-                              'Confirm',
+                                : Text(
+                              l10n.commonConfirm,
                               style: _PinTextStyles.buttonPrimary,
                             ),
                           ),
@@ -234,7 +212,7 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
               ),
             ),
 
-            // ==== Loading overlay ====
+            // ===== Loading overlay =====
             if (_submitting)
               Positioned.fill(
                 child: Container(
@@ -254,4 +232,3 @@ class _PaymentEnterPinPageState extends State<PaymentEnterPinPage>
     );
   }
 }
-

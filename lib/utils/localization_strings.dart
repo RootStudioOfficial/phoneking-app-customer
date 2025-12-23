@@ -310,4 +310,110 @@ class LocalizationString {
   String get changePinSuccessUpdated =>
       'change_pin_success_updated'.tr();
 
+  // ================== ACTIVITY PAGE ==================
+
+  String get activityTitle => 'activity_title'.tr();
+
+  String get activityPointsSpent => 'activity_points_spent'.tr();
+  String get activityPointsEarned => 'activity_points_earned'.tr();
+
+  String get activityFilterByDate => 'activity_filter_by_date'.tr();
+  String get activityFrom => 'activity_from'.tr();
+  String get activityTo => 'activity_to'.tr();
+  String get activitySelectDate => 'activity_select_date'.tr();
+  String get activityApply => 'activity_apply'.tr();
+  String get activityClear => 'activity_clear'.tr();
+
+  String get activityErrorSelectBothDates =>
+      'activity_error_select_both_dates'.tr();
+  String get activityErrorStartAfterEnd =>
+      'activity_error_start_after_end'.tr();
+
+  String get activityRecentTransactions =>
+      'activity_recent_transactions'.tr();
+  String get activityNoTransactions =>
+      'activity_no_transactions'.tr();
+
+  String get activityTxnPointsEarned =>
+      'activity_txn_points_earned'.tr();
+  String get activityTxnPointsSpent =>
+      'activity_txn_points_spent'.tr();
+
+  String get paymentEnterPinTitle => 'payment_enter_pin_title'.tr();
+  String get paymentEnterPinSubtitle => 'payment_enter_pin_subtitle'.tr();
+  String get paymentEnterPinError => 'payment_enter_pin_error'.tr();
+
+  String get commonCancel => 'common_cancel'.tr();
+  String get commonConfirm => 'common_confirm'.tr();
+
+  String get paymentSuccessTitle =>
+      'payment_success_title'.tr();
+
+  String get paymentSuccessPreview =>
+      'payment_success_preview'.tr();
+
+  String get paymentSuccessGoHome =>
+      'payment_success_go_home'.tr();
+
+  // ================= HOME =================
+
+  String get homeBannerPlaceholder => 'home_banner_placeholder'.tr();
+  String get homeNoStores => 'home_no_stores'.tr();
+  String get homeNoRewards => 'home_no_rewards'.tr();
+
+// ================= COMMON =================
+
+  String get commonRetry => 'common_retry'.tr();
+
+// ================= LANGUAGE =================
+
+  String get languageSelectTitle => 'language_select_title'.tr();
+
+
+  String get storeViewRetry => 'store_view_retry'.tr();
+  String get storeViewNoRewards => 'store_view_no_rewards'.tr();
+  String get storeViewErrorPrefix => 'store_view_error_prefix'.tr();
+
+
+  String get rewardDetailsTitle => 'reward_details_title'.tr();
+  String get rewardDetailsPointsRequired => 'reward_details_points_required'.tr();
+
+  String get rewardDetailsCannotRedeem => 'reward_details_cannot_redeem'.tr();
+  String get rewardDetailsRedeemSuccess => 'reward_details_redeem_success'.tr();
+
+  String get rewardDetailsConfirmTitle => 'reward_details_confirm_title'.tr();
+  String get rewardDetailsConfirmMessage => 'reward_details_confirm_message'.tr();
+
+  String get commonYes => 'common_yes'.tr();
+  String get commonNo => 'common_no'.tr();
+
+  String get rewardPinTitle => 'reward_pin_title'.tr();
+  String get rewardPinEnterTitle => 'reward_pin_enter_title'.tr();
+  String get rewardPinEnterDesc => 'reward_pin_enter_desc'.tr();
+  String get rewardPinInvalid => 'reward_pin_invalid'.tr();
+  String get rewardPinSuccess => 'reward_pin_success'.tr();
+
+  String get rewardsTitle => 'rewards_title'.tr();
+  String get rewardsStore => 'rewards_store'.tr();
+  String get rewardsRedeemed => 'rewards_redeemed'.tr();
+  String get rewardsUsed => 'rewards_used'.tr();
+
+  String get rewardsViewAll => 'rewards_view_all'.tr();
+
+  String get rewardsNoStores => 'rewards_no_stores'.tr();
+  String get rewardsNoRedeemed => 'rewards_no_redeemed'.tr();
+  String get rewardsNoUsed => 'rewards_no_used'.tr();
+
+  String get rewardSuccessTitle => 'reward_success_title'.tr();
+  String get rewardSuccessCompleted => 'reward_success_completed'.tr();
+  String get rewardSuccessHint => 'reward_success_hint'.tr();
+  String get rewardSuccessPreview => 'reward_success_preview'.tr();
+  String get rewardSuccessRedeemedAt => 'reward_success_redeemed_at'.tr();
+  String get rewardSuccessClaimDate => 'reward_success_claim_date'.tr();
+  String get rewardSuccessGoHome => 'reward_success_go_home'.tr();
+
+
+  String get bottomNavHome => 'bottom_nav_home'.tr();
+  String get bottomNavRewards => 'bottom_nav_rewards'.tr();
+  String get bottomNavProfile => 'bottom_nav_profile'.tr();
 }

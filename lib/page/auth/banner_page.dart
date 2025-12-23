@@ -35,37 +35,31 @@ class _BannerPageState extends State<BannerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            AspectRatio(
-              aspectRatio: 3 / 1,
-              child: CacheNetworkImageWidget(url: widget.bannerImageUrl, fit: BoxFit.cover),
+            Positioned.fill(
+              child: AspectRatio(
+                aspectRatio: 3 / 1,
+                child: CacheNetworkImageWidget(url: widget.bannerImageUrl, fit: BoxFit.cover),
+              ),
             ),
-
-            // optional: rest of the screen
-            Expanded(
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8, right: 8),
-                      child: GestureDetector(
-                        onTap: () {
-                          context.navigateToNextPageWithRemoveUntil(IndexPage());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(18)),
-                          child: Text(
-                            "Skip in $_left${_left == 1 ? 's' : 's'}",
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8, right: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    context.navigateToNextPageWithRemoveUntil(IndexPage());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(18)),
+                    child: Text(
+                      "Skip in $_left${_left == 1 ? 's' : 's'}",
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ],

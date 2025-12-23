@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phone_king_customer/data/model/auth/phone_king_auth_model_impl.dart';
@@ -121,6 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = LocalizationString.of(context);
+    final localeCode = context.locale.languageCode;
 
     final name = _user?.displayName ?? _user?.username ?? '—';
     final phone = _user?.phoneNumber ?? '—';
@@ -131,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final totalRewards = (_tier?.totalClaimRewards ?? 0).toString();
 
     return Stack(
+      key: ValueKey(localeCode),
       children: [
         Scaffold(
           backgroundColor: const Color(0xFFF5F6FA),

@@ -8,7 +8,10 @@ import 'package:phone_king_customer/utils/localization_strings.dart';
 class PaymentSuccessPage extends StatelessWidget {
   final PaymentSuccessVO paymentData;
 
-  const PaymentSuccessPage({super.key, required this.paymentData});
+  const PaymentSuccessPage({
+    super.key,
+    required this.paymentData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +22,12 @@ class PaymentSuccessPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Success Payment',
+        automaticallyImplyLeading: false, // prevent accidental back
+        title: Text(
+          l10n.paymentSuccessTitle,
           style: _PaymentSuccessTextStyles.appBarTitle,
         ),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -35,9 +36,9 @@ class PaymentSuccessPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
 
-                  // Success Icon
+                  /// Success icon
                   Image.asset(
                     AssetImageUtils.paymentSuccessfulIcon,
                     width: 180,
@@ -46,58 +47,56 @@ class PaymentSuccessPage extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // Success Message
+                  /// Success message
                   Text(
-                    '${l10n.paymentSuccessPaymentCompletedSuccessfully}.',
-                    // "Payment Completed Successfully."
+                    l10n.paymentSuccessPaymentCompletedSuccessfully,
                     style: _PaymentSuccessTextStyles.successTitle,
                     textAlign: TextAlign.center,
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
 
-                  // Payment Preview Card
+                  /// Preview card
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey[200]!, width: 1),
+                      border: Border.all(
+                        color: Colors.grey[200]!,
+                        width: 1,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Card Header
-                        const Padding(
-                          padding: EdgeInsets.all(16),
+                        /// Header
+                        Padding(
+                          padding: const EdgeInsets.all(16),
                           child: Text(
-                            'Payment Preview',
+                            l10n.paymentSuccessPreview,
                             style: _PaymentSuccessTextStyles.cardTitle,
                           ),
                         ),
 
-                        // Divider
                         Divider(height: 1, color: Colors.grey[200]),
 
-                        // Payment Details
+                        /// Details
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
                               _buildDetailRow(
                                 label: l10n.paymentSuccessPaymentAt,
-                                // "Payment At"
                                 value: paymentData.processByName,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
                                 label: l10n.paymentSuccessPaymentDate,
-                                // "Payment Date"
                                 value: paymentData.paymentDate,
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
                                 label: l10n.paymentSuccessUsedPoints,
-                                // "Used Points"
                                 value: paymentData.pointAmount.toString(),
                                 valueColor: Colors.deepOrange,
                                 highlight: true,
@@ -105,7 +104,6 @@ class PaymentSuccessPage extends StatelessWidget {
                               const SizedBox(height: 16),
                               _buildDetailRow(
                                 label: l10n.paymentSuccessInvoiceNo,
-                                // "Invoice No"
                                 value: paymentData.invoiceNo,
                               ),
                             ],
@@ -119,14 +117,16 @@ class PaymentSuccessPage extends StatelessWidget {
             ),
           ),
 
-          // Go Back Home Button
+          /// Go home button
           Padding(
             padding: const EdgeInsets.all(24),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.navigateToNextPageWithRemoveUntil(IndexPage());
+                  context.navigateToNextPageWithRemoveUntil(
+                    const IndexPage(),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepOrange,
@@ -136,8 +136,8 @@ class PaymentSuccessPage extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'Go Back Home',
+                child: Text(
+                  l10n.paymentSuccessGoHome,
                   style: _PaymentSuccessTextStyles.buttonText,
                 ),
               ),
@@ -155,7 +155,6 @@ class PaymentSuccessPage extends StatelessWidget {
     bool highlight = false,
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -166,11 +165,11 @@ class PaymentSuccessPage extends StatelessWidget {
         Expanded(
           child: Text(
             value,
+            textAlign: TextAlign.right,
             style: (highlight
                 ? _PaymentSuccessTextStyles.detailValueHighlight
                 : _PaymentSuccessTextStyles.detailValue)
                 .copyWith(color: valueColor ?? Colors.black),
-            textAlign: TextAlign.right,
           ),
         ),
       ],

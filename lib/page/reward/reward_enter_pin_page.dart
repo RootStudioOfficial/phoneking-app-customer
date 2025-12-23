@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
+
+import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
 import 'package:phone_king_customer/page/reward/reward_success_page.dart';
 import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
 import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-
-import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
-import 'package:pinput/pinput.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 
 class RewardEnterPinPage extends StatefulWidget {
   const RewardEnterPinPage({
@@ -23,21 +24,22 @@ class RewardEnterPinPage extends StatefulWidget {
 
 class _RewardEnterPinPageState extends State<RewardEnterPinPage>
     with SingleTickerProviderStateMixin {
-  // API model
   final _rewardModel = PhoneKingRewardModelImpl();
 
-  // UI state
   bool _submitting = false;
-  String _pin = "";
+  String _pin = '';
 
   Future<void> _confirm() async {
+    final l10n = LocalizationString.of(context);
+
     if (_pin.length != 6) {
-      context.showErrorSnackBar('Please enter your 6 digit PIN');
+      context.showErrorSnackBar(l10n.rewardPinInvalid);
       return;
     }
     if (_submitting) return;
 
     setState(() => _submitting = true);
+
     try {
       final res = await _rewardModel.claimReward(
         widget.paymentKey,
@@ -47,32 +49,37 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
 
       if (!mounted) return;
 
-      context.showSuccessSnackBar('Reward claimed successfully');
+      context.showSuccessSnackBar(l10n.rewardPinSuccess);
+
       if (res.data != null) {
         context.navigateToNextPage(
           RewardSuccessPage(rewardData: res.data!),
         );
       }
     } catch (e) {
-      if (!mounted) return;
-      context.showErrorSnackBar(e.toString());
+      if (mounted) {
+        context.showErrorSnackBar(e.toString());
+      }
     } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (mounted) {
+        setState(() => _submitting = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
     const orange = Color(0xFFE85B2A);
 
     return WillPopScope(
-      // Block system back while submitting
       onWillPop: () async => !_submitting,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text(
-            'Redeemed Confirm',
-            style: TextStyle(
+          title: Text(
+            l10n.rewardPinTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
@@ -81,36 +88,31 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
-            // ==== Main content ====
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
               child: AbsorbPointer(
-                absorbing: _submitting, // Block taps while loading
+                absorbing: _submitting,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Center(
-                      child: Text(
-                        'Enter Your 6 digit PIN',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
+                    Text(
+                      l10n.rewardPinEnterTitle,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Center(
-                      child: Text(
-                        'Please enter your PIN to confirm the transaction',
-                        style: TextStyle(color: Color(0xFF9E9E9E)),
-                      ),
+                    Text(
+                      l10n.rewardPinEnterDesc,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Color(0xFF9E9E9E)),
                     ),
                     const SizedBox(height: 22),
 
-                    // PIN boxes container
+                    // PIN input
                     Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 30,
@@ -131,51 +133,48 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                       child: Pinput(
                         length: 6,
                         keyboardType: TextInputType.number,
-                        inputFormatters: [
+                        inputFormatters:  [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                        obscureText: true,
                         showCursor: true,
                         closeKeyboardWhenCompleted: true,
-                        obscureText: true,
-                        onChanged: (pin) {
-                          _pin = pin;
-                        },
-                        onCompleted: (pin) {
-                          _pin = pin;
-                        },
+                        onChanged: (pin) => _pin = pin,
+                        onCompleted: (pin) => _pin = pin,
                       ),
                     ),
+
                     const SizedBox(height: 20),
 
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton(
+                            onPressed:
+                            _submitting ? null : () => context.navigateBack(),
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              side:
-                              const BorderSide(color: Color(0xFFE0E0E0)),
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 14),
+                              side: const BorderSide(
+                                  color: Color(0xFFE0E0E0)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               foregroundColor: Colors.black,
                             ),
-                            onPressed: _submitting
-                                ? null
-                                : () => context.navigateBack(),
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(fontWeight: FontWeight.w700),
+                            child: Text(
+                              l10n.commonCancel,
+                              style:
+                              const TextStyle(fontWeight: FontWeight.w700),
                             ),
                           ),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: ElevatedButton(
+                            onPressed: _submitting ? null : _confirm,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: orange,
-                              foregroundColor: Colors.white,
                               padding:
                               const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
@@ -183,21 +182,19 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
                               ),
                               elevation: 0,
                             ),
-                            onPressed: _submitting ? null : _confirm,
                             child: _submitting
                                 ? const SizedBox(
-                              height: 20,
                               width: 20,
+                              height: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color: Colors.white,
                               ),
                             )
-                                : const Text(
-                              'Confirm',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
+                                : Text(
+                              l10n.commonConfirm,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700),
                             ),
                           ),
                         ),
@@ -208,7 +205,6 @@ class _RewardEnterPinPageState extends State<RewardEnterPinPage>
               ),
             ),
 
-            // ==== Loading overlay ====
             if (_submitting)
               Positioned.fill(
                 child: Container(

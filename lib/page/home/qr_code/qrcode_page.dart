@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
 import 'package:phone_king_customer/persistent/login_persistent.dart';
+import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:phone_king_customer/widgets/qr_info_widget.dart';
 
 class QrCodePage extends StatefulWidget {
@@ -10,16 +11,6 @@ class QrCodePage extends StatefulWidget {
 
   @override
   State<QrCodePage> createState() => _QrCodePageState();
-}
-
-// ========= Typography for this page =========
-
-class _QrTextStyles {
-  static const appBarTitle = TextStyle(
-    fontWeight: FontWeight.w800,
-    fontSize: 18,
-    color: Color(0xFF0F172A),
-  );
 }
 
 class _QrCodePageState extends State<QrCodePage> {
@@ -30,6 +21,7 @@ class _QrCodePageState extends State<QrCodePage> {
   void initState() {
     super.initState();
     loginPersistent.getLoginData().then((data) {
+      if (!mounted) return;
       setState(() {
         _qrPayloadVO = QrPayloadVO.create(
           data: QrDataVO(
@@ -43,6 +35,8 @@ class _QrCodePageState extends State<QrCodePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = LocalizationString.of(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -50,14 +44,24 @@ class _QrCodePageState extends State<QrCodePage> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         centerTitle: true,
-        title: const Text(
-          'My QR Code',
+        title: Text(
+          l10n.homeQrCode,
           style: _QrTextStyles.appBarTitle,
         ),
       ),
       body: _qrPayloadVO == null
           ? const Center(child: CircularProgressIndicator())
-          : QrInfoWidget(qrData: jsonEncode(_qrPayloadVO?.toJson())),
+          : QrInfoWidget(qrData: jsonEncode(_qrPayloadVO!.toJson())),
     );
   }
+}
+
+// ========= Typography =========
+
+class _QrTextStyles {
+  static const appBarTitle = TextStyle(
+    fontWeight: FontWeight.w800,
+    fontSize: 18,
+    color: Color(0xFF0F172A),
+  );
 }
