@@ -14,7 +14,7 @@ RewardDetailsVO _$RewardDetailsVOFromJson(Map<String, dynamic> json) =>
       imageUrl: json['imageUrl'] as String?,
       rewardType: json['rewardType'] as String,
       requiredPoints: (json['requiredPoints'] as num).toInt(),
-      availableQuantity: (json['availableQuantity'] as num).toInt(),
+      availableQuantity: (json['availableQuantity'] as num?)?.toInt(),
       store: json['store'] == null
           ? null
           : StoreVO.fromJson(json['store'] as Map<String, dynamic>),

@@ -11,13 +11,9 @@ import 'package:phone_king_customer/utils/localization_strings.dart';
 import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 
 class RewardDetailsPage extends StatefulWidget {
-  const RewardDetailsPage({
-    super.key,
-    required this.rewardID,
-    this.isRedeem = true,
-  });
+  const RewardDetailsPage({super.key, required this.rewardID, this.redemptionId});
 
-  final bool isRedeem;
+  final String? redemptionId;
   final String rewardID;
 
   @override
@@ -70,7 +66,7 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
 
   bool get _canRedeem {
     if (_details == null || _balance == null) return false;
-    if (_details!.availableQuantity <= 0) return false;
+    if ((_details!.availableQuantity ?? 0) <= 0) return false;
     return _balance!.totalBalance >= _details!.requiredPoints;
   }
 
@@ -85,11 +81,15 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
     return buf.toString();
   }
 
-  String _titleCase(String s) =>
-      s.toLowerCase().replaceAll('_', ' ').split(' ').map((e) {
+  String _titleCase(String s) => s
+      .toLowerCase()
+      .replaceAll('_', ' ')
+      .split(' ')
+      .map((e) {
         if (e.isEmpty) return e;
         return '${e[0].toUpperCase()}${e.substring(1)}';
-      }).join(' ');
+      })
+      .join(' ');
 
   @override
   Widget build(BuildContext context) {
@@ -102,80 +102,62 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
-        title: Text(
-          l10n.rewardDetailsTitle,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
+        title: Text(l10n.rewardDetailsTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       ),
 
       bottomNavigationBar: d == null
           ? null
           : SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ElevatedButton(
-            onPressed: _redeemLoading
-                ? null
-                : () async {
-              if (!widget.isRedeem) {
-                context.navigateToNextPage(
-                  RewardScanQrCodePage(redemptionId: d.id),
-                );
-                return;
-              }
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: ElevatedButton(
+                  onPressed: _redeemLoading || (!_canRedeem)
+                      ? null
+                      : () async {
+                          if (widget.redemptionId?.isNotEmpty ?? false) {
+                            context.navigateToNextPage(RewardScanQrCodePage(redemptionId: d.id));
+                            return;
+                          }
 
-              if (!_canRedeem) {
-                context.showErrorSnackBar(
-                  l10n.rewardDetailsCannotRedeem,
-                );
-                return;
-              }
+                          if (!_canRedeem) {
+                            context.showErrorSnackBar(l10n.rewardDetailsCannotRedeem);
+                            return;
+                          }
 
-              final ok = await _showRedeemConfirmDialog(context);
-              if (ok != true) return;
+                          final ok = await _showRedeemConfirmDialog(context);
+                          if (ok != true) return;
 
-              setState(() => _redeemLoading = true);
-              try {
-                await _rewardModel.rewardRedeem(d.id);
+                          setState(() => _redeemLoading = true);
+                          try {
+                            await _rewardModel.rewardRedeem(d.id);
 
-                if (!mounted) return;
-                context.showSuccessSnackBar(
-                  l10n.rewardDetailsRedeemSuccess,
-                );
-                context.navigateToNextPageWithRemoveUntil(
-                  IndexPage(desireIndex: 1, desireRewardIndex: 1),
-                );
-              } catch (e) {
-                if (mounted) {
-                  context.showErrorSnackBar(e.toString());
-                }
-              } finally {
-                if (mounted) {
-                  setState(() => _redeemLoading = false);
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-              (!_canRedeem && widget.isRedeem) ? Colors.grey : Colors.deepOrange,
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            if (!mounted) return;
+                            context.showSuccessSnackBar(l10n.rewardDetailsRedeemSuccess);
+                            context.navigateToNextPageWithRemoveUntil(IndexPage(desireIndex: 1, desireRewardIndex: 1));
+                          } catch (e) {
+                            if (mounted) {
+                              context.showErrorSnackBar(e.toString());
+                            }
+                          } finally {
+                            if (mounted) {
+                              setState(() => _redeemLoading = false);
+                            }
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: (!_canRedeem && (widget.redemptionId?.isNotEmpty ?? false)) ? Colors.grey : Colors.deepOrange,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: _redeemLoading
+                      ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      : Text(
+                          (widget.redemptionId?.isNotEmpty ?? false) ? l10n.rewardDetailsRedeem : l10n.rewardDetailsScanToClaim,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                        ),
+                ),
+              ),
             ),
-            child: _redeemLoading
-                ? const SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-            )
-                : Text(
-              widget.isRedeem
-                  ? l10n.rewardDetailsRedeem
-                  : l10n.rewardDetailsScanToClaim,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-      ),
 
       body: RefreshIndicator(
         onRefresh: _onRefresh,
@@ -184,48 +166,41 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
             : _error != null
             ? ListView(children: [Center(child: Text(_error!))])
             : SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AspectRatio(
-                aspectRatio: 3 / 2,
-                child: (d!.imageUrl ?? '').isEmpty
-                    ? Container(color: Colors.grey.shade200)
-                    : CacheNetworkImageWidget(url: d.imageUrl!, fit: BoxFit.cover),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(d.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    if (d.rewardType.isNotEmpty)
-                      Chip(
-                        label: Text(_titleCase(d.rewardType)),
-                        backgroundColor: Colors.deepOrange,
-                        labelStyle: const TextStyle(color: Colors.white),
-                      ),
-                    const SizedBox(height: 16),
-                    if ((d.description ?? '').isNotEmpty)
-                      Text(d.description!, style: const TextStyle(color: Colors.grey)),
-                    const SizedBox(height: 24),
-                    _infoCard(
-                      title: l10n.rewardDetailsPointsRequired,
-                      value: '${_formatPoints(d.requiredPoints)} pts',
+                    AspectRatio(
+                      aspectRatio: 3 / 2,
+                      child: (d!.imageUrl ?? '').isEmpty
+                          ? Container(color: Colors.grey.shade200)
+                          : CacheNetworkImageWidget(url: d.imageUrl!, fit: BoxFit.cover),
                     ),
-                    const SizedBox(height: 12),
-                    _infoCard(
-                      title: l10n.rewardDetailsYourBalance,
-                      value: '${_formatPoints(_balance?.totalBalance ?? 0)} pts',
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(d.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          if (d.rewardType.isNotEmpty)
+                            Chip(
+                              label: Text(_titleCase(d.rewardType)),
+                              backgroundColor: Colors.deepOrange,
+                              labelStyle: const TextStyle(color: Colors.white),
+                            ),
+                          const SizedBox(height: 16),
+                          if ((d.description ?? '').isNotEmpty) Text(d.description!, style: const TextStyle(color: Colors.grey)),
+                          const SizedBox(height: 24),
+                          _infoCard(title: l10n.rewardDetailsPointsRequired, value: '${_formatPoints(d.requiredPoints)} pts'),
+                          const SizedBox(height: 12),
+                          _infoCard(title: l10n.rewardDetailsYourBalance, value: '${_formatPoints(_balance?.totalBalance ?? 0)} pts'),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -238,7 +213,10 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange)),
+          Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange),
+          ),
         ],
       ),
     );

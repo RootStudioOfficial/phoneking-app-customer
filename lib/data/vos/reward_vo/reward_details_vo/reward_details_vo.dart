@@ -11,7 +11,7 @@ class RewardDetailsVO {
   final String? imageUrl;
   final String rewardType;
   final int requiredPoints;
-  final int availableQuantity;
+  final int ?availableQuantity;
   final StoreVO? store;
 
   RewardDetailsVO({

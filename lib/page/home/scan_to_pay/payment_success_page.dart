@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
 import 'package:phone_king_customer/page/index_page.dart';
@@ -8,10 +9,7 @@ import 'package:phone_king_customer/utils/localization_strings.dart';
 class PaymentSuccessPage extends StatelessWidget {
   final PaymentSuccessVO paymentData;
 
-  const PaymentSuccessPage({
-    super.key,
-    required this.paymentData,
-  });
+  const PaymentSuccessPage({super.key, required this.paymentData});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +20,9 @@ class PaymentSuccessPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false, // prevent accidental back
-        title: Text(
-          l10n.paymentSuccessTitle,
-          style: _PaymentSuccessTextStyles.appBarTitle,
-        ),
+        automaticallyImplyLeading: false,
+        // prevent accidental back
+        title: Text(l10n.paymentSuccessTitle, style: _PaymentSuccessTextStyles.appBarTitle),
         centerTitle: true,
       ),
       body: Column(
@@ -39,20 +35,12 @@ class PaymentSuccessPage extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   /// Success icon
-                  Image.asset(
-                    AssetImageUtils.paymentSuccessfulIcon,
-                    width: 180,
-                    height: 180,
-                  ),
+                  Image.asset(AssetImageUtils.paymentSuccessfulIcon, width: 180, height: 180),
 
                   const SizedBox(height: 20),
 
                   /// Success message
-                  Text(
-                    l10n.paymentSuccessPaymentCompletedSuccessfully,
-                    style: _PaymentSuccessTextStyles.successTitle,
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(l10n.paymentSuccessPaymentCompletedSuccessfully, style: _PaymentSuccessTextStyles.successTitle, textAlign: TextAlign.center),
 
                   const SizedBox(height: 24),
 
@@ -61,10 +49,7 @@ class PaymentSuccessPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.grey[200]!,
-                        width: 1,
-                      ),
+                      border: Border.all(color: Colors.grey[200]!, width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,10 +57,7 @@ class PaymentSuccessPage extends StatelessWidget {
                         /// Header
                         Padding(
                           padding: const EdgeInsets.all(16),
-                          child: Text(
-                            l10n.paymentSuccessPreview,
-                            style: _PaymentSuccessTextStyles.cardTitle,
-                          ),
+                          child: Text(l10n.paymentSuccessPreview, style: _PaymentSuccessTextStyles.cardTitle),
                         ),
 
                         Divider(height: 1, color: Colors.grey[200]),
@@ -85,14 +67,11 @@ class PaymentSuccessPage extends StatelessWidget {
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              _buildDetailRow(
-                                label: l10n.paymentSuccessPaymentAt,
-                                value: paymentData.processByName,
-                              ),
+                              _buildDetailRow(label: l10n.paymentSuccessPaymentAt, value: paymentData.processByName),
                               const SizedBox(height: 16),
                               _buildDetailRow(
                                 label: l10n.paymentSuccessPaymentDate,
-                                value: paymentData.paymentDate,
+                                value: DateFormat('yyyy-MM-dd hh:mm:ss a').format(DateTime.parse(paymentData.paymentDate).toUtc()),
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(
@@ -102,10 +81,7 @@ class PaymentSuccessPage extends StatelessWidget {
                                 highlight: true,
                               ),
                               const SizedBox(height: 16),
-                              _buildDetailRow(
-                                label: l10n.paymentSuccessInvoiceNo,
-                                value: paymentData.invoiceNo,
-                              ),
+                              _buildDetailRow(label: l10n.paymentSuccessInvoiceNo, value: paymentData.invoiceNo),
                             ],
                           ),
                         ),
@@ -124,22 +100,15 @@ class PaymentSuccessPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  context.navigateToNextPageWithRemoveUntil(
-                    const IndexPage(),
-                  );
+                  context.navigateToNextPageWithRemoveUntil(const IndexPage());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepOrange,
                   padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   elevation: 0,
                 ),
-                child: Text(
-                  l10n.paymentSuccessGoHome,
-                  style: _PaymentSuccessTextStyles.buttonText,
-                ),
+                child: Text(l10n.paymentSuccessGoHome, style: _PaymentSuccessTextStyles.buttonText),
               ),
             ),
           ),
@@ -148,28 +117,19 @@ class PaymentSuccessPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow({
-    required String label,
-    required String value,
-    Color? valueColor,
-    bool highlight = false,
-  }) {
+  Widget _buildDetailRow({required String label, required String value, Color? valueColor, bool highlight = false}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: _PaymentSuccessTextStyles.detailLabel,
-        ),
+        Text(label, style: _PaymentSuccessTextStyles.detailLabel),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: (highlight
-                ? _PaymentSuccessTextStyles.detailValueHighlight
-                : _PaymentSuccessTextStyles.detailValue)
-                .copyWith(color: valueColor ?? Colors.black),
+            style: (highlight ? _PaymentSuccessTextStyles.detailValueHighlight : _PaymentSuccessTextStyles.detailValue).copyWith(
+              color: valueColor ?? Colors.black,
+            ),
           ),
         ),
       ],
@@ -180,45 +140,17 @@ class PaymentSuccessPage extends StatelessWidget {
 // ========= Typography helper =========
 
 class _PaymentSuccessTextStyles {
-  static const appBarTitle = TextStyle(
-    color: Colors.black,
-    fontSize: 18,
-    fontWeight: FontWeight.w800,
-  );
+  static const appBarTitle = TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w800);
 
-  static const successTitle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w800,
-    color: Colors.black,
-  );
+  static const successTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black);
 
-  static const cardTitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    color: Colors.black,
-  );
+  static const cardTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black);
 
-  static const detailLabel = TextStyle(
-    fontSize: 14,
-    color: Color(0xFF6B7280),
-    fontWeight: FontWeight.w500,
-  );
+  static const detailLabel = TextStyle(fontSize: 14, color: Color(0xFF6B7280), fontWeight: FontWeight.w500);
 
-  static const detailValue = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w600,
-    color: Colors.black,
-  );
+  static const detailValue = TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black);
 
-  static const detailValueHighlight = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w700,
-    color: Colors.deepOrange,
-  );
+  static const detailValueHighlight = TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.deepOrange);
 
-  static const buttonText = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
-    color: Colors.white,
-  );
+  static const buttonText = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white);
 }

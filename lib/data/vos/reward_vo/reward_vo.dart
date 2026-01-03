@@ -4,14 +4,14 @@ part 'reward_vo.g.dart';
 
 @JsonSerializable()
 class RewardVO {
-
   final String? id;
-  final String ?name;
+  final String? name;
   final String? description;
   final String? imageUrl;
   final String? rewardType;
   final int? requiredPoints;
   final int? availableQuantity;
+  final String? redemptionId;
 
   RewardVO({
     required this.id,
@@ -21,6 +21,7 @@ class RewardVO {
     required this.rewardType,
     required this.requiredPoints,
     required this.availableQuantity,
+    this.redemptionId,
   });
 
   factory RewardVO.fromJson(Map<String, dynamic> json) => _$RewardVOFromJson(json);

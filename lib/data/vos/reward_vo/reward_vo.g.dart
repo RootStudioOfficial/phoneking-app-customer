@@ -14,6 +14,7 @@ RewardVO _$RewardVOFromJson(Map<String, dynamic> json) => RewardVO(
   rewardType: json['rewardType'] as String?,
   requiredPoints: (json['requiredPoints'] as num?)?.toInt(),
   availableQuantity: (json['availableQuantity'] as num?)?.toInt(),
+  redemptionId: json['redemptionId'] as String?,
 );
 
 Map<String, dynamic> _$RewardVOToJson(RewardVO instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$RewardVOToJson(RewardVO instance) => <String, dynamic>{
   'rewardType': instance.rewardType,
   'requiredPoints': instance.requiredPoints,
   'availableQuantity': instance.availableQuantity,
+  'redemptionId': instance.redemptionId,
 };

@@ -152,7 +152,7 @@ class _SuccessBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = LocalizationString.of(context);
 
-    final balanceAfter = data.currentBalance + data.pointAmount;
+    final balanceAfter = data.currentBalance - data.pointAmount;
 
     return Column(
       children: [
@@ -205,6 +205,9 @@ class _SuccessBody extends StatelessWidget {
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             children: [
+                              _buildRow(l10n.paymentDetailsPointsToUse, data.pointAmount.toString()),
+
+                              const SizedBox(height: 12),
                               _buildRow(l10n.paymentDetailsCurrentBalance, _format(data.currentBalance)),
 
                               const SizedBox(height: 12),

@@ -21,8 +21,7 @@ class RewardsPage extends StatefulWidget {
   State<RewardsPage> createState() => _RewardsPageState();
 }
 
-class _RewardsPageState extends State<RewardsPage>
-    with SingleTickerProviderStateMixin {
+class _RewardsPageState extends State<RewardsPage> with SingleTickerProviderStateMixin {
   late final TabController _tab;
 
   @override
@@ -48,10 +47,7 @@ class _RewardsPageState extends State<RewardsPage>
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: Text(
-          l10n.rewardsTitle,
-          style: const TextStyle(fontWeight: FontWeight.w800),
-        ),
+        title: Text(l10n.rewardsTitle, style: const TextStyle(fontWeight: FontWeight.w800)),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: Padding(
@@ -60,14 +56,7 @@ class _RewardsPageState extends State<RewardsPage>
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tab,
-        children: const [
-          _RewardStoreTab(),
-          _RedeemedTab(),
-          _UsedTab(),
-        ],
-      ),
+      body: TabBarView(controller: _tab, children: const [_RewardStoreTab(), _RedeemedTab(), _UsedTab()]),
     );
   }
 }
@@ -84,16 +73,10 @@ class _SegmentedTabBar extends StatelessWidget {
 
     return Container(
       height: 44,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F1F6),
-        borderRadius: BorderRadius.circular(22),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF0F1F6), borderRadius: BorderRadius.circular(22)),
       child: TabBar(
         controller: controller,
-        indicator: BoxDecoration(
-          color: const Color(0xFFED5B23),
-          borderRadius: BorderRadius.circular(22),
-        ),
+        indicator: BoxDecoration(color: const Color(0xFFED5B23), borderRadius: BorderRadius.circular(22)),
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF5B667A),
         labelStyle: const TextStyle(fontWeight: FontWeight.w700),
@@ -108,7 +91,6 @@ class _SegmentedTabBar extends StatelessWidget {
     );
   }
 }
-
 
 // -------------------------------------------------------------
 // Reward Store tab  -> getStores()
@@ -296,7 +278,7 @@ class _RedeemedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.navigateToNextPage(RewardDetailsPage(rewardID: item.id ?? "", isRedeem: false));
+        context.navigateToNextPage(RewardDetailsPage(rewardID: item.id ?? "", redemptionId: item.redemptionId));
       },
       child: Container(
         decoration: BoxDecoration(
