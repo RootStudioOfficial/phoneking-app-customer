@@ -232,8 +232,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: l10n.changePinHintAtLeast8Digits,
-                            helperText: l10n.changePinHelper8Digits,
+                            hintText: l10n.changePinHintAtLeast6Digits,
+                            helperText: l10n.changePinHelper6Digits,
                             helperStyle: _ChangePinTextStyles.helper,
                             hintStyle: _ChangePinTextStyles.hint,
                             filled: true,
@@ -299,8 +299,8 @@ class _ChangePinPageState extends State<ChangePinPage> {
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
-                            hintText: l10n.changePinHintAtLeast8Digits,
-                            helperText: l10n.changePinHelper8Digits,
+                            hintText: l10n.changePinHintAtLeast6Digits,
+                            helperText: l10n.changePinHelper6Digits,
                             helperStyle: _ChangePinTextStyles.helper,
                             hintStyle: _ChangePinTextStyles.hint,
                             filled: true,

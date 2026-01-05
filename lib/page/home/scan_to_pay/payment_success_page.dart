@@ -71,7 +71,7 @@ class PaymentSuccessPage extends StatelessWidget {
                               const SizedBox(height: 16),
                               _buildDetailRow(
                                 label: l10n.paymentSuccessPaymentDate,
-                                value: DateFormat('yyyy-MM-dd hh:mm:ss a').format(DateTime.parse(paymentData.paymentDate).toUtc()),
+                                value: DateFormat('yyyy-MM-dd hh:mm:ss a').format(DateTime.now()),
                               ),
                               const SizedBox(height: 16),
                               _buildDetailRow(

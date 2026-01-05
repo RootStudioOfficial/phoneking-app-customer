@@ -15,8 +15,8 @@ class RewardSuccessPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = LocalizationString.of(context);
 
-    final redeemDate = rewardData.redeemDate;
-    final collectedDate = rewardData.collectedDate;
+    final redeemDate = DateTime.now();
+    final collectedDate = DateTime.now();
     final rewardName = rewardData.rewardName;
     final description = rewardData.description;
     final imageUrl = rewardData.imageUrl;
@@ -127,15 +127,9 @@ class RewardSuccessPage extends StatelessWidget {
 
                                 const SizedBox(height: 24),
 
-                                _infoRow(
-                                  l10n.rewardSuccessRedeemedAt,
-                                  DateFormat('yyyy-MM-dd hh:mm:ss a').format(DateTime.parse(redeemDate).toUtc()),
-                                ),
+                                _infoRow(l10n.rewardSuccessRedeemedAt, DateFormat('yyyy-MM-dd hh:mm:ss a').format(redeemDate)),
                                 const SizedBox(height: 16),
-                                _infoRow(
-                                  l10n.rewardSuccessClaimDate,
-                                  DateFormat('yyyy-MM-dd hh:mm:ss a').format(DateTime.parse(collectedDate).toUtc()),
-                                ),
+                                _infoRow(l10n.rewardSuccessClaimDate, DateFormat('yyyy-MM-dd hh:mm:ss a').format(collectedDate)),
                               ],
                             ),
                           ),

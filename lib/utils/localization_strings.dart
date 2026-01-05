@@ -10,6 +10,15 @@ class LocalizationString {
   static LocalizationString of(BuildContext context) =>
       LocalizationString(context);
 
+  String get rewardDetailsAvailability =>
+      tr('rewardDetailsAvailability');
+
+  String get commonInStock =>
+      tr('commonInStock');
+
+  String get commonOutOfStock =>
+      tr('commonOutOfStock');
+
   /// Activity
   String get homeActivity => 'home_activity'.tr();
 
@@ -283,12 +292,12 @@ class LocalizationString {
   String get changePinHintCurrent => 'change_pin_hint_current'.tr();
 
   /// Hint: must be at least 8 digits
-  String get changePinHintAtLeast8Digits =>
-      'change_pin_hint_at_least_8_digits'.tr();
+  String get changePinHintAtLeast6Digits =>
+      'change_pin_hint_at_least_6_digits'.tr();
 
   /// Helper: PIN must be 8 digits
-  String get changePinHelper8Digits =>
-      'change_pin_helper_8_digits'.tr();
+  String get changePinHelper6Digits =>
+      'change_pin_helper_6_digits'.tr();
 
   /// Button: Update PIN
   String get changePinUpdatePinButton =>

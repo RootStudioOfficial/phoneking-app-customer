@@ -5,12 +5,10 @@
   "home_scan_to_pay": "Scan to Pay",
   "home_view_all": "View All",
   "home_pts": "pts",
-
   "reward_reward_store": "Reward Store",
   "reward_redeemed": "Redeemed",
   "reward_used": "Used",
   "reward_view_all": "View All",
-
   "reward_details_points_required_in_reward_details": "Points Required (In reward details)",
   "reward_details_your_balance": "Your Balance",
   "reward_details_category": "Category",
@@ -19,44 +17,36 @@
   "reward_details_scan_to_claim": "Scan to Claim",
   "reward_details_redeem": "Redeem",
   "reward_details_are_you_sure_want_to_redeem_this_reward": "Are you sure want to redeem this reward?",
-
   "redeem_claim_success_reward_claim_successfully": "Reward claim successfully",
   "redeem_claim_success_reward_preview": "Reward preview",
   "redeem_claim_success_redeem_at": "Redeem at",
   "redeem_claim_success_claim_date": "Claim Date",
-
   "payment_details_payment_details": "Payment Details",
   "payment_details_invoice_no": "Invoice No",
   "payment_details_points_to_use": "Points to use",
   "payment_details_current_balance": "Current Balance",
   "payment_details_balance_after": "Balance After",
-
   "payment_success_payment_completed_successfully": "Payment Completed Successfully",
   "payment_success_transaction_id": "Transaction Id",
   "payment_success_payment_at": "Payment At",
   "payment_success_payment_date": "Payment Date",
   "payment_success_used_points": "Used Points",
   "payment_success_invoice_no": "Invoice No",
-
   "qr_scan_scanning_tips": "Scanning Tips",
   "qr_scan_hold_your_phone_steady_and_ensure_good_lighting": "Hold your phone steady and ensure good lighting",
   "qr_scan_keep_the_qr_code_within_scanning_frame": "Keep the QR code within scanning frame",
-
   "profile_member": "Member",
   "profile_points": "Points",
   "profile_rewards": "Rewards",
   "profile_general": "General",
-
   "profile_change_pin": "Change Pin",
   "profile_update_your_security_pin_for_account_acces": "Update your security PIN for account acces",
   "profile_current_pin": "Current PIN",
   "profile_new_pin": "New PIN",
   "profile_confirm_new_pin": "Confirm New Pin",
-
   "profile_share_app": "Share App",
   "profile_invite_friends": "Invite Friends",
   "profile_invite_your_friends_to_join_phone_king_and_earn_1_000_pts_per_person": "Invite your friends to join Phone King and earn 1,000 Pts per person",
-
   "profile_help_and_support": "Help & Support",
   "profile_contact_us": "Contact Us",
   "profile_call_us": "Call Us",
@@ -66,110 +56,83 @@
   "profile_our_branches": "Our Branches",
   "profile_terms_and_conditions": "Terms & Conditions",
   "profile_sign_out": "Sign Out",
-
   "notification_notification": "Notification",
   "notification_unread_notification": "unread notification",
   "notification_mark_as_all_read": "mark as all read",
-
   "profile_title": "Profile",
   "profile_support": "Support",
-
   "snackbar_profile_updated": "Profile updated",
   "snackbar_logout_success": "Logout Success.",
-
   "error_full_name_required": "Please enter your full name",
-
   "edit_profile_title": "Edit Profile",
   "edit_profile_full_name": "Full Name",
   "edit_profile_full_name_hint": "John Doe",
   "edit_profile_phone_number": "Phone Number",
   "edit_profile_phone_number_cannot_be_changed": "Phone number cannot be changed",
   "edit_profile_save_changes": "Save Changes",
-
   "logout_dialog_title": "Are you sure you want to log out?",
   "logout_cancel": "Cancel",
   "logout_confirm": "Logout",
-
   "change_pin_hint_current": "Enter current PIN",
-  "change_pin_hint_at_least_8_digits": "Must be at least 8 digits",
-  "change_pin_helper_8_digits": "PIN must be 8 digits",
+  "change_pin_hint_at_least_6_digits": "Must be at least 6 digits",
+  "change_pin_helper_6_digits": "PIN must be 6 digits",
   "change_pin_update_pin": "Update PIN",
-
   "change_pin_error_enter_current_pin": "Please enter your current PIN",
   "change_pin_error_new_pin_length": "New PIN must be at least 8 digits",
   "change_pin_error_pin_not_match": "New PIN and Confirm PIN do not match",
   "change_pin_success_updated": "PIN updated successfully",
-
   "activity_title": "Activity",
-
   "activity_points_spent": "Points Spent",
   "activity_points_earned": "Points Earned",
-
   "activity_filter_by_date": "Filter by Date",
   "activity_from": "From",
   "activity_to": "To",
   "activity_select_date": "Select date",
   "activity_apply": "Apply",
   "activity_clear": "Clear",
-
   "activity_error_select_both_dates": "Please select both From and To dates.",
   "activity_error_start_after_end": "Start date cannot be after end date.",
-
   "activity_recent_transactions": "Recent Transactions",
   "activity_no_transactions": "No transactions found for the selected range.",
-
   "activity_txn_points_earned": "Points Earned",
   "activity_txn_points_spent": "Points Spent",
-
-
   "payment_enter_pin_title": "Enter your 6-digit PIN",
   "payment_enter_pin_subtitle": "Please enter your PIN to confirm the transaction",
   "payment_enter_pin_error": "Please enter your 6-digit PIN",
   "common_cancel": "Cancel",
   "common_confirm": "Confirm",
-
   "payment_success_title": "Payment Successful",
   "payment_success_preview": "Payment Preview",
   "payment_success_go_home": "Go Back Home",
-
   "home_banner_placeholder": "Banner Placeholder",
   "home_no_stores": "No stores available",
   "home_no_rewards": "No rewards available",
   "common_retry": "Retry",
   "language_select_title": "Select Language",
-
   "store_view_retry": "Retry",
   "store_view_no_rewards": "No rewards found",
   "store_view_error_prefix": "Error",
-
   "reward_details_title": "Reward Details",
   "reward_details_points_required": "Points Required",
-
   "reward_details_cannot_redeem": "You cannot redeem this reward.",
   "reward_details_redeem_success": "Redeemed successfully",
-
   "reward_details_confirm_title": "Confirm Redeem",
   "reward_details_confirm_message": "Are you sure you want to redeem this reward?",
   "common_yes": "Yes",
   "common_no": "No",
-
   "reward_pin_title": "Redeem Confirmation",
   "reward_pin_enter_title": "Enter your 6-digit PIN",
   "reward_pin_enter_desc": "Please enter your PIN to confirm the transaction",
   "reward_pin_invalid": "Please enter your 6-digit PIN",
   "reward_pin_success": "Reward claimed successfully",
-
   "rewards_title": "Rewards",
   "rewards_store": "Reward Store",
   "rewards_redeemed": "Redeemed",
   "rewards_used": "Used",
-
   "rewards_view_all": "View All →",
-
   "rewards_no_stores": "No stores available",
   "rewards_no_redeemed": "No redeemed rewards",
   "rewards_no_used": "No used rewards",
-
   "reward_success_title": "Reward Details",
   "reward_success_completed": "Reward Claimed Successfully.",
   "reward_success_hint": "Show this reward to the staff or follow the store instructions to enjoy your benefits.",
@@ -177,8 +140,10 @@
   "reward_success_redeemed_at": "Redeemed at",
   "reward_success_claim_date": "Claim Date",
   "reward_success_go_home": "Go Back Home",
-
   "bottom_nav_home": "Home",
   "bottom_nav_rewards": "Rewards",
-  "bottom_nav_profile": "Profile"
+  "bottom_nav_profile": "Profile",
+  "rewardDetailsAvailability": "Availability",
+  "commonInStock": "In Stock",
+  "commonOutOfStock": "Out of Stock"
 }
