@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                   onPageChanged: (i) => setState(() => _bannerActiveIndex = i),
                   itemCount: _banners.length,
                   itemBuilder: (_, i) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 26),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: CacheNetworkImageWidget(
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
     final rewards = store.rewards ?? [];
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 26, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
       child: Column(
@@ -382,7 +382,7 @@ class _GreetingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = LocalizationString.of(context);
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 26),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(

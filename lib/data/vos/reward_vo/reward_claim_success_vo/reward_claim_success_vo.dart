@@ -4,11 +4,11 @@ part 'reward_claim_success_vo.g.dart';
 
 @JsonSerializable()
 class RewardClaimSuccessVO {
-  final String rewardName;
-  final String description;
-  final String imageUrl;
-  final String redeemDate;
-  final String collectedDate;
+  final String? rewardName;
+  final String? description;
+  final String? imageUrl;
+  final String? redeemDate;
+  final String? collectedDate;
 
   RewardClaimSuccessVO({
     required this.rewardName,

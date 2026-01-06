@@ -9,11 +9,11 @@ part of 'reward_claim_success_vo.dart';
 RewardClaimSuccessVO _$RewardClaimSuccessVOFromJson(
   Map<String, dynamic> json,
 ) => RewardClaimSuccessVO(
-  rewardName: json['rewardName'] as String,
-  description: json['description'] as String,
-  imageUrl: json['imageUrl'] as String,
-  redeemDate: json['redeemDate'] as String,
-  collectedDate: json['collectedDate'] as String,
+  rewardName: json['rewardName'] as String?,
+  description: json['description'] as String?,
+  imageUrl: json['imageUrl'] as String?,
+  redeemDate: json['redeemDate'] as String?,
+  collectedDate: json['collectedDate'] as String?,
 );
 
 Map<String, dynamic> _$RewardClaimSuccessVOToJson(

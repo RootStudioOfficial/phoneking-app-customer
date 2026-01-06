@@ -94,10 +94,10 @@ class RewardSuccessPage extends StatelessWidget {
                                   children: [
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
-                                      child: imageUrl.isEmpty
+                                      child: imageUrl?.isEmpty ?? true
                                           ? _imagePlaceholder()
                                           : Image.network(
-                                              imageUrl,
+                                              imageUrl ?? '',
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.cover,
@@ -110,14 +110,14 @@ class RewardSuccessPage extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            rewardName,
+                                            rewardName ?? '-',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                           ),
-                                          if (description.isNotEmpty) ...[
+                                          if (description?.isNotEmpty ?? false) ...[
                                             const SizedBox(height: 6),
-                                            Text(description, style: TextStyle(fontSize: 14, height: 1.4, color: Colors.grey[600])),
+                                            Text(description ?? '-', style: TextStyle(fontSize: 14, height: 1.4, color: Colors.grey[600])),
                                           ],
                                         ],
                                       ),

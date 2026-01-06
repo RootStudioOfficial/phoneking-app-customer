@@ -604,11 +604,6 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
     return null;
   }
 
-  String? _validateReferralCode(String v) {
-    if (v.trim().isEmpty) return 'ReferralCode is required';
-    return null;
-  }
-
   Future<void> _submit() async {
     if (!widget.enabled) return;
     final form = _formKey.currentState;
@@ -658,7 +653,6 @@ class _PersonalInfoFormCardState extends State<_PersonalInfoFormCard> {
                   controller: _referralCodeCtrl,
                   enabled: widget.enabled,
                   textInputAction: TextInputAction.done,
-                  validator: (v) => _validateReferralCode(v ?? ''),
                   decoration: _Decorations.inputRoundedAll(hint: "Enter Your ReferralCode"),
                 ),
 
