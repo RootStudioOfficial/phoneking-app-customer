@@ -1,5 +1,5 @@
 class PhoneKingCustomerApi {
-  static const String baseUrl = 'https://api-phoneking.up.railway.app/api/v1';
+  static const String baseUrl = 'https://api-phoneking-prd.up.railway.app/api/v1';
 
   // Auth
   static const String login = '$baseUrl/user/auth/login';
