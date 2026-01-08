@@ -6,9 +6,15 @@ import 'package:phone_king_customer/persistent/login_persistent.dart';
 class PhoneKingInterceptor extends Interceptor {
   const PhoneKingInterceptor();
 
+  // Define public URLs that don't require authentication
+  static const List<String> publicUrlPatterns = [
+    '/api/v1/user/auth/',
+    '/api/v1/geography/',
+  ];
+
   bool _isMultipart(RequestOptions o) =>
       o.contentType?.toLowerCase().contains('multipart/form-data') == true ||
-      o.data is FormData;
+          o.data is FormData;
 
   bool _isLogin(RequestOptions o) {
     return o.path.endsWith('/auth') ||
@@ -16,11 +22,24 @@ class PhoneKingInterceptor extends Interceptor {
         o.path.contains('/auth/login');
   }
 
+  bool _isPublicUrl(RequestOptions o) {
+    final path = o.path;
+
+    // Check if the path matches any public URL pattern
+    for (final pattern in publicUrlPatterns) {
+      if (path.contains(pattern)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @override
   void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) async {
+      RequestOptions options,
+      RequestInterceptorHandler handler,
+      ) async {
     debugPrint('============ Request URL    => ${options.uri}');
     debugPrint('============ Request Data   => ${options.data}');
 
@@ -30,7 +49,9 @@ class PhoneKingInterceptor extends Interceptor {
       options.contentType = Headers.jsonContentType;
     }
 
-    if (_isLogin(options)) {
+    // Skip token for public URLs
+    if (_isLogin(options) || _isPublicUrl(options)) {
+      debugPrint('============ Public URL - No Token Required');
       return handler.next(options);
     }
 
