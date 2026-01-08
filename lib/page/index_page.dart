@@ -71,11 +71,11 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(15),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
             child: Container(
-              height: 120,
+              height: 105,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
@@ -133,7 +133,7 @@ class _NavItem extends StatelessWidget {
                 ? const LinearGradient(colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)], begin: Alignment.topLeft, end: Alignment.bottomRight)
                 : null,
             color: isSelected ? null : Colors.transparent,
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(23),
             boxShadow: isSelected ? const [BoxShadow(color: Color(0x33FF6A3A), blurRadius: 18, offset: Offset(0, 8))] : null,
           ),
           child: Column(
@@ -162,7 +162,7 @@ class _NavItem extends StatelessWidget {
                         key: const ValueKey('label'),
                         padding: const EdgeInsets.only(left: 10),
                         child: DefaultTextStyle(
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 0.2),
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 0.2),
                           child: Text(label),
                         ),
                       )
