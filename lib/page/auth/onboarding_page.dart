@@ -74,6 +74,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProvid
     if (!mounted) return;
     if (isRegister) {
       setState(() => _sheet = _Sheet.login);
+      _ac.forward(from: 0);
     } else {
       setState(() => _sheet = _Sheet.none);
       context.navigateToNextPageWithRemoveUntil(const IndexPage());
@@ -152,7 +153,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProvid
     try {
       await _auth.register(displayName: name, password: _pin!, phoneNumber: _phone!, birthday: birthday, referralCode: referralCode);
       _snack('Registration successful');
-      await _finishFlow(false);
+      await _finishFlow(true);
     } catch (e) {
       _snack(e.toString(), isError: true);
     } finally {
