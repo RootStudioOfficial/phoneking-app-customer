@@ -113,11 +113,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () => _showLanguageSelectBottomSheet(context),
-            icon: Image.asset(AssetImageUtils.translateIcon, width: 24),
+            icon: Image.asset(AssetImageUtils.translateIcon, width: 18),
           ),
           IconButton(
             onPressed: () => context.navigateToNextPage(const NotificationPage()),
-            icon: Image.asset(AssetImageUtils.notificationIcon, width: 24),
+            icon: Image.asset(AssetImageUtils.notificationIcon, width: 18),
           ),
           const SizedBox(width: 12),
         ],
