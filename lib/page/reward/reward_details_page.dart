@@ -67,6 +67,7 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
   bool get _canRedeem {
     if (widget.redemptionId?.isNotEmpty ?? false) return true;
     if (_details == null || _balance == null) return false;
+    if (_details!.availableQuantity == null ) return true;
     if ((_details!.availableQuantity ?? 0) <= 0) return false;
     return _balance!.totalBalance >= _details!.requiredPoints;
   }
