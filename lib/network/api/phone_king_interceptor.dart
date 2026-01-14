@@ -7,19 +7,12 @@ class PhoneKingInterceptor extends Interceptor {
   const PhoneKingInterceptor();
 
   // Define public URLs that don't require authentication
-  static const List<String> publicUrlPatterns = [
-    '/api/v1/user/auth/',
-    '/api/v1/geography/',
-  ];
+  static const List<String> publicUrlPatterns = ['/api/v1/user/auth/', '/api/v1/geography/'];
 
-  bool _isMultipart(RequestOptions o) =>
-      o.contentType?.toLowerCase().contains('multipart/form-data') == true ||
-          o.data is FormData;
+  bool _isMultipart(RequestOptions o) => o.contentType?.toLowerCase().contains('multipart/form-data') == true || o.data is FormData;
 
   bool _isLogin(RequestOptions o) {
-    return o.path.endsWith('/auth') ||
-        o.path.endsWith('/login') ||
-        o.path.contains('/auth/login');
+    return o.path.endsWith('/auth') || o.path.endsWith('/login') || o.path.contains('/auth/login');
   }
 
   bool _isPublicUrl(RequestOptions o) {
@@ -36,10 +29,7 @@ class PhoneKingInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     debugPrint('============ Request URL    => ${options.uri}');
     debugPrint('============ Request Data   => ${options.data}');
 

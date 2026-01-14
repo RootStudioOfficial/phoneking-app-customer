@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
 import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
 import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
+import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
+import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
 import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
 import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
 import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
@@ -23,6 +27,7 @@ import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
 import 'package:phone_king_customer/widgets/reward_card_widget.dart';
 import 'package:phone_king_customer/widgets/session_time_out_dialog_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,10 +69,91 @@ class _HomePageState extends State<HomePage> {
 
   static const _bannerTypeAnnouncement = 'ANNOUNCEMENT';
 
+  bool _checkedUpdate = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadAll());
+  }
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        _checkAppUpdate(context);
+      }
+    });
+
+    super.didChangeDependencies();
+  }
+
+  Future<void> _checkAppUpdate(BuildContext context) async {
+    if (_checkedUpdate) return;
+    _checkedUpdate = true;
+
+    try {
+      final info = await PackageInfo.fromPlatform();
+      final currentBuild = int.parse(info.buildNumber);
+      final platform = Platform.isAndroid ? 'ANDROID' : 'IOS';
+
+      final res = await PhoneKingSupportModelImpl().checkVersion(platform, currentBuild);
+      final config = res.data;
+
+      if (config == null || !mounted) return;
+
+      if (currentBuild < config.minimumVersionCode) {
+        await showForceUpdateDialog(context, config);
+      } else if (currentBuild < config.recommendedVersionCode) {
+        await showOptionalUpdateDialog(context, config);
+      }
+    } catch (_) {
+      // silent fail — don't block Home
+    }
+  }
+
+  Future<void> showForceUpdateDialog(BuildContext context, AppUpdateConfigVO config) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("Update Required"),
+          content: Text(config.updateMessage),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                launchUrl(Uri.parse(config.storeUrl), mode: LaunchMode.externalApplication);
+              },
+              child: const Text("Update Now"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showOptionalUpdateDialog(BuildContext context, AppUpdateConfigVO config) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text("New Version Available"),
+          content: Text(config.updateMessage),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Later")),
+            ElevatedButton(
+              onPressed: () {
+                launchUrl(Uri.parse(config.storeUrl), mode: LaunchMode.externalApplication);
+              },
+              child: const Text("Update"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _loadAll() async {
