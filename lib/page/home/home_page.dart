@@ -111,10 +111,7 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 0,
         title: Row(children: [const SizedBox(width: 16), Image.asset(AssetImageUtils.appLogo, width: 150)]),
         actions: [
-          IconButton(
-            onPressed: () => _showLanguageSelectBottomSheet(context),
-            icon: Image.asset(AssetImageUtils.translateIcon, width: 18),
-          ),
+          IconButton(onPressed: () => _showLanguageSelectBottomSheet(context), icon: Image.asset(AssetImageUtils.translateIcon, width: 18)),
           IconButton(
             onPressed: () => context.navigateToNextPage(const NotificationPage()),
             icon: Image.asset(AssetImageUtils.notificationIcon, width: 18),
@@ -129,55 +126,52 @@ class _HomePageState extends State<HomePage> {
             : _error != null
             ? _ErrorView(message: _error!, onRetry: _loadAll)
             : SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Column(
-            children: [
-              _GreetingCard(balance: _balance?.totalBalance ?? 0),
-              const SizedBox(height: 16),
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  children: [
+                    _GreetingCard(balance: _balance?.totalBalance ?? 0),
+                    const SizedBox(height: 16),
 
-              /// BANNERS
-              SizedBox(
-                height: w * 0.5,
-                child: _banners.isEmpty
-                    ? Center(child: Text(l10n.homeBannerPlaceholder, style: _HomeTextStyles.bannerPlaceholder))
-                    : PageView.builder(
-                  onPageChanged: (i) => setState(() => _bannerActiveIndex = i),
-                  itemCount: _banners.length,
-                  itemBuilder: (_, i) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 26),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: CacheNetworkImageWidget(
-                        url: _banners[i].imageUrl,
-                        fit: BoxFit.cover,
-                      ),
+                    /// BANNERS
+                    SizedBox(
+                      height: w * 0.5,
+                      child: _banners.isEmpty
+                          ? Center(child: Text(l10n.homeBannerPlaceholder, style: _HomeTextStyles.bannerPlaceholder))
+                          : PageView.builder(
+                              onPageChanged: (i) => setState(() => _bannerActiveIndex = i),
+                              itemCount: _banners.length,
+                              itemBuilder: (_, i) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 26),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: CacheNetworkImageWidget(url: _banners[i].imageUrl, fit: BoxFit.cover),
+                                ),
+                              ),
+                            ),
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    if (_banners.isNotEmpty)
+                      AnimatedSmoothIndicator(
+                        activeIndex: _bannerActiveIndex,
+                        count: _banners.length,
+                        effect: const WormEffect(dotWidth: 10, dotHeight: 10, activeDotColor: Color(0xFFED5B23)),
+                      ),
+
+                    const SizedBox(height: 24),
+
+                    if (_stores.isEmpty)
+                      SizedBox(
+                        height: 120,
+                        child: Center(child: Text(l10n.homeNoStores, style: _HomeTextStyles.noData)),
+                      )
+                    else
+                      ..._stores.map((s) => _storeSection(context, s)),
+
+                    const SizedBox(height: 150),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              if (_banners.isNotEmpty)
-                AnimatedSmoothIndicator(
-                  activeIndex: _bannerActiveIndex,
-                  count: _banners.length,
-                  effect: const WormEffect(dotWidth: 10, dotHeight: 10, activeDotColor: Color(0xFFED5B23)),
-                ),
-
-              const SizedBox(height: 24),
-
-              if (_stores.isEmpty)
-                SizedBox(
-                  height: 120,
-                  child: Center(child: Text(l10n.homeNoStores, style: _HomeTextStyles.noData)),
-                )
-              else
-                ..._stores.map((s) => _storeSection(context, s)).toList(),
-
-              const SizedBox(height: 150),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -197,25 +191,30 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 12),
           rewards.isEmpty
               ? SizedBox(
-            height: 120,
-            child: Center(child: Text(l10n.homeNoRewards, style: _HomeTextStyles.noData)),
-          )
+                  height: 120,
+                  child: Center(child: Text(l10n.homeNoRewards, style: _HomeTextStyles.noData)),
+                )
               : GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemCount: rewards.length,
-            itemBuilder: (_, i) {
-              final r = rewards[i];
-              return RewardCardWidget(
-                name: r.name ?? '',
-                imageUrl: r.imageUrl ?? '',
-                points: '${r.requiredPoints} pts',
-                onTap: () => context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? '')),
-              );
-            },
-          ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
+                    childAspectRatio: 4 / 5.42,
+                  ),
+                  itemCount: rewards.length,
+                  itemBuilder: (_, i) {
+                    final r = rewards[i];
+                    return RewardCardWidget(
+                      name: r.name ?? '',
+                      imageUrl: r.imageUrl ?? '',
+                      points: '${r.requiredPoints} pts',
+                      onTap: () => context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? '')),
+                    );
+                  },
+                ),
         ],
       ),
     );
@@ -247,7 +246,9 @@ class _HomeSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Padding(padding: EdgeInsets.only(top: 60), child: CircularProgressIndicator()));
+    return const Center(
+      child: Padding(padding: EdgeInsets.only(top: 60), child: CircularProgressIndicator()),
+    );
   }
 }
 
@@ -267,11 +268,7 @@ class _ErrorViewState extends State<_ErrorView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.message == 'session time out') {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => const SessionTimeoutDialog(),
-        ).then((_) {
+        showDialog(context: context, barrierDismissible: false, builder: (_) => const SessionTimeoutDialog()).then((_) {
           LoginPersistent().clearLoginData();
           context.navigateToNextPageWithRemoveUntil(const OnBoardingPage());
         });
@@ -298,8 +295,6 @@ class _ErrorViewState extends State<_ErrorView> {
     );
   }
 }
-
-
 
 class LanguageOption {
   final Locale locale;
@@ -385,12 +380,8 @@ class _GreetingCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 26),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFED5B23), Color(0xFFFFA86B), Color(0xFFB85C32)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
         borderRadius: BorderRadius.circular(20),
+        image: const DecorationImage(image: AssetImage(AssetImageUtils.homeGradientImage), fit: BoxFit.cover),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

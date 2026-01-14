@@ -15,12 +15,14 @@ class RewardCardWidget extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE6E8F0)),
         ),
         child: Column(
+          spacing: 10,
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,35 +31,24 @@ class RewardCardWidget extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: AspectRatio(
                 aspectRatio: 3 / 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: imageUrl.isEmpty
-                      ? const Center(child: Icon(Icons.image, size: 32, color: Colors.grey))
-                      : CacheNetworkImageWidget(url: imageUrl, fit: BoxFit.contain),
-                ),
+                child: imageUrl.isEmpty
+                    ? const Center(child: Icon(Icons.image, size: 32, color: Colors.grey))
+                    : CacheNetworkImageWidget(url: imageUrl, fit: BoxFit.contain),
               ),
             ),
 
             // Name
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
-                child: Text(
-                  name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
-                ),
-              ),
+            Text(
+              name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
             ),
 
             // Points
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                points,
-                style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 13),
-              ),
+            Text(
+              points,
+              style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 13),
             ),
 
             const SizedBox(height: 4),
