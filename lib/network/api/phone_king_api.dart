@@ -222,7 +222,7 @@ class PhoneKingCustomerAPI {
 
   Future<BaseResponse<List<RewardVO>>> getAllReward(
     String storeID,
-    String rewardType,
+    String ?rewardType,
   ) async {
     try {
       final response = await _dio.get(

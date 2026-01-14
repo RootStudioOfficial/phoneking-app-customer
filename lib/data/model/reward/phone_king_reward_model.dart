@@ -8,7 +8,7 @@ abstract class PhoneKingRewardModel {
 
   Future<BaseResponse<List<RewardVO>>> getAllReward(
     String storeID,
-    String rewardType,
+    String? rewardType,
   );
 
   Future<BaseResponse<List<RewardVO>>> getUsedRewards();

@@ -46,15 +46,7 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
   String? _error;
   List<RewardVO> _rewards = const [];
 
-  static const List<String> _categories = [
-    'Discount Voucher',
-    'Free Product',
-    'Free Service',
-    'Cashback',
-    'Gift Card',
-    'Service Upgrade',
-    'Special Access',
-  ];
+  static const List<String> _categories = ['All', 'Discount Voucher', 'Free Product', 'Free Service'];
 
   @override
   void initState() {
@@ -70,7 +62,10 @@ class _StoreViewAllPageState extends State<StoreViewAllPage> {
     return widget.stores.firstWhere((s) => s.id == selectedStoreId, orElse: () => widget.stores.first);
   }
 
-  String _mapCategoryToApi(String ui) => ui.replaceAll(' ', '_').toUpperCase();
+  String? _mapCategoryToApi(String ui) {
+    if (ui == 'All') return null;
+    return ui.replaceAll(' ', '_').toUpperCase();
+  }
 
   Future<void> _fetchRewards() async {
     if (selectedStoreId == null) return;

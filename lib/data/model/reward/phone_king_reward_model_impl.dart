@@ -31,7 +31,7 @@ class PhoneKingRewardModelImpl implements PhoneKingRewardModel {
   @override
   Future<BaseResponse<List<RewardVO>>> getAllReward(
     String storeID,
-    String rewardType,
+    String ?rewardType,
   ) => _api.getAllReward(storeID, rewardType);
 
   @override
