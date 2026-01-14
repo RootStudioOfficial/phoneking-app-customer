@@ -67,7 +67,7 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
   bool get _canRedeem {
     if (widget.redemptionId?.isNotEmpty ?? false) return true;
     if (_details == null || _balance == null) return false;
-    if (_details!.availableQuantity == null ) return true;
+    if (_details!.availableQuantity == null) return true;
     if ((_details!.availableQuantity ?? 0) <= 0) return false;
     return _balance!.totalBalance >= _details!.requiredPoints;
   }
@@ -195,19 +195,17 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// Title
-            Row(
+            Wrap(
               spacing: 10,
               children: [
                 Text(d.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
 
                 /// Service chip
                 if (d.rewardType.isNotEmpty)
-                  Flexible(
-                    child: Chip(
-                      label: Text(_titleCase(d.rewardType)),
-                      backgroundColor: Colors.deepOrange,
-                      labelStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
+                  Chip(
+                    label: Text(_titleCase(d.rewardType)),
+                    backgroundColor: Colors.deepOrange,
+                    labelStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                   ),
               ],
             ),
