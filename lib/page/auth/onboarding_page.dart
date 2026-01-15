@@ -183,15 +183,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            // Gradient background
-            Positioned.fill(child: Image.asset(AssetImageUtils.onboardingBgImage)),
+      body: Stack(
+        children: [
+          // Gradient background
+          Positioned.fill(
+              child: Image.asset(
+                AssetImageUtils.onboardingBgImage,
+                fit: BoxFit.cover,)),
 
-            // Content
-            Align(
+          // Content
+          SafeArea(
+            child: Align(
               alignment: Alignment.bottomCenter,
               child: (_sheet == _Sheet.none)
                   ? _BottomCard(
@@ -209,57 +211,57 @@ class _OnBoardingPageState extends State<OnBoardingPage> with SingleTickerProvid
                     )
                   : const SizedBox.shrink(),
             ),
+          ),
 
-            // Scrim + animated sheet
-            if (_sheet != _Sheet.none) ...[
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: _busy ? null : _closeAny,
-                  child: AnimatedBuilder(
-                    animation: _ac,
-                    builder: (_, __) => ColoredBox(color: Colors.black.withValues(alpha: .35 * _ac.value)),
+          // Scrim + animated sheet
+          if (_sheet != _Sheet.none) ...[
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: _busy ? null : _closeAny,
+                child: AnimatedBuilder(
+                  animation: _ac,
+                  builder: (_, __) => ColoredBox(color: Colors.black.withValues(alpha: .35 * _ac.value)),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SlideTransition(
+                position: _slide,
+                child: ScaleTransition(
+                  scale: _scale,
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 560),
+                    child: switch (_sheet) {
+                      _Sheet.phone => _PhoneFormCard(enabled: !_busy, onConfirm: _handleSendOtp, onTapLogin: _openLogin),
+                      _Sheet.otp => _OtpFormCard(
+                        enabled: !_busy,
+                        onConfirm: _handleVerifyOtp,
+                        onResend: () {
+                          if (_phone != null) _handleSendOtp(_phone!);
+                        },
+                      ),
+                      _Sheet.pin => _PinFormCard(enabled: !_busy, onConfirm: _handleSetPin),
+                      _Sheet.personal => _PersonalInfoFormCard(enabled: !_busy, onConfirm: _handleRegister),
+                      _Sheet.login => _LoginFormCard(enabled: !_busy, onConfirm: _handleLogin, onTapRegister: _openPhone),
+                      _ => const SizedBox.shrink(),
+                    },
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SlideTransition(
-                  position: _slide,
-                  child: ScaleTransition(
-                    scale: _scale,
-                    alignment: Alignment.bottomCenter,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 560),
-                      child: switch (_sheet) {
-                        _Sheet.phone => _PhoneFormCard(enabled: !_busy, onConfirm: _handleSendOtp, onTapLogin: _openLogin),
-                        _Sheet.otp => _OtpFormCard(
-                          enabled: !_busy,
-                          onConfirm: _handleVerifyOtp,
-                          onResend: () {
-                            if (_phone != null) _handleSendOtp(_phone!);
-                          },
-                        ),
-                        _Sheet.pin => _PinFormCard(enabled: !_busy, onConfirm: _handleSetPin),
-                        _Sheet.personal => _PersonalInfoFormCard(enabled: !_busy, onConfirm: _handleRegister),
-                        _Sheet.login => _LoginFormCard(enabled: !_busy, onConfirm: _handleLogin, onTapRegister: _openPhone),
-                        _ => const SizedBox.shrink(),
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-
-            // Loading overlay
-            if (_busy)
-              const Positioned.fill(
-                child: ColoredBox(
-                  color: Color(0x33000000),
-                  child: Center(child: CircularProgressIndicator(color: Colors.white)),
-                ),
-              ),
+            ),
           ],
-        ),
+
+          // Loading overlay
+          if (_busy)
+            const Positioned.fill(
+              child: ColoredBox(
+                color: Color(0x33000000),
+                child: Center(child: CircularProgressIndicator(color: Colors.white)),
+              ),
+            ),
+        ],
       ),
     );
   }
