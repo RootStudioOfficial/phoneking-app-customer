@@ -20,4 +20,6 @@ abstract class PhoneKingProfileModel {
   );
 
   Future<BaseResponse<String>> uploadFile(File file, String folder);
+
+  Future<BaseResponse<void>> deleteProfile();
 }

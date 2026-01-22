@@ -39,4 +39,9 @@ class PhoneKingProfileModelImpl implements PhoneKingProfileModel {
   Future<BaseResponse<String>> uploadFile(File file, String folder) {
     return _api.uploadFile(file, folder);
   }
+
+  @override
+  Future<BaseResponse<void>> deleteProfile() {
+    return _api.deleteProfile();
+  }
 }

@@ -145,5 +145,10 @@
   "bottom_nav_profile": "Profile",
   "rewardDetailsAvailability": "Availability",
   "commonInStock": "In Stock",
-  "commonOutOfStock": "Unlimited"
+  "commonOutOfStock": "Unlimited",
+  "profile_delete_account": "Delete Account",
+  "delete_account_dialog_title": "Are you sure you want to delete your account?",
+  "delete_account_dialog_message": "This action cannot be undone. All your data will be permanently deleted.",
+  "delete_account_confirm": "Delete",
+  "snackbar_delete_account_success": "Account deleted successfully"
 }

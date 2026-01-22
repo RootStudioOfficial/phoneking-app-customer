@@ -424,6 +424,16 @@ class PhoneKingCustomerAPI {
     }
   }
 
+  Future<BaseResponse<void>> deleteProfile() async {
+    try {
+      final response = await _dio.delete(PhoneKingCustomerApi.deleteProfile);
+
+      return BaseResponse.fromJson(response.data, (_) => {});
+    } catch (e, stack) {
+      throw Exception(_throwException(e, stack));
+    }
+  }
+
   Future<BaseResponse<String>> uploadFile(File file, String folder) async {
     try {
       final formData = FormData.fromMap({

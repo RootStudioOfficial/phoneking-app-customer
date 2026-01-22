@@ -425,4 +425,12 @@ class LocalizationString {
   String get bottomNavHome => 'bottom_nav_home'.tr();
   String get bottomNavRewards => 'bottom_nav_rewards'.tr();
   String get bottomNavProfile => 'bottom_nav_profile'.tr();
+
+  // ================== DELETE ACCOUNT ==================
+
+  String get profileDeleteAccount => 'profile_delete_account'.tr();
+  String get deleteAccountDialogTitle => 'delete_account_dialog_title'.tr();
+  String get deleteAccountDialogMessage => 'delete_account_dialog_message'.tr();
+  String get deleteAccountConfirm => 'delete_account_confirm'.tr();
+  String get snackbarDeleteAccountSuccess => 'snackbar_delete_account_success'.tr();
 }
