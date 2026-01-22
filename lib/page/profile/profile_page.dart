@@ -33,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // state
   bool _loading = false;
   bool _updating = false;
+  bool _deleting = false;
   String? _error;
 
   UserVO? _user;
@@ -116,6 +117,28 @@ class _ProfilePageState extends State<ProfilePage> {
       context.showErrorSnackBar(e.toString());
     } finally {
       if (mounted) setState(() => _updating = false);
+    }
+  }
+
+  Future<void> _deleteAccount() async {
+    final l10n = LocalizationString.of(context);
+
+    final isDelete = await showDeleteAccountDialog(context);
+    if (isDelete != true) return;
+
+    setState(() => _deleting = true);
+    try {
+      await _profileModel.deleteProfile();
+      await _authModel.logout();
+
+      if (!mounted) return;
+      context.showSuccessSnackBar(l10n.snackbarDeleteAccountSuccess);
+      context.navigateToNextPageWithRemoveUntil(const OnBoardingPage());
+    } catch (e) {
+      if (!mounted) return;
+      context.showErrorSnackBar(e.toString());
+    } finally {
+      if (mounted) setState(() => _deleting = false);
     }
   }
 
@@ -337,7 +360,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   asset: AssetImageUtils.signOutIcon,
                   label: l10n.profileSignOut,
                   labelColor: const Color(0xFFEF4444),
-                  onTap: _loading || _updating
+                  onTap: _loading || _updating || _deleting
                       ? null
                       : () async {
                     final isLogout = await showLogoutDialog(context);
@@ -363,13 +386,32 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
+              const SizedBox(height: 12),
+
+              // Delete account card
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xFFE6E8F0)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: _SettingTile(
+                  asset: AssetImageUtils.signOutIcon,
+                  label: l10n.profileDeleteAccount,
+                  labelColor: const Color(0xFFEF4444),
+                  onTap: _loading || _updating || _deleting
+                      ? null
+                      : _deleteAccount,
+                ),
+              ),
+
               const SizedBox(height: 130),
             ],
           ),
         ),
 
         // loading overlays
-        if (_loading || _updating)
+        if (_loading || _updating || _deleting)
           Positioned.fill(
             child: IgnorePointer(
               ignoring: false,
@@ -930,6 +972,126 @@ Future<bool?> showLogoutDialog(BuildContext ctx) {
                         ),
                         child: Text(
                           l10n.logoutConfirm,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Close (X)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              icon: const Icon(Icons.close, size: 22),
+              onPressed: () => Navigator.of(ctx).pop(false),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<bool?> showDeleteAccountDialog(BuildContext ctx) {
+  final l10n = LocalizationString.of(ctx);
+
+  return showDialog<bool>(
+    context: ctx,
+    barrierDismissible: false,
+    builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon
+                Container(
+                  width: 84,
+                  height: 84,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFEAEA),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.delete_forever_rounded,
+                    size: 48,
+                    color: Color(0xFFEF4444),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.deleteAccountDialogTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    height: 1.3,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.deleteAccountDialogMessage,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => ctx.navigateBack(false),
+                        style: OutlinedButton.styleFrom(
+                          padding:
+                          const EdgeInsets.symmetric(vertical: 14),
+                          side:
+                          BorderSide(color: Colors.grey.shade300),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          l10n.logoutCancel,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => ctx.navigateBack(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEF4444),
+                          padding:
+                          const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          l10n.deleteAccountConfirm,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

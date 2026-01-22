@@ -38,6 +38,7 @@ class PhoneKingCustomerApi {
   static const String getMemberTier = '$baseUrl/user/profile/summary';
   static const String changePassword = '$baseUrl/user/auth/change-password';
   static const String updateProfile = '$baseUrl/user/profile';
+  static const String deleteProfile = '$baseUrl/user/profile/delete';
 
   ///Support
   static const String supportFaq = "$baseUrl/support/faq";
