@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
-import 'package:phone_king_customer/data/vos/contact_us_vo/contact_us_vo.dart';
-import 'package:phone_king_customer/data/vos/faq_vo/faq_vo.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/support/phone_king_support_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/contact_us_vo/contact_us_vo.dart';
+import 'package:phonekingcustomer/data/vos/faq_vo/faq_vo.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpAndSupportPage extends StatefulWidget {

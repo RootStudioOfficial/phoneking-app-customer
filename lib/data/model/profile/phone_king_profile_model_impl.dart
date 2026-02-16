@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:phone_king_customer/data/model/profile/phone_king_profile_model.dart';
-import 'package:phone_king_customer/data/vos/member_tier_vo/member_tier_vo.dart';
-import 'package:phone_king_customer/data/vos/user_vo/user_vo.dart';
-import 'package:phone_king_customer/network/api/phone_king_api.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/profile/phone_king_profile_model.dart';
+import 'package:phonekingcustomer/data/vos/member_tier_vo/member_tier_vo.dart';
+import 'package:phonekingcustomer/data/vos/user_vo/user_vo.dart';
+import 'package:phonekingcustomer/network/api/phone_king_api.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 class PhoneKingProfileModelImpl implements PhoneKingProfileModel {
   final PhoneKingCustomerAPI _api = PhoneKingCustomerAPI();

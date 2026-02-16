@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
-import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
-import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
-import 'package:phone_king_customer/page/index_page.dart';
-import 'package:phone_king_customer/page/reward/reward_scan_qr_code_page.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
-import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phonekingcustomer/data/model/reward/phone_king_reward_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/get_balance_vo/get_balance_vo.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
+import 'package:phonekingcustomer/page/index_page.dart';
+import 'package:phonekingcustomer/page/reward/reward_scan_qr_code_page.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
 
 class RewardDetailsPage extends StatefulWidget {
   const RewardDetailsPage({super.key, required this.rewardID, this.redemptionId});

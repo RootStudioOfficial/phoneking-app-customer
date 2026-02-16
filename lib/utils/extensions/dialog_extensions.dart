@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/widgets/app_update_dialog_widget.dart';
-import 'package:phone_king_customer/widgets/easy_text_widget.dart';
-import 'package:phone_king_customer/widgets/loading_dialog_widget.dart';
+import 'package:phonekingcustomer/data/vos/app_update_config_vo/app_update_config_vo.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/widgets/app_update_dialog_widget.dart';
+import 'package:phonekingcustomer/widgets/easy_text_widget.dart';
+import 'package:phonekingcustomer/widgets/loading_dialog_widget.dart';
 
 enum UpdateType { none, optional, mandatory }
 

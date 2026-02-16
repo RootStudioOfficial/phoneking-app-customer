@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/home/home_page.dart';
-import 'package:phone_king_customer/page/profile/profile_page.dart';
-import 'package:phone_king_customer/page/reward/reward_page.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/page/home/home_page.dart';
+import 'package:phonekingcustomer/page/profile/profile_page.dart';
+import 'package:phonekingcustomer/page/reward/reward_page.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key, this.desireIndex = 0, this.desireRewardIndex = 0});

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/index_page.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/page/index_page.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 
-import 'package:phone_king_customer/data/model/auth/phone_king_auth_model.dart';
-import 'package:phone_king_customer/data/model/auth/phone_king_auth_model_impl.dart';
+import 'package:phonekingcustomer/data/model/auth/phone_king_auth_model.dart';
+import 'package:phonekingcustomer/data/model/auth/phone_king_auth_model_impl.dart';
 
 enum _Sheet { none, phone, otp, pin, personal, login }
 

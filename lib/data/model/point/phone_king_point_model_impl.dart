@@ -1,11 +1,11 @@
-import 'package:phone_king_customer/data/model/point/phone_king_point_model.dart';
-import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
-import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
-import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
-import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
-import 'package:phone_king_customer/data/vos/scan_payment_vo/scan_payment_vo.dart';
-import 'package:phone_king_customer/network/api/phone_king_api.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/point/phone_king_point_model.dart';
+import 'package:phonekingcustomer/data/vos/get_balance_vo/get_balance_vo.dart';
+import 'package:phonekingcustomer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
+import 'package:phonekingcustomer/data/vos/history_vo/history_vo.dart';
+import 'package:phonekingcustomer/data/vos/payment_success_vo/payment_success_vo.dart';
+import 'package:phonekingcustomer/data/vos/scan_payment_vo/scan_payment_vo.dart';
+import 'package:phonekingcustomer/network/api/phone_king_api.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 class PhoneKingPointModelImpl implements PhoneKingPointModel {
   final PhoneKingCustomerAPI _api = PhoneKingCustomerAPI();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/vos/scan_payment_vo/scan_payment_vo.dart';
-import 'package:phone_king_customer/page/home/scan_to_pay/payment_enter_pin_page.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/data/vos/scan_payment_vo/scan_payment_vo.dart';
+import 'package:phonekingcustomer/page/home/scan_to_pay/payment_enter_pin_page.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 // ========== Typography helper ==========
 

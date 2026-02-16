@@ -1,9 +1,9 @@
-import 'package:phone_king_customer/data/model/reward/phone_king_reward_model.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_claim_success_vo/reward_claim_success_vo.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
-import 'package:phone_king_customer/network/api/phone_king_api.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/reward/phone_king_reward_model.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_claim_success_vo/reward_claim_success_vo.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_details_vo/reward_details_vo.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phonekingcustomer/network/api/phone_king_api.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 class PhoneKingRewardModelImpl implements PhoneKingRewardModel {
   final PhoneKingCustomerAPI _api = PhoneKingCustomerAPI();

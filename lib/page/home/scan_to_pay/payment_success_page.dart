@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/vos/payment_success_vo/payment_success_vo.dart';
-import 'package:phone_king_customer/page/index_page.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/data/vos/payment_success_vo/payment_success_vo.dart';
+import 'package:phonekingcustomer/page/index_page.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   final PaymentSuccessVO paymentData;

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
-import 'package:phone_king_customer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
-import 'package:phone_king_customer/data/vos/history_vo/history_vo.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/history_vo/history_summary_vo/history_summary_vo.dart';
+import 'package:phonekingcustomer/data/vos/history_vo/history_vo.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});

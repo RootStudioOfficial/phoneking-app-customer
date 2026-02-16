@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Accent color for FCM notification (status bar / notification tray) -->
+    <color name="notification_color">#ED5B23</color>
+</resources>

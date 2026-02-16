@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
-import 'package:phone_king_customer/widgets/qr_info_widget.dart';
+import 'package:phonekingcustomer/data/vos/qr_payload_vo/qr_payload_vo.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/widgets/qr_info_widget.dart';
 
 class QrCodePage extends StatefulWidget {
   const QrCodePage({super.key});

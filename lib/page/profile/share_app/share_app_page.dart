@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
 
 class ShareAppPage extends StatefulWidget {
   const ShareAppPage({super.key});

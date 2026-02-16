@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:phone_king_customer/network/response/error_response.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/network/response/error_response.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
 
 class PhoneKingInterceptor extends Interceptor {
   const PhoneKingInterceptor();

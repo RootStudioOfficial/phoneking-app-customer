@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/notification/phone_king_notification_model.dart';
-import 'package:phone_king_customer/data/model/notification/phone_king_notification_model_impl.dart';
-import 'package:phone_king_customer/data/vos/notification_vo/notification_vo.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/data/model/notification/phone_king_notification_model.dart';
+import 'package:phonekingcustomer/data/model/notification/phone_king_notification_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/notification_vo/notification_vo.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 // ========= Typography helpers =========
 

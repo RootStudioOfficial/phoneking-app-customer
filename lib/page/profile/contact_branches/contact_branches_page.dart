@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
-import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/support/phone_king_support_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/branches_vo/branches_vo.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactBranchesPage extends StatefulWidget {

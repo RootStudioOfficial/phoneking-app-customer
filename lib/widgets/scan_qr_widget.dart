@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:phone_king_customer/data/vos/qr_payload_vo/qr_payload_vo.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/data/vos/qr_payload_vo/qr_payload_vo.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
 
 class ScanQrWidget extends StatefulWidget {
   const ScanQrWidget({super.key, required this.onDetect, required this.title});

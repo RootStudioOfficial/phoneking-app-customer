@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/index_page.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/page/index_page.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
 
 class BannerPage extends StatefulWidget {
   const BannerPage({super.key, required this.bannerImageUrl});

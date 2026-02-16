@@ -1,10 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/auth/splash_page.dart';
-import 'package:phone_king_customer/persistent/language_persistent.dart';
+import 'package:phonekingcustomer/page/auth/splash_page.dart';
+import 'package:phonekingcustomer/persistent/language_persistent.dart';
+import 'package:phonekingcustomer/services/notification_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  await NotificationHandler.initialize();
 
   await EasyLocalization.ensureInitialized();
   final languageService = LanguagePersistent();
@@ -21,14 +26,28 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final LanguagePersistent languageService;
 
   const MyApp({super.key, required this.languageService});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationHandler.handlePendingInitialMessage();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: NotificationHandler.navigatorKey,
       title: 'Phone King',
       debugShowCheckedModeBanner: false,
       locale: context.locale,

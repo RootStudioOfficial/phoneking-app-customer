@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
-import 'package:phone_king_customer/data/vos/terms_and_condition_vo/terms_and_condition_vo.dart';
+import 'package:phonekingcustomer/data/model/support/phone_king_support_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/terms_and_condition_vo/terms_and_condition_vo.dart';
 
 class TermsAndConditionPage extends StatefulWidget {
   const TermsAndConditionPage({super.key});

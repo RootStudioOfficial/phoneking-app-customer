@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppUpdateDialogWidget extends StatelessWidget {

@@ -1,8 +1,8 @@
-import 'package:phone_king_customer/data/model/auth/phone_king_auth_model.dart';
-import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
-import 'package:phone_king_customer/network/api/phone_king_api.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/data/model/auth/phone_king_auth_model.dart';
+import 'package:phonekingcustomer/data/vos/login_vo/login_vo.dart';
+import 'package:phonekingcustomer/network/api/phone_king_api.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
 
 class PhoneKingAuthModelImpl implements PhoneKingAuthModel {
   final PhoneKingCustomerAPI _api = PhoneKingCustomerAPI();

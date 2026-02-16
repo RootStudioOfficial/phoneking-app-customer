@@ -1,5 +1,5 @@
-import 'package:phone_king_customer/data/vos/notification_vo/notification_vo.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/vos/notification_vo/notification_vo.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 abstract class PhoneKingNotificationModel {
   Future<BaseResponse<NotificationVO>> getAllNotification(

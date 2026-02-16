@@ -3,29 +3,29 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
-import 'package:phone_king_customer/data/model/point/phone_king_point_model_impl.dart';
-import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
-import 'package:phone_king_customer/data/model/support/phone_king_support_model_impl.dart';
-import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
-import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
-import 'package:phone_king_customer/data/vos/get_balance_vo/get_balance_vo.dart';
-import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
-import 'package:phone_king_customer/page/auth/onboarding_page.dart';
-import 'package:phone_king_customer/page/home/activity/activity_page.dart';
-import 'package:phone_king_customer/page/home/notification/notification_page.dart';
-import 'package:phone_king_customer/page/home/qr_code/qrcode_page.dart';
-import 'package:phone_king_customer/page/home/scan_to_pay/payment_qr_scan_page.dart';
-import 'package:phone_king_customer/page/home/store_view_all_page.dart';
-import 'package:phone_king_customer/page/reward/reward_details_page.dart';
-import 'package:phone_king_customer/persistent/language_persistent.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
-import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
-import 'package:phone_king_customer/widgets/reward_card_widget.dart';
-import 'package:phone_king_customer/widgets/session_time_out_dialog_widget.dart';
+import 'package:phonekingcustomer/data/model/banner/phone_king_banner_model_impl.dart';
+import 'package:phonekingcustomer/data/model/point/phone_king_point_model_impl.dart';
+import 'package:phonekingcustomer/data/model/store/phone_king_store_model_impl.dart';
+import 'package:phonekingcustomer/data/model/support/phone_king_support_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/app_update_config_vo/app_update_config_vo.dart';
+import 'package:phonekingcustomer/data/vos/banner_vo/banner_vo.dart';
+import 'package:phonekingcustomer/data/vos/get_balance_vo/get_balance_vo.dart';
+import 'package:phonekingcustomer/data/vos/store_vo/store_vo.dart';
+import 'package:phonekingcustomer/page/auth/onboarding_page.dart';
+import 'package:phonekingcustomer/page/home/activity/activity_page.dart';
+import 'package:phonekingcustomer/page/home/notification/notification_page.dart';
+import 'package:phonekingcustomer/page/home/qr_code/qrcode_page.dart';
+import 'package:phonekingcustomer/page/home/scan_to_pay/payment_qr_scan_page.dart';
+import 'package:phonekingcustomer/page/home/store_view_all_page.dart';
+import 'package:phonekingcustomer/page/reward/reward_details_page.dart';
+import 'package:phonekingcustomer/persistent/language_persistent.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/widgets/reward_card_widget.dart';
+import 'package:phonekingcustomer/widgets/session_time_out_dialog_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,6 +67,9 @@ class _HomePageState extends State<HomePage> {
 
   int _bannerActiveIndex = 0;
 
+  late final PageController _bannerPageController = PageController();
+  Timer? _bannerTimer;
+
   static const _bannerTypeAnnouncement = 'ANNOUNCEMENT';
 
   bool _checkedUpdate = false;
@@ -75,6 +78,27 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadAll());
+    _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted) return;
+      if (_banners.length <= 1) return;
+      final current = _bannerPageController.hasClients
+          ? (_bannerPageController.page?.round() ?? 0)
+          : 0;
+      final next = (current + 1) % _banners.length;
+      _bannerPageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _bannerTimer?.cancel();
+    _bannerPageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -225,6 +249,7 @@ class _HomePageState extends State<HomePage> {
                       child: _banners.isEmpty
                           ? Center(child: Text(l10n.homeBannerPlaceholder, style: _HomeTextStyles.bannerPlaceholder))
                           : PageView.builder(
+                              controller: _bannerPageController,
                               onPageChanged: (i) => setState(() => _bannerActiveIndex = i),
                               itemCount: _banners.length,
                               itemBuilder: (_, i) => Padding(

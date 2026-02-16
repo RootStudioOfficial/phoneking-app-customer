@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:phone_king_customer/data/vos/login_vo/login_vo.dart';
+import 'package:phonekingcustomer/data/vos/login_vo/login_vo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPersistent {

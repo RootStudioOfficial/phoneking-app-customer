@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:phone_king_customer/data/vos/member_tier_vo/member_tier_vo.dart';
-import 'package:phone_king_customer/data/vos/user_vo/user_vo.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/vos/member_tier_vo/member_tier_vo.dart';
+import 'package:phonekingcustomer/data/vos/user_vo/user_vo.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 abstract class PhoneKingProfileModel {
   Future<BaseResponse<UserVO>> getProfile();

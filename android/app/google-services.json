@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "622454605972",
+    "project_id": "phonekingxrootstudio",
+    "storage_bucket": "phonekingxrootstudio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622454605972:android:6c4785229c6aa573ef4c81",
+        "android_client_info": {
+          "package_name": "asia.rootstudio.phone_king_customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5SdvRMjTpwV5qjKVXegbO2zIY6wYfndM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622454605972:android:164026dfcb756102ef4c81",
+        "android_client_info": {
+          "package_name": "asia.rootstudio.phonekingcustomer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5SdvRMjTpwV5qjKVXegbO2zIY6wYfndM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

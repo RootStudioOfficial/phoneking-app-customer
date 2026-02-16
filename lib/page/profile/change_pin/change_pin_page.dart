@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:phone_king_customer/page/auth/onboarding_page.dart';
-import 'package:phone_king_customer/utils/extensions/dialog_extensions.dart';
-import 'package:phone_king_customer/data/model/profile/phone_king_profile_model_impl.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/page/auth/onboarding_page.dart';
+import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
+import 'package:phonekingcustomer/data/model/profile/phone_king_profile_model_impl.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
 
 class ChangePinPage extends StatefulWidget {
   const ChangePinPage({super.key});

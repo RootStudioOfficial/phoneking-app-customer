@@ -1,11 +1,11 @@
-import 'package:phone_king_customer/data/model/support/phone_king_support_model.dart';
-import 'package:phone_king_customer/data/vos/app_update_config_vo/app_update_config_vo.dart';
-import 'package:phone_king_customer/data/vos/branches_vo/branches_vo.dart';
-import 'package:phone_king_customer/data/vos/contact_us_vo/contact_us_vo.dart';
-import 'package:phone_king_customer/data/vos/faq_vo/faq_vo.dart';
-import 'package:phone_king_customer/data/vos/terms_and_condition_vo/terms_and_condition_vo.dart';
-import 'package:phone_king_customer/network/api/phone_king_api.dart';
-import 'package:phone_king_customer/network/response/base_response.dart';
+import 'package:phonekingcustomer/data/model/support/phone_king_support_model.dart';
+import 'package:phonekingcustomer/data/vos/app_update_config_vo/app_update_config_vo.dart';
+import 'package:phonekingcustomer/data/vos/branches_vo/branches_vo.dart';
+import 'package:phonekingcustomer/data/vos/contact_us_vo/contact_us_vo.dart';
+import 'package:phonekingcustomer/data/vos/faq_vo/faq_vo.dart';
+import 'package:phonekingcustomer/data/vos/terms_and_condition_vo/terms_and_condition_vo.dart';
+import 'package:phonekingcustomer/network/api/phone_king_api.dart';
+import 'package:phonekingcustomer/network/response/base_response.dart';
 
 class PhoneKingSupportModelImpl implements PhoneKingSupportModel {
   final PhoneKingCustomerAPI _api = PhoneKingCustomerAPI();

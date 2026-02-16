@@ -1,4 +1,4 @@
-package asia.rootstudio.phone_king_customer
+package asia.rootstudio.phonekingcustomer
 
 import io.flutter.embedding.android.FlutterActivity
 

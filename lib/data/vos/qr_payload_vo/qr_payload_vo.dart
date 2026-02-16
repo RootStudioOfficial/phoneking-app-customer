@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'qr_payload_vo.g.dart';
 
-const _expectedAppName = 'PhoneKing';
+const _expectedAppName = 'PhoneKing Plus';
 
 @JsonSerializable(explicitToJson: true)
 class QrPayloadVO {

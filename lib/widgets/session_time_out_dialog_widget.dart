@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 
 class SessionTimeoutDialog extends StatelessWidget {
   const SessionTimeoutDialog({super.key});

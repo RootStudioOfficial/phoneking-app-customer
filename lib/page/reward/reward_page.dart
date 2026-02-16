@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'package:phone_king_customer/data/model/store/phone_king_store_model_impl.dart';
-import 'package:phone_king_customer/data/model/reward/phone_king_reward_model_impl.dart';
-import 'package:phone_king_customer/data/vos/store_vo/store_vo.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phonekingcustomer/data/model/store/phone_king_store_model_impl.dart';
+import 'package:phonekingcustomer/data/model/reward/phone_king_reward_model_impl.dart';
+import 'package:phonekingcustomer/data/vos/store_vo/store_vo.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_vo.dart';
 
-import 'package:phone_king_customer/page/home/store_view_all_page.dart';
-import 'package:phone_king_customer/page/reward/reward_details_page.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
-import 'package:phone_king_customer/utils/localization_strings.dart';
-import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/page/home/store_view_all_page.dart';
+import 'package:phonekingcustomer/page/reward/reward_details_page.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/utils/localization_strings.dart';
+import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key, this.desireRewardIndex = 0});

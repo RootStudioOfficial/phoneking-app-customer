@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/page/auth/banner_page.dart';
-import 'package:phone_king_customer/page/auth/onboarding_page.dart';
-import 'package:phone_king_customer/persistent/login_persistent.dart';
-import 'package:phone_king_customer/utils/asset_image_utils.dart';
-import 'package:phone_king_customer/utils/extensions/navigation_extensions.dart';
+import 'package:phonekingcustomer/page/auth/banner_page.dart';
+import 'package:phonekingcustomer/page/auth/onboarding_page.dart';
+import 'package:phonekingcustomer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/utils/asset_image_utils.dart';
+import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 
-import 'package:phone_king_customer/data/model/banner/phone_king_banner_model.dart';
-import 'package:phone_king_customer/data/model/banner/phone_king_banner_model_impl.dart';
+import 'package:phonekingcustomer/data/model/banner/phone_king_banner_model.dart';
+import 'package:phonekingcustomer/data/model/banner/phone_king_banner_model_impl.dart';
 
-import 'package:phone_king_customer/data/vos/banner_vo/banner_vo.dart';
+import 'package:phonekingcustomer/data/vos/banner_vo/banner_vo.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

@@ -1,6 +1,6 @@
 {
-    "name": "phone_king_customer",
-    "short_name": "phone_king_customer",
+    "name": "phonekingcustomer",
+    "short_name": "phonekingcustomer",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

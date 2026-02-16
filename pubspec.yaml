@@ -1,4 +1,4 @@
-name: phone_king_customer
+name: phonekingcustomer
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -52,6 +52,9 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   easy_localization: ^3.0.8
   cupertino_icons: ^1.0.8
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.5
+  flutter_local_notifications: ^18.0.1
 
 flutter_launcher_icons:
   android: true

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "phone_king_customer" "\0"
+            VALUE "FileDescription", "phonekingcustomer" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "phone_king_customer" "\0"
+            VALUE "InternalName", "phonekingcustomer" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "phone_king_customer.exe" "\0"
-            VALUE "ProductName", "phone_king_customer" "\0"
+            VALUE "OriginalFilename", "phonekingcustomer.exe" "\0"
+            VALUE "ProductName", "phonekingcustomer" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

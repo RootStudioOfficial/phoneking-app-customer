@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
 
 class RewardCardWidget extends StatelessWidget {
   const RewardCardWidget({super.key, required this.name, required this.imageUrl, required this.points, this.onTap});

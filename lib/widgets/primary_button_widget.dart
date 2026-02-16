@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_king_customer/widgets/easy_text_widget.dart';
+import 'package:phonekingcustomer/widgets/easy_text_widget.dart';
 
 class PrimaryButtonWidget extends StatelessWidget {
   final double? width;

@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:phone_king_customer/data/vos/reward_vo/reward_vo.dart';
+import 'package:phonekingcustomer/data/vos/reward_vo/reward_vo.dart';
 
 part 'store_vo.g.dart';
 
