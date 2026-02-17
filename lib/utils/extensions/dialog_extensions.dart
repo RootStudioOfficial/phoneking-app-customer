@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:phonekingcustomer/data/vos/app_update_config_vo/app_update_config_vo.dart';
+import 'package:phonekingcustomer/utils/app_version.dart';
 import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 import 'package:phonekingcustomer/widgets/app_update_dialog_widget.dart';
 import 'package:phonekingcustomer/widgets/easy_text_widget.dart';
@@ -47,20 +47,8 @@ extension DialogExtensions on BuildContext {
     navigateBack();
   }
 
-  Future<int> _getSemanticVersionCode() async {
-    final info = await PackageInfo.fromPlatform();
-    final version = info.version;
-
-    final parts = version.split('.');
-    final major = int.parse(parts[0]);
-    final minor = int.parse(parts[1]);
-    final patch = int.parse(parts[2]);
-
-    return major * 100 + minor * 10 + patch;
-  }
-
   Future<void> checkForUpdateAndShowDialog(AppUpdateConfigVO config) async {
-    final currentVersionCode = await _getSemanticVersionCode();
+    final currentVersionCode = await AppVersionHelper.getCurrentVersionCode();
 
     final type = _getUpdateType(
       config: config,

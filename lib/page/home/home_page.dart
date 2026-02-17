@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:phonekingcustomer/data/model/banner/phone_king_banner_model_impl.dart';
 import 'package:phonekingcustomer/data/model/point/phone_king_point_model_impl.dart';
 import 'package:phonekingcustomer/data/model/store/phone_king_store_model_impl.dart';
@@ -20,6 +19,8 @@ import 'package:phonekingcustomer/page/home/store_view_all_page.dart';
 import 'package:phonekingcustomer/page/reward/reward_details_page.dart';
 import 'package:phonekingcustomer/persistent/language_persistent.dart';
 import 'package:phonekingcustomer/persistent/login_persistent.dart';
+import 'package:phonekingcustomer/persistent/version_check_persistent.dart';
+import 'package:phonekingcustomer/utils/app_version.dart';
 import 'package:phonekingcustomer/utils/asset_image_utils.dart';
 import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 import 'package:phonekingcustomer/utils/localization_strings.dart';
@@ -53,7 +54,7 @@ class _HomeTextStyles {
 
 // ================= STATE =================
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final _pointModel = PhoneKingPointModelImpl();
   final _bannerModel = PhoneKingBannerModelImpl();
   final _storeModel = PhoneKingStoreModelImpl();
@@ -72,11 +73,10 @@ class _HomePageState extends State<HomePage> {
 
   static const _bannerTypeAnnouncement = 'ANNOUNCEMENT';
 
-  bool _checkedUpdate = false;
-
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => _loadAll());
     _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
@@ -93,12 +93,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _bannerTimer?.cancel();
     _bannerPageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      _checkAppUpdate(context);
+    }
   }
 
   @override
@@ -112,29 +119,33 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
   }
 
+  /// Called when user navigates to this home screen (e.g. taps Home tab). Also runs on load and app resume.
+  void checkAppUpdate() => _checkAppUpdate(context);
+
   Future<void> _checkAppUpdate(BuildContext context) async {
-    if (_checkedUpdate) return;
-    _checkedUpdate = true;
-
     try {
-      final info = await PackageInfo.fromPlatform();
-      final currentBuild = int.parse(info.buildNumber);
-      final platform = Platform.isAndroid ? 'ANDROID' : 'IOS';
+      final currentVersionCode = await AppVersionHelper.getCurrentVersionCode();
+      final platform = Platform.isAndroid ? 'USER_ANDROID' : 'USER_IOS';
 
-      final res = await PhoneKingSupportModelImpl().checkVersion(platform, currentBuild);
+      final res = await PhoneKingSupportModelImpl().checkVersion(platform, currentVersionCode);
       final config = res.data;
 
       if (config == null || !mounted) return;
 
-      if (currentBuild < config.minimumVersionCode) {
+      if (currentVersionCode < config.minimumVersionCode) {
         await showForceUpdateDialog(context, config);
-      } else if (currentBuild < config.recommendedVersionCode) {
-        await showOptionalUpdateDialog(context, config);
+      } else if (currentVersionCode < config.recommendedVersionCode) {
+        final shouldShow = await VersionCheckPersistent.shouldShowOptionalUpdateDialog();
+        if (mounted && shouldShow) {
+          await VersionCheckPersistent.markOptionalUpdateDialogShown();
+          await showOptionalUpdateDialog(context, config);
+        }
       }
     } catch (_) {
       // silent fail — don't block Home
     }
   }
+
 
   Future<void> showForceUpdateDialog(BuildContext context, AppUpdateConfigVO config) {
     return showDialog(

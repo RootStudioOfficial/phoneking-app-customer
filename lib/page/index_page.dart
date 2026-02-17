@@ -21,12 +21,17 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   late int _currentIndex;
   late List<Widget> _pages;
+  final GlobalKey<State<HomePage>> _homeKey = GlobalKey<State<HomePage>>();
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.desireIndex;
-    _pages = <Widget>[const HomePage(), RewardsPage(desireRewardIndex: widget.desireRewardIndex), const ProfilePage()];
+    _pages = <Widget>[
+      HomePage(key: _homeKey),
+      RewardsPage(desireRewardIndex: widget.desireRewardIndex),
+      const ProfilePage(),
+    ];
   }
 
   @override
@@ -48,6 +53,9 @@ class _IndexPageState extends State<IndexPage> {
                 setState(() {
                   _currentIndex = index;
                 });
+                if (index == 0) {
+                  (_homeKey.currentState as dynamic)?.checkAppUpdate();
+                }
               },
             ),
           ),
