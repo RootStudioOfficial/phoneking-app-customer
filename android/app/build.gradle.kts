@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "asia.rootstudio.phonekingcustomer"
+    namespace = "asia.rootstudio.phone_king_customer"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -31,7 +31,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "asia.rootstudio.phonekingcustomer"
+        applicationId = "asia.rootstudio.phone_king_customer"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
