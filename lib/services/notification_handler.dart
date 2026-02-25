@@ -35,7 +35,14 @@ class NotificationHandler {
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-    await FirebaseMessaging.instance.subscribeToTopic(_topicAllUsers);
+    if (Platform.isIOS) {
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        await FirebaseMessaging.instance.subscribeToTopic(_topicAllUsers);
+      }
+    } else {
+      await FirebaseMessaging.instance.subscribeToTopic(_topicAllUsers);
+    }
 
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
