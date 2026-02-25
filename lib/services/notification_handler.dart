@@ -19,17 +19,12 @@ class NotificationHandler {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  static final FlutterLocalNotificationsPlugin _localNotifications =
-      FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
   static RemoteMessage? _pendingInitialMessage;
 
   static Future<void> initialize() async {
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    await FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
 
     await _initLocalNotifications();
 
@@ -52,18 +47,9 @@ class NotificationHandler {
 
   static Future<void> _initLocalNotifications() async {
     const androidInit = AndroidInitializationSettings('ic_notification');
-    final iosInit = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-    );
-    final initSettings = InitializationSettings(
-      android: androidInit,
-      iOS: iosInit,
-    );
-    await _localNotifications.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: _onLocalNotificationTap,
-    );
+    final iosInit = DarwinInitializationSettings(requestAlertPermission: true, requestBadgePermission: true);
+    final initSettings = InitializationSettings(android: androidInit, iOS: iosInit);
+    await _localNotifications.initialize(initSettings, onDidReceiveNotificationResponse: _onLocalNotificationTap);
 
     if (Platform.isAndroid) {
       final channel = AndroidNotificationChannel(
@@ -73,10 +59,7 @@ class NotificationHandler {
         importance: Importance.high,
         playSound: true,
       );
-      await _localNotifications
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
+      await _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
     }
   }
 
@@ -108,22 +91,10 @@ class NotificationHandler {
       priority: Priority.high,
       icon: 'ic_notification',
     );
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
+    const iosDetails = DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
+    const details = NotificationDetails(android: androidDetails, iOS: iosDetails);
 
-    _localNotifications.show(
-      message.messageId.hashCode,
-      title,
-      body,
-      details,
-    );
+    _localNotifications.show(message.messageId.hashCode, title, body, details);
   }
 
   static void _handleNotificationTap(RemoteMessage message) {

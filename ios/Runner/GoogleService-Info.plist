@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>asia.rootstudio.phonekingcustomer</string>
+	<string>asia.rootstudio.phone-king-customer</string>
 	<key>PROJECT_ID</key>
 	<string>phonekingxrootstudio</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:622454605972:ios:13f1ffcd64db844bef4c81</string>
+	<string>1:622454605972:ios:0c85f2090460613aef4c81</string>
 </dict>
 </plist>
