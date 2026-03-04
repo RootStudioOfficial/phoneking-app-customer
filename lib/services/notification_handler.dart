@@ -185,7 +185,7 @@ class NotificationHandler {
       iOS: iosDetails,
     );
 
-    _localNotifications.show(message.messageId.hashCode, title, body, details);
+    _localNotifications.show(id, title, body, details);
   }
 
   static void _handleNotificationTap(RemoteMessage message) {
