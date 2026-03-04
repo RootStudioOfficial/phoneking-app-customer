@@ -41,6 +41,7 @@ class NotificationContentVO {
   final String title;
   final String body;
   final String? routeId;
+  final String? imageUrl;
   final String notificationType;
   final String localDateTime;
   final bool read;
@@ -50,6 +51,7 @@ class NotificationContentVO {
     required this.title,
     required this.body,
     this.routeId,
+    this.imageUrl,
     required this.notificationType,
     required this.localDateTime,
     required this.read,
@@ -64,6 +66,7 @@ class NotificationContentVO {
     String? title,
     String? body,
     String? routeId,
+    String? imageUrl,
     String? notificationType,
     String? localDateTime,
     bool? read,
@@ -73,6 +76,7 @@ class NotificationContentVO {
       title: title ?? this.title,
       body: body ?? this.body,
       routeId: routeId ?? this.routeId,
+      imageUrl: imageUrl ?? this.imageUrl,
       notificationType: notificationType ?? this.notificationType,
       localDateTime: localDateTime ?? this.localDateTime,
       read: read ?? this.read,

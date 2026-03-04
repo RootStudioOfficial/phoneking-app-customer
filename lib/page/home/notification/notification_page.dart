@@ -68,6 +68,8 @@ class _NotificationPageState extends State<NotificationPage> {
         return Icons.card_giftcard;
       case 'TIER_UPDATE':
         return Icons.emoji_events;
+      case 'WISH_PROMO':
+        return Icons.card_giftcard;
       default:
         return Icons.notifications;
     }
@@ -218,6 +220,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         return _NotificationCard(
                           title: n.title,
                           body: n.body,
+                          imageUrl: n.imageUrl,
                           tag: n.notificationType,
                           iconPath: _iconForType(n.notificationType),
                           timeLabel: _timeAgo(n.localDateTime),
@@ -253,6 +256,7 @@ class _NotificationPageState extends State<NotificationPage> {
 class _NotificationCard extends StatelessWidget {
   final String title;
   final String body;
+  final String? imageUrl;
   final String tag;
   final IconData iconPath;
   final String timeLabel;
@@ -262,6 +266,7 @@ class _NotificationCard extends StatelessWidget {
   const _NotificationCard({
     required this.title,
     required this.body,
+    this.imageUrl,
     required this.tag,
     required this.iconPath,
     required this.timeLabel,
@@ -311,6 +316,19 @@ class _NotificationCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(body, style: _NotificationTextStyles.cardBody),
+                  if (imageUrl != null && imageUrl!.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        imageUrl!,
+                        height: 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
