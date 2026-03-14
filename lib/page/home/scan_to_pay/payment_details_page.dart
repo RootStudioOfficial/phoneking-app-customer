@@ -253,8 +253,9 @@ class _SuccessBody extends StatelessWidget {
                     onPressed: onProceed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrange,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      minimumSize: const Size(0, 48),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                     child: const Text('Proceed to Payment', style: TextStyle(color: Colors.white)),
                   ),

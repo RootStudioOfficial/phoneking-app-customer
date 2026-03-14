@@ -237,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w800,
                                         color: Color(0xFF0F172A),
                                       ),
@@ -258,6 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Text(
                                 phone,
                                 style: const TextStyle(
+                                  fontSize: 13,
                                   color: Color(0xFF6B7280),
                                 ),
                               ),
@@ -471,6 +472,7 @@ class _StatTile extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
+              fontSize: 12,
               color: Color(0xFF6B7280),
               fontWeight: FontWeight.w600,
             ),
@@ -479,6 +481,7 @@ class _StatTile extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
+              fontSize: 14,
               color: valueColor ?? const Color(0xFF0F172A),
               fontWeight: FontWeight.w800,
             ),
@@ -494,6 +497,7 @@ Widget _sectionTitle(String text) => Padding(
   child: Text(
     text,
     style: const TextStyle(
+      fontSize: 16,
       color: Color(0xFF818898),
       fontWeight: FontWeight.w700,
     ),
@@ -544,6 +548,7 @@ class _SettingTile extends StatelessWidget {
       title: Text(
         label,
         style: TextStyle(
+          fontSize: 14,
           color: labelColor ?? const Color(0xFF0F172A),
           fontWeight: FontWeight.w600,
         ),
