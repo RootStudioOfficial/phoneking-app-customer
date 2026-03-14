@@ -15,15 +15,14 @@ class RewardCardWidget extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE6E8F0)),
         ),
         child: Column(
-          spacing: 10,
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image (3:2)
@@ -36,22 +35,22 @@ class RewardCardWidget extends StatelessWidget {
                     : CacheNetworkImageWidget(url: imageUrl, fit: BoxFit.contain),
               ),
             ),
-
-            // Name
-            Text(
-              name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
+            const SizedBox(height: 8),
+            // Name - flex to use remaining space and avoid overflow
+            Expanded(
+              child: Text(
+                name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF111827)),
+              ),
             ),
-
+            const SizedBox(height: 4),
             // Points
             Text(
               points,
               style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 13),
             ),
-
-            const SizedBox(height: 4),
           ],
         ),
       ),

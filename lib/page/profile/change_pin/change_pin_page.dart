@@ -364,9 +364,10 @@ class _ChangePinPageState extends State<ChangePinPage> {
                     onPressed: _submitting ? null : _updatePin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: deepOrange,
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      minimumSize: const Size(0, 48),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       elevation: 0,
                     ),

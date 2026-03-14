@@ -20,7 +20,8 @@ class NotificationHandler {
   static const String _androidChannelId = 'phoneking_foreground';
   static const String _androidChannelName = 'Phone King';
 
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
@@ -50,7 +51,8 @@ class NotificationHandler {
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
 
-    _pendingInitialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    _pendingInitialMessage = await FirebaseMessaging.instance
+        .getInitialMessage();
   }
 
   static Future<void> _initLocalNotifications() async {
@@ -78,7 +80,8 @@ class NotificationHandler {
       );
       await _localNotifications
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
     }
   }
@@ -105,16 +108,28 @@ class NotificationHandler {
     final imageUrl = message.data[_dataKeyImageUrl] as String?;
 
     if (Platform.isAndroid && imageUrl != null && imageUrl.isNotEmpty) {
-      _showForegroundWithImage(message.messageId.hashCode, title, body, imageUrl);
+      _showForegroundWithImage(
+        message.messageId.hashCode,
+        title,
+        body,
+        imageUrl,
+      );
     } else {
       _showForegroundPlain(message.messageId.hashCode, title, body);
     }
   }
 
-  static Future<void> _showForegroundWithImage(int id, String title, String body, String imageUrl) async {
+  static Future<void> _showForegroundWithImage(
+    int id,
+    String title,
+    String body,
+    String imageUrl,
+  ) async {
     try {
       final dir = Directory.systemTemp;
-      final file = File('${dir.path}/notif_$id${DateTime.now().millisecondsSinceEpoch}.jpg');
+      final file = File(
+        '${dir.path}/notif_$id${DateTime.now().millisecondsSinceEpoch}.jpg',
+      );
       await _dio.download(imageUrl, file.path);
       if (!await file.exists()) {
         _showForegroundPlain(id, title, body);
@@ -127,9 +142,25 @@ class NotificationHandler {
         importance: Importance.high,
         priority: Priority.high,
         icon: 'ic_notification',
-        styleInformation: BigPictureStyleInformation(FilePathAndroidBitmap(file.path), contentTitle: title, summaryText: body),
+        styleInformation: BigPictureStyleInformation(
+          FilePathAndroidBitmap(file.path),
+          contentTitle: title,
+          summaryText: body,
+        ),
       );
-      await _localNotifications.show(id, title, body, NotificationDetails(android: androidDetails, iOS: const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true)));
+      await _localNotifications.show(
+        id,
+        title,
+        body,
+        NotificationDetails(
+          android: androidDetails,
+          iOS: const DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+      );
     } catch (_) {
       _showForegroundPlain(id, title, body);
     }
@@ -144,7 +175,16 @@ class NotificationHandler {
       priority: Priority.high,
       icon: 'ic_notification',
     );
-    const details = NotificationDetails(android: androidDetails, iOS: const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true));
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+    const details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
     _localNotifications.show(id, title, body, details);
   }
 

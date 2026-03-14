@@ -15,26 +15,26 @@ class ContactBranchesPage extends StatefulWidget {
 
 class _ContactBranchesTextStyles {
   static const appBarTitle = TextStyle(
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w700,
     color: Colors.black,
   );
 
   static const sectionTitle = TextStyle(
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.w700,
     color: Color(0xFF111827),
   );
 
   static const sectionSubtitle = TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
     color: Color(0xFF6B7280),
     height: 1.4,
   );
 
   static const emptyState = TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
     color: Color(0xFF9CA3AF),
   );
@@ -46,33 +46,33 @@ class _ContactBranchesTextStyles {
   );
 
   static const branchName = TextStyle(
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: FontWeight.w700,
     color: Color(0xFF111827),
   );
 
   static const branchAddress = TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w500,
     color: Color(0xFF374151),
     height: 1.4,
   );
 
   static const branchPhone = TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w600,
     color: Color(0xFFFF6A00),
   );
 
   static const branchOpeningTime = TextStyle(
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: FontWeight.w500,
     color: Color(0xFF6B7280),
     height: 1.4,
   );
 
   static const buttonLabel = TextStyle(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.w600,
   );
 }

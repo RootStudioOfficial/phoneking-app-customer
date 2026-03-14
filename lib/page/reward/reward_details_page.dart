@@ -139,8 +139,9 @@ class _RewardDetailsPageState extends State<RewardDetailsPage> {
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: !_canRedeem ? Colors.grey : Colors.deepOrange,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    minimumSize: const Size(0, 48),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                   child: _redeemLoading
                       ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))

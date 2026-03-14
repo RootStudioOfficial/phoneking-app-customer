@@ -167,6 +167,7 @@ class _TermsAndConditionPageState extends State<TermsAndConditionPage> {
               Text(
                 term.title ?? 'Untitled Section',
                 style: theme.textTheme.titleMedium?.copyWith(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -174,6 +175,7 @@ class _TermsAndConditionPageState extends State<TermsAndConditionPage> {
               Text(
                 term.description ?? 'No description available.',
                 style: theme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 13,
                   color: theme.hintColor,
                   height: 1.5,
                 ),

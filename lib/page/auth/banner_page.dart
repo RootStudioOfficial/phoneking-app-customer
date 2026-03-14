@@ -45,7 +45,7 @@ class _BannerPageState extends State<BannerPage> {
           Align(
             alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8, right: 8),
+              padding: const EdgeInsets.only(top: 20, right: 8),
               child: GestureDetector(
                 onTap: () {
                   context.navigateToNextPageWithRemoveUntil(IndexPage());

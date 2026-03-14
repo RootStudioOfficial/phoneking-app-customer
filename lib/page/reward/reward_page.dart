@@ -11,6 +11,7 @@ import 'package:phonekingcustomer/page/reward/reward_details_page.dart';
 import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
 import 'package:phonekingcustomer/utils/localization_strings.dart';
 import 'package:phonekingcustomer/widgets/cache_network_image_widget.dart';
+import 'package:phonekingcustomer/widgets/reward_card_widget.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key, this.desireRewardIndex = 0});
@@ -590,66 +591,28 @@ Widget _rewardGrid(List<RewardVO> rewards) {
     return const SizedBox(height: 120, child: Center(child: Text("No rewards available")));
   }
 
+  // Same card aspect as home page (4/5.15) so design matches
+  const double cardWidth = 160;
+  const double cardHeight = cardWidth * 5.15 / 4;
+
   return SizedBox(
-    height: 240,
+    height: cardHeight,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       itemCount: rewards.length,
       itemBuilder: (context, i) {
         final r = rewards[i];
-        return Container(
-          width: 160,
-          margin: const EdgeInsets.only(right: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE6E8F0)),
-          ),
-          child: InkWell(
-            onTap: () {
-              context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? ''));
-            },
-            borderRadius: BorderRadius.circular(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // image
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: SizedBox(
-                    height: 130,
-                    child: (r.imageUrl ?? '').isEmpty
-                        ? const Center(child: Text("Image"))
-                        : AspectRatio(
-                            aspectRatio: 3 / 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: CacheNetworkImageWidget(url: r.imageUrl!, fit: BoxFit.contain),
-                            ),
-                          ),
-                  ),
-                ),
-                // name
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  child: Text(
-                    r.name ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                  ),
-                ),
-                // points
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    "${r.requiredPoints} pts",
-                    style: const TextStyle(color: Color(0xFF0C34FF), fontWeight: FontWeight.w700, fontSize: 14),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
+        return Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: SizedBox(
+            width: cardWidth,
+            height: cardHeight,
+            child: RewardCardWidget(
+              name: r.name ?? '',
+              imageUrl: r.imageUrl ?? '',
+              points: '${r.requiredPoints} pts',
+              onTap: () => context.navigateToNextPage(RewardDetailsPage(rewardID: r.id ?? '')),
             ),
           ),
         );

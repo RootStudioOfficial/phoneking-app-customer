@@ -324,7 +324,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     crossAxisCount: 2,
                     mainAxisSpacing: 15,
                     crossAxisSpacing: 15,
-                    childAspectRatio: 4 / 5.42,
+                    childAspectRatio: 4 / 5.15,
                   ),
                   itemCount: rewards.length,
                   itemBuilder: (_, i) {
@@ -348,12 +348,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(store.name ?? '', style: _HomeTextStyles.storeName),
-          GestureDetector(
-            onTap: () => context.navigateToNextPage(StoreViewAllPage(stores: _stores)),
-            child: Text('${l10n.homeViewAll} →', style: _HomeTextStyles.viewAll),
+          Expanded(
+            flex: 3,
+            child: Text(
+              store.name ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: _HomeTextStyles.storeName,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onTap: () => context.navigateToNextPage(StoreViewAllPage(stores: _stores)),
+              child: Text('${l10n.homeViewAll} →', style: _HomeTextStyles.viewAll, textAlign: TextAlign.end),
+            ),
           ),
         ],
       ),

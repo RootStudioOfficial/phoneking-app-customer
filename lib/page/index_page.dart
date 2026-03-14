@@ -79,16 +79,16 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(28),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
             child: Container(
-              height: 105,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              height: 84,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(28),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 6))],
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: Row(
                 children: [
@@ -135,7 +135,7 @@ class _NavItem extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 280),
           curve: Curves.easeOutCubic,
-          padding: EdgeInsets.symmetric(horizontal: isSelected ? 18 : 0, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: isSelected ? 18 : 0, vertical: 10),
           decoration: BoxDecoration(
             gradient: isSelected
                 ? const LinearGradient(colors: [Color(0xFFFF7A33), Color(0xFFFF4E2E)], begin: Alignment.topLeft, end: Alignment.bottomRight)
@@ -152,7 +152,7 @@ class _NavItem extends StatelessWidget {
                 duration: const Duration(milliseconds: 220),
                 scale: isSelected ? 1.05 : 1.0,
                 curve: Curves.easeOut,
-                child: Image.asset(iconAsset, width: 22, height: 22, color: isSelected ? Colors.white : const Color(0xFF7C7E8C)),
+                child: Image.asset(iconAsset, width: 20, height: 20, color: isSelected ? Colors.white : const Color(0xFF7C7E8C)),
               ),
 
               // Label (only when selected)

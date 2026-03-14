@@ -15,25 +15,25 @@ class HelpAndSupportPage extends StatefulWidget {
 // ================== Typography Helper ==================
 
 class _HelpSupportTextStyles {
-  static const appBarTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black);
+  static const appBarTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black);
 
-  static const sectionTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF111827));
+  static const sectionTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF111827));
 
-  static const sectionSubtitle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF6B7280), height: 1.4);
+  static const sectionSubtitle = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF6B7280), height: 1.4);
 
   static const errorBanner = TextStyle(color: Color(0xFFB00020), fontSize: 12, fontWeight: FontWeight.w500);
 
-  static const emptyState = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF9CA3AF));
+  static const emptyState = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF9CA3AF));
 
-  static const contactCardTitle = TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF111827));
+  static const contactCardTitle = TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827));
 
   static const contactCardSubtitle = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF6B7280));
 
-  static const businessHours = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF16A34A));
+  static const businessHours = TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF16A34A));
 
-  static const faqQuestion = TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF111827));
+  static const faqQuestion = TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827));
 
-  static const faqAnswer = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF6B7280), height: 1.5);
+  static const faqAnswer = TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF6B7280), height: 1.5);
 }
 
 // ================== Page ==================
