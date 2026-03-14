@@ -13,6 +13,7 @@ import 'package:phonekingcustomer/page/profile/contact_branches/contact_branches
 import 'package:phonekingcustomer/page/profile/help_and_support/help_and_support_page.dart';
 import 'package:phonekingcustomer/page/profile/share_app/share_app_page.dart';
 import 'package:phonekingcustomer/page/profile/terms_and_condition/terms_and_condition_page.dart';
+import 'package:phonekingcustomer/utils/app_version.dart';
 import 'package:phonekingcustomer/utils/asset_image_utils.dart';
 import 'package:phonekingcustomer/utils/extensions/dialog_extensions.dart';
 import 'package:phonekingcustomer/utils/extensions/navigation_extensions.dart';
@@ -405,7 +406,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-              const SizedBox(height: 130),
+              const SizedBox(height: 16),
+              FutureBuilder<String>(
+                future: AppVersionHelper.getCurrentVersionString(),
+                builder: (context, snap) => Center(
+                  child: Text(
+                    snap.hasData ? 'Version ${snap.data}' : '',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 100),
             ],
           ),
         ),

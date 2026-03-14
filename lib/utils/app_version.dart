@@ -11,6 +11,14 @@ class AppVersionHelper {
     return _versionNameToCode(info.version);
   }
 
+  /// Version string for display (e.g. "1.0.3" or "1.0.3+9").
+  static Future<String> getCurrentVersionString() async {
+    final info = await PackageInfo.fromPlatform();
+    final build = info.buildNumber;
+    if (build.isEmpty || build == '0') return info.version;
+    return '${info.version}+$build';
+  }
+
   static int _versionNameToCode(String version) {
     final parts = version.split('.');
     final major = parts.isNotEmpty ? int.tryParse(parts[0]) ?? 0 : 0;
