@@ -42,20 +42,25 @@ class _BannerPageState extends State<BannerPage> {
               child: CacheNetworkImageWidget(url: widget.bannerImageUrl, fit: BoxFit.cover),
             ),
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20, right: 8),
-              child: GestureDetector(
-                onTap: () {
-                  context.navigateToNextPageWithRemoveUntil(IndexPage());
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(18)),
-                  child: Text(
-                    "Skip in $_left${_left == 1 ? 's' : 's'}",
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12, right: 16),
+                child: GestureDetector(
+                  onTap: () {
+                    context.navigateToNextPageWithRemoveUntil(IndexPage());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Text(
+                      "Skip in ${_left}s",
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),
